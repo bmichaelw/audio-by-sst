@@ -195,11 +195,11 @@ export default function Pricing() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8 max-w-2xl mx-auto"
           >
-            <Card className="bg-amber-600/10 border-amber-600/30">
+            <Card style={{ backgroundColor: 'hsl(var(--accent) / 0.1)', borderColor: 'hsl(var(--accent) / 0.3)' }}>
               <CardContent className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  <span className="text-white">
+                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'hsl(var(--accent))' }} />
+                  <span style={{ color: 'hsl(var(--foreground))' }}>
                     Current plan: <span className="font-medium capitalize">{currentTier.replace('_', ' ')}</span>
                   </span>
                 </div>
@@ -208,7 +208,7 @@ export default function Pricing() {
                   size="sm"
                   onClick={handleManageSubscription}
                   disabled={isLoading}
-                  className="border-amber-600/30 text-amber-400 hover:bg-amber-600/10"
+                  style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--accent))' }}
                 >
                   Manage Subscription
                 </Button>
@@ -232,58 +232,55 @@ export default function Pricing() {
               >
                 <Card
                   className={cn(
-                    "relative h-full border transition-all duration-300",
-                    tier.popular
-                      ? "border-amber-500/50 bg-stone-800/50 shadow-lg shadow-amber-500/10"
-                      : "border-stone-700/50 bg-stone-800/30",
-                    "hover:border-stone-600 hover:shadow-xl"
+                    "relative h-full border transition-all duration-300 hover:shadow-lg",
+                    tier.popular && "shadow-md"
                   )}
+                  style={{
+                    backgroundColor: tier.popular ? 'hsl(var(--surface-elevated))' : 'hsl(var(--card))',
+                    borderColor: tier.popular ? 'hsl(var(--accent) / 0.4)' : 'hsl(var(--border))'
+                  }}
                 >
                   {tier.popular && (
-                    <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-600 text-white border-0">
+                    <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 border-0" style={{ backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))' }}>
                       Most Popular
                     </Badge>
                   )}
 
                   <CardHeader className="text-center pb-4">
                     <div
-                      className={cn(
-                        "w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center",
-                        `bg-gradient-to-br ${tier.color}`
-                      )}
+                      className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center"
+                      style={{ background: `linear-gradient(to bottom right, ${tier.color.replace('from-', '').replace('to-', ', ')})` }}
                     >
                       <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <CardTitle className="text-xl text-white mb-1">{tier.name}</CardTitle>
-                    <CardDescription className="text-stone-400 text-sm">
+                    <CardTitle className="text-xl mb-1" style={{ color: 'hsl(var(--foreground))' }}>{tier.name}</CardTitle>
+                    <CardDescription className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
                       {tier.description}
                     </CardDescription>
                   </CardHeader>
 
                   <CardContent className="pt-0">
                     <div className="text-center mb-6">
-                      <span className="text-4xl font-light text-white">{tier.price}</span>
-                      <span className="text-stone-400">{tier.period}</span>
+                      <span className="text-4xl font-light" style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading))' }}>{tier.price}</span>
+                      <span style={{ color: 'hsl(var(--text-muted))' }}>{tier.period}</span>
                     </div>
 
                     <ul className="space-y-3 mb-6">
                       {tier.features.map((feature) => (
-                        <li key={feature} className="flex items-start gap-2 text-sm text-stone-300">
-                          <Check className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                        <li key={feature} className="flex items-start gap-2 text-sm" style={{ color: 'hsl(var(--text-body))' }}>
+                          <Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'hsl(var(--accent))' }} />
                           <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
 
                     <Button
-                      className={cn(
-                        "w-full",
-                        isCurrentTier
-                          ? "bg-stone-700 text-stone-300 cursor-default"
-                          : tier.id === 'free'
-                          ? "bg-stone-700 hover:bg-stone-600 text-white"
-                          : "bg-amber-600 hover:bg-amber-500 text-white"
-                      )}
+                      className="w-full"
+                      style={isCurrentTier ? 
+                        { backgroundColor: 'hsl(var(--muted))', color: 'hsl(var(--text-muted))' } : 
+                        tier.id === 'free' ? 
+                          { backgroundColor: 'hsl(var(--muted))', color: 'hsl(var(--foreground))' } : 
+                          { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
                       disabled={isCurrentTier || isLoading}
                       onClick={() => handleSubscribe(tier)}
                     >
@@ -303,7 +300,8 @@ export default function Pricing() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-center text-stone-400 text-sm space-y-2"
+          className="text-center text-sm space-y-2"
+          style={{ color: 'hsl(var(--text-muted))' }}
         >
           <p>All paid plans include a 7-day free trial</p>
           <p>Cancel anytime • No long-term contracts • Secure payments via Stripe</p>
@@ -316,10 +314,10 @@ export default function Pricing() {
           transition={{ delay: 0.6 }}
           className="mt-12 max-w-2xl mx-auto"
         >
-          <Card className="bg-stone-800/30 border-stone-700/50">
+          <Card style={{ backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))' }}>
             <CardContent className="p-6">
-              <h3 className="text-amber-400 font-medium mb-2">🔧 Backend Functions Required</h3>
-              <p className="text-stone-400 text-sm">
+              <h3 className="font-medium mb-2" style={{ color: 'hsl(var(--accent))' }}>🔧 Backend Functions Required</h3>
+              <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
                 To enable Stripe payments, backend functions need to be activated in your Base44 dashboard.
                 This will allow secure webhook handling and subscription management.
               </p>

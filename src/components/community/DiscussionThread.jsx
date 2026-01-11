@@ -44,38 +44,39 @@ export default function DiscussionThread({ postId, onBack, user }) {
 
   if (postLoading) {
     return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--background))' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-stone-950 py-8 px-4">
+    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: 'hsl(var(--background))' }}>
       <div className="max-w-4xl mx-auto">
         <Button
           variant="ghost"
           onClick={onBack}
-          className="text-stone-400 hover:text-white mb-6"
+          className="mb-6"
+          style={{ color: 'hsl(var(--text-muted))' }}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to discussions
         </Button>
 
         {/* Post */}
-        <Card className="bg-stone-900 border-stone-800 mb-6">
+        <Card className="mb-6" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <CardContent className="p-6">
             <div className="flex items-start gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-600/20 to-stone-800 flex items-center justify-center flex-shrink-0">
-                <span className="text-amber-500 font-medium">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, hsl(var(--accent) / 0.3), hsl(var(--muted)))' }}>
+                <span className="font-medium" style={{ color: 'hsl(var(--accent))' }}>
                   {post?.created_by?.charAt(0).toUpperCase()}
                 </span>
               </div>
               <div className="flex-1">
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <h1 className="text-2xl font-medium text-white mb-1">{post?.title}</h1>
-                    <div className="flex items-center gap-3 text-stone-500 text-sm">
+                    <h1 className="text-2xl font-medium mb-1" style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading))' }}>{post?.title}</h1>
+                    <div className="flex items-center gap-3 text-sm" style={{ color: 'hsl(var(--text-subtle))' }}>
                       <span>{post?.created_by?.split('@')[0]}</span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
@@ -83,21 +84,21 @@ export default function DiscussionThread({ postId, onBack, user }) {
                       </span>
                     </div>
                   </div>
-                  <Badge variant="outline" className="border-stone-700 text-stone-400">
+                  <Badge variant="outline" style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--text-muted))' }}>
                     {post?.category}
                   </Badge>
                 </div>
               </div>
             </div>
-            <p className="text-stone-300 whitespace-pre-wrap leading-relaxed">
+            <p className="whitespace-pre-wrap leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
               {post?.content}
             </p>
-            <div className="flex items-center gap-4 mt-4 pt-4 border-t border-stone-800">
-              <Button variant="ghost" size="sm" className="text-stone-400 hover:text-amber-500">
+            <div className="flex items-center gap-4 mt-4 pt-4 border-t" style={{ borderColor: 'hsl(var(--divider))' }}>
+              <Button variant="ghost" size="sm" style={{ color: 'hsl(var(--text-muted))' }}>
                 <TrendingUp className="w-4 h-4 mr-1" />
                 {post?.upvotes || 0} upvotes
               </Button>
-              <Button variant="ghost" size="sm" className="text-stone-400">
+              <Button variant="ghost" size="sm" style={{ color: 'hsl(var(--text-muted))' }}>
                 <MessageSquare className="w-4 h-4 mr-1" />
                 {comments.length} comments
               </Button>
@@ -107,26 +108,27 @@ export default function DiscussionThread({ postId, onBack, user }) {
 
         {/* Comments */}
         <div className="space-y-4">
-          <h2 className="text-xl font-medium text-white">
+          <h2 className="text-xl font-medium" style={{ color: 'hsl(var(--foreground))' }}>
             Comments ({comments.length})
           </h2>
 
           {user && (
-            <Card className="bg-stone-900 border-stone-800">
+            <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
               <CardContent className="p-4">
                 <form onSubmit={handleSubmitComment} className="space-y-3">
                   <Textarea
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
                     placeholder="Share your thoughts..."
-                    className="bg-stone-800 border-stone-700 resize-none"
+                    className="resize-none"
+                    style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
                     rows={3}
                   />
                   <div className="flex justify-end">
                     <Button
                       type="submit"
                       disabled={!commentText.trim() || createCommentMutation.isPending}
-                      className="bg-amber-600 hover:bg-amber-500"
+                      style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
                     >
                       {createCommentMutation.isPending ? (
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -142,24 +144,24 @@ export default function DiscussionThread({ postId, onBack, user }) {
           )}
 
           {comments.map(comment => (
-            <Card key={comment.id} className="bg-stone-900/50 border-stone-800">
+            <Card key={comment.id} style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-600/20 to-stone-800 flex items-center justify-center flex-shrink-0">
-                    <span className="text-amber-500 text-sm">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, hsl(var(--accent) / 0.3), hsl(var(--muted)))' }}>
+                    <span className="text-sm" style={{ color: 'hsl(var(--accent))' }}>
                       {comment.created_by?.charAt(0).toUpperCase()}
                     </span>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-white font-medium text-sm">
+                      <span className="font-medium text-sm" style={{ color: 'hsl(var(--foreground))' }}>
                         {comment.created_by?.split('@')[0]}
                       </span>
-                      <span className="text-stone-500 text-xs">
+                      <span className="text-xs" style={{ color: 'hsl(var(--text-subtle))' }}>
                         {new Date(comment.created_date).toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-stone-300 text-sm whitespace-pre-wrap">
+                    <p className="text-sm whitespace-pre-wrap" style={{ color: 'hsl(var(--text-body))' }}>
                       {comment.content}
                     </p>
                   </div>

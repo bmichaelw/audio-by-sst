@@ -27,17 +27,17 @@ export default function Playlists() {
   });
 
   return (
-    <div className="min-h-screen bg-stone-950 py-8 px-4">
+    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: 'hsl(var(--background))' }}>
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Playlists</h1>
-            <p className="text-stone-400">Curate and share your favorite tracks</p>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>Playlists</h1>
+            <p style={{ color: 'hsl(var(--text-muted))' }}>Curate and share your favorite tracks</p>
           </div>
           {user && (
             <Button
               onClick={() => setShowCreateModal(true)}
-              className="bg-amber-600 hover:bg-amber-500"
+              style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
             >
               <Plus className="w-4 h-4 mr-2" />
               Create Playlist
@@ -46,12 +46,12 @@ export default function Playlists() {
         </div>
 
         <Tabs defaultValue="my" className="space-y-6">
-          <TabsList className="bg-stone-900 border border-stone-800">
-            <TabsTrigger value="my" className="data-[state=active]:bg-stone-800">
+          <TabsList style={{ backgroundColor: 'hsl(var(--surface))', border: '1px solid hsl(var(--border))' }}>
+            <TabsTrigger value="my">
               <Music className="w-4 h-4 mr-2" />
               My Playlists
             </TabsTrigger>
-            <TabsTrigger value="community" className="data-[state=active]:bg-stone-800">
+            <TabsTrigger value="community">
               <Users className="w-4 h-4 mr-2" />
               Community Playlists
             </TabsTrigger>
@@ -60,13 +60,13 @@ export default function Playlists() {
           <TabsContent value="my">
             {myLoading ? (
               <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
+                <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
               </div>
             ) : myPlaylists.length === 0 ? (
               <div className="text-center py-12">
-                <Music className="w-16 h-16 text-stone-600 mx-auto mb-4" />
-                <p className="text-stone-400 mb-4">You haven't created any playlists yet</p>
-                <Button onClick={() => setShowCreateModal(true)} className="bg-amber-600 hover:bg-amber-500">
+                <Music className="w-16 h-16 mx-auto mb-4" style={{ color: 'hsl(var(--text-subtle))' }} />
+                <p className="mb-4" style={{ color: 'hsl(var(--text-muted))' }}>You haven't created any playlists yet</p>
+                <Button onClick={() => setShowCreateModal(true)} style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
                   Create Your First Playlist
                 </Button>
               </div>
@@ -82,12 +82,12 @@ export default function Playlists() {
           <TabsContent value="community">
             {publicLoading ? (
               <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
+                <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
               </div>
             ) : publicPlaylists.length === 0 ? (
               <div className="text-center py-12">
-                <Users className="w-16 h-16 text-stone-600 mx-auto mb-4" />
-                <p className="text-stone-400">No public playlists yet</p>
+                <Users className="w-16 h-16 mx-auto mb-4" style={{ color: 'hsl(var(--text-subtle))' }} />
+                <p style={{ color: 'hsl(var(--text-muted))' }}>No public playlists yet</p>
               </div>
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

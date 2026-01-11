@@ -43,36 +43,38 @@ export default function CreatePlaylistModal({ isOpen, onClose, user }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-stone-900 border-stone-800">
+      <DialogContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
         <DialogHeader>
-          <DialogTitle className="text-white">Create New Playlist</DialogTitle>
+          <DialogTitle style={{ color: 'hsl(var(--foreground))' }}>Create New Playlist</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label className="text-stone-300">Playlist Name</Label>
+            <Label style={{ color: 'hsl(var(--text-body))' }}>Playlist Name</Label>
             <Input
               value={formData.name}
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               placeholder="My Favorite Tracks"
-              className="bg-stone-800 border-stone-700 mt-1"
+              className="mt-1"
+              style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
             />
           </div>
 
           <div>
-            <Label className="text-stone-300">Description (optional)</Label>
+            <Label style={{ color: 'hsl(var(--text-body))' }}>Description (optional)</Label>
             <Textarea
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
               placeholder="A collection of calming sounds for..."
-              className="bg-stone-800 border-stone-700 mt-1"
+              className="mt-1"
+              style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
               rows={3}
             />
           </div>
 
           <div className="flex items-center justify-between pt-2">
             <div>
-              <Label className="text-stone-300">Make Public</Label>
-              <p className="text-stone-500 text-sm">Share with the community</p>
+              <Label style={{ color: 'hsl(var(--text-body))' }}>Make Public</Label>
+              <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Share with the community</p>
             </div>
             <Switch
               checked={formData.is_public}
@@ -81,13 +83,13 @@ export default function CreatePlaylistModal({ isOpen, onClose, user }) {
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={onClose} className="border-stone-700">
+            <Button type="button" variant="outline" onClick={onClose} style={{ borderColor: 'hsl(var(--border))' }}>
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={createMutation.isPending}
-              className="bg-amber-600 hover:bg-amber-500"
+              style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
             >
               {createMutation.isPending ? (
                 <>

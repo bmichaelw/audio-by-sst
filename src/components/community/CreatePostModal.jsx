@@ -47,28 +47,29 @@ export default function CreatePostModal({ isOpen, onClose, user }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-stone-900 border-stone-800 max-w-2xl">
+      <DialogContent className="max-w-2xl" style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
         <DialogHeader>
-          <DialogTitle className="text-white">Create New Post</DialogTitle>
+          <DialogTitle style={{ color: 'hsl(var(--foreground))' }}>Create New Post</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label className="text-stone-300">Title</Label>
+            <Label style={{ color: 'hsl(var(--text-body))' }}>Title</Label>
             <Input
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
               placeholder="What's on your mind?"
-              className="bg-stone-800 border-stone-700 mt-1"
+              className="mt-1"
+              style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
             />
           </div>
 
           <div>
-            <Label className="text-stone-300">Category</Label>
+            <Label style={{ color: 'hsl(var(--text-body))' }}>Category</Label>
             <Select value={formData.category} onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}>
-              <SelectTrigger className="bg-stone-800 border-stone-700 mt-1">
+              <SelectTrigger className="mt-1" style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
                 <SelectItem value="general">General</SelectItem>
                 <SelectItem value="experiences">Experiences</SelectItem>
                 <SelectItem value="questions">Questions</SelectItem>
@@ -79,23 +80,24 @@ export default function CreatePostModal({ isOpen, onClose, user }) {
           </div>
 
           <div>
-            <Label className="text-stone-300">Content</Label>
+            <Label style={{ color: 'hsl(var(--text-body))' }}>Content</Label>
             <Textarea
               value={formData.content}
               onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
               placeholder="Share your thoughts, experiences, or questions..."
-              className="bg-stone-800 border-stone-700 mt-1 min-h-[150px]"
+              className="mt-1 min-h-[150px]"
+              style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
             />
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={onClose} className="border-stone-700">
+            <Button type="button" variant="outline" onClick={onClose} style={{ borderColor: 'hsl(var(--border))' }}>
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={createMutation.isPending}
-              className="bg-amber-600 hover:bg-amber-500"
+              style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
             >
               {createMutation.isPending ? (
                 <>

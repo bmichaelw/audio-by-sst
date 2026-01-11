@@ -11,22 +11,24 @@ export default function PlaylistCard({ playlist, isOwner, user }) {
   const navigate = useNavigate();
 
   return (
-    <Card className="bg-stone-900 border-stone-800 hover:bg-stone-900/80 transition-all group cursor-pointer">
+    <Card className="hover:shadow-lg transition-all group cursor-pointer" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
       <CardContent className="p-0">
         {/* Cover */}
         <div 
-          className="h-48 bg-gradient-to-br from-amber-600/20 via-stone-800 to-stone-900 flex items-center justify-center relative overflow-hidden"
+          className="h-48 flex items-center justify-center relative overflow-hidden"
+          style={{ background: 'linear-gradient(to bottom right, hsl(var(--accent) / 0.2), hsl(var(--muted)))' }}
           onClick={() => navigate(createPageUrl(`PlaylistView?id=${playlist.id}`))}
         >
           {playlist.cover_image_url ? (
             <img src={playlist.cover_image_url} alt={playlist.name} className="w-full h-full object-cover" />
           ) : (
-            <Music className="w-16 h-16 text-stone-600 group-hover:text-stone-500 transition-colors" />
+            <Music className="w-16 h-16 transition-colors" style={{ color: 'hsl(var(--text-subtle))' }} />
           )}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+          <div className="absolute inset-0 bg-purple-900/0 group-hover:bg-purple-900/10 transition-colors flex items-center justify-center">
             <Button
               size="icon"
-              className="opacity-0 group-hover:opacity-100 transition-opacity bg-amber-600 hover:bg-amber-500 rounded-full w-12 h-12"
+              className="opacity-0 group-hover:opacity-100 transition-opacity rounded-full w-12 h-12"
+              style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
             >
               <Play className="w-5 h-5" />
             </Button>
@@ -36,21 +38,21 @@ export default function PlaylistCard({ playlist, isOwner, user }) {
         {/* Info */}
         <div className="p-4">
           <div className="flex items-start justify-between mb-2">
-            <h3 className="text-white font-medium line-clamp-1">{playlist.name}</h3>
+            <h3 className="font-medium line-clamp-1" style={{ color: 'hsl(var(--foreground))' }}>{playlist.name}</h3>
             {playlist.is_public ? (
-              <Globe className="w-4 h-4 text-green-500 flex-shrink-0" />
+              <Globe className="w-4 h-4 text-green-600 flex-shrink-0" />
             ) : (
-              <Lock className="w-4 h-4 text-stone-500 flex-shrink-0" />
+              <Lock className="w-4 h-4 flex-shrink-0" style={{ color: 'hsl(var(--text-subtle))' }} />
             )}
           </div>
           
           {playlist.description && (
-            <p className="text-stone-400 text-sm line-clamp-2 mb-3">
+            <p className="text-sm line-clamp-2 mb-3" style={{ color: 'hsl(var(--text-muted))' }}>
               {playlist.description}
             </p>
           )}
 
-          <div className="flex items-center justify-between text-stone-500 text-sm">
+          <div className="flex items-center justify-between text-sm" style={{ color: 'hsl(var(--text-subtle))' }}>
             <span className="flex items-center gap-1">
               <Music className="w-3 h-3" />
               {/* Track count will be calculated */}
@@ -62,7 +64,7 @@ export default function PlaylistCard({ playlist, isOwner, user }) {
           </div>
 
           {!isOwner && (
-            <p className="text-stone-500 text-xs mt-2">
+            <p className="text-xs mt-2" style={{ color: 'hsl(var(--text-subtle))' }}>
               by {playlist.created_by?.split('@')[0]}
             </p>
           )}
