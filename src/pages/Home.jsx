@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 
 export default function Home() {
   const [userTier, setUserTier] = useState('free');
+  const [userEmail, setUserEmail] = useState(null);
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
   const [filters, setFilters] = useState({
     search: '',
@@ -30,6 +31,7 @@ export default function Home() {
       try {
         const user = await base44.auth.me();
         if (user) {
+          setUserEmail(user.email);
           const subscriptions = await base44.entities.UserSubscription.filter({
             user_email: user.email,
             is_active: true,
@@ -44,6 +46,16 @@ export default function Home() {
     };
     fetchUserData();
   }, []);
+
+  // Fetch user preferences
+  const { data: preferences } = useQuery({
+    queryKey: ['user-preferences', userEmail],
+    queryFn: async () => {
+      const prefs = await base44.entities.UserPreferences.filter({ user_email: userEmail });
+      return prefs[0] || null;
+    },
+    enabled: !!userEmail,
+  });
 
   // Fetch tracks
   const { data: tracks = [], isLoading } = useQuery({
@@ -109,10 +121,63 @@ export default function Home() {
     });
   }, [tracks, filters]);
 
+  // Personalized recommendations based on preferences
+  const recommendedTracks = useMemo(() => {
+    if (!preferences || tracks.length === 0) return [];
+
+    const scored = tracks.map(track => {
+      let score = 0;
+
+      // Match preferred themes
+      if (preferences.preferred_themes?.length > 0) {
+        const themeMatch = track.themes?.some(t => preferences.preferred_themes.includes(t));
+        if (themeMatch) score += 3;
+      }
+
+      // Match preferred chakras
+      if (preferences.preferred_chakras?.length > 0 && track.chakra) {
+        if (preferences.preferred_chakras.includes(track.chakra)) score += 2;
+      }
+
+      // Match nervous system preferences
+      if (preferences.preferred_nervous_system_states?.length > 0 && track.nervous_system_state) {
+        if (preferences.preferred_nervous_system_states.includes(track.nervous_system_state)) score += 2;
+      }
+
+      // Match difficulty level
+      if (preferences.difficulty_level && track.difficulty_level === preferences.difficulty_level) {
+        score += 1;
+      }
+
+      // Match voice preference
+      if (preferences.voice_preference === 'with_voice' && track.voice_present) score += 1;
+      if (preferences.voice_preference === 'without_voice' && !track.voice_present) score += 1;
+
+      // Match session duration
+      if (preferences.session_duration_preference && track.duration_seconds) {
+        const minutes = track.duration_seconds / 60;
+        if (preferences.session_duration_preference === 'short' && minutes < 15) score += 1;
+        if (preferences.session_duration_preference === 'medium' && minutes >= 15 && minutes <= 30) score += 1;
+        if (preferences.session_duration_preference === 'long' && minutes > 30) score += 1;
+      }
+
+      return { track, score };
+    });
+
+    return scored
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4)
+      .map(item => item.track);
+  }, [tracks, preferences]);
+
   // Featured tracks
   const featuredTracks = useMemo(() => {
     return tracks.filter((t) => t.is_featured).slice(0, 4);
   }, [tracks]);
+
+  // Display personalized tracks if available, otherwise featured
+  const heroTracks = recommendedTracks.length > 0 ? recommendedTracks : featuredTracks;
 
   // Count active filters
   const activeFiltersCount = useMemo(() => {
@@ -174,8 +239,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Tracks */}
-      {featuredTracks.length > 0 && (
+      {/* Recommended/Featured Tracks */}
+      {heroTracks.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 pb-16">
           <motion.div
             initial={{ opacity: 0 }}
@@ -183,7 +248,14 @@ export default function Home() {
             transition={{ delay: 0.3 }}
           >
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-light text-white">Featured</h2>
+              <div>
+                <h2 className="text-2xl font-light text-white">
+                  {recommendedTracks.length > 0 ? 'Recommended for You' : 'Featured'}
+                </h2>
+                {recommendedTracks.length > 0 && (
+                  <p className="text-stone-400 text-sm mt-1">Based on your preferences</p>
+                )}
+              </div>
               <Link
                 to={createPageUrl('Library')}
                 className="text-amber-500 hover:text-amber-400 text-sm flex items-center gap-1"
@@ -193,7 +265,7 @@ export default function Home() {
               </Link>
             </div>
             <TrackList
-              tracks={featuredTracks}
+              tracks={heroTracks}
               isLoading={false}
               userTier={userTier}
               onUpgradeClick={() => setIsUpgradeOpen(true)}

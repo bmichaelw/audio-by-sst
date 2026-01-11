@@ -50,6 +50,7 @@ export default function Layout({ children, currentPageName }) {
 
   if (user) {
     navItems.push({ name: 'Profile', icon: User, href: createPageUrl('Profile') });
+    navItems.push({ name: 'Settings', icon: User, href: createPageUrl('Settings') });
   }
 
   // Add ResonancePath for eligible users
