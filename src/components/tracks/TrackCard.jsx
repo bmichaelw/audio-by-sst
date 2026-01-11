@@ -22,9 +22,9 @@ const tierLabels = {
 };
 
 const nervousSystemColors = {
-  calming: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  activating: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-  balancing: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+  calming: 'bg-blue-100 text-blue-800 border-blue-200',
+  activating: 'bg-rose-100 text-rose-800 border-rose-200',
+  balancing: 'bg-purple-100 text-purple-800 border-purple-200',
 };
 
 function formatDuration(seconds) {
@@ -87,14 +87,18 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
   return (
     <Card
       className={cn(
-        "group overflow-hidden border transition-all duration-300 hover:shadow-xl",
+        "group overflow-hidden border transition-all duration-300 hover:shadow-lg",
         isCurrentTrack
-          ? "border-amber-600/50 bg-stone-900 shadow-lg shadow-amber-600/10"
-          : "border-stone-800 bg-stone-900/50 hover:border-stone-700"
+          ? "border-purple-300 shadow-lg"
+          : "hover:border-purple-200"
       )}
+      style={{ 
+        backgroundColor: isCurrentTrack ? 'hsl(var(--surface-elevated))' : 'hsl(var(--card))',
+        borderColor: isCurrentTrack ? 'hsl(var(--primary) / 0.3)' : undefined
+      }}
     >
       {/* Cover Image */}
-      <div className="relative aspect-square overflow-hidden bg-stone-800">
+      <div className="relative aspect-square overflow-hidden" style={{ backgroundColor: 'hsl(var(--muted))' }}>
         {track.cover_image_url ? (
           <img
             src={track.cover_image_url}
@@ -102,15 +106,15 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-800 to-stone-900">
-            <div className="w-16 h-16 rounded-full bg-stone-700/50" />
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
+            <div className="w-16 h-16 rounded-full" style={{ backgroundColor: 'hsl(var(--muted))' }} />
           </div>
         )}
 
         {/* Play Button Overlay */}
         <div
           className={cn(
-            "absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity",
+            "absolute inset-0 bg-purple-900/30 flex items-center justify-center transition-opacity",
             "opacity-0 group-hover:opacity-100",
             isCurrentTrack && "opacity-100"
           )}
@@ -118,13 +122,11 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
           <button
             onClick={handlePlayClick}
             disabled={isLoadingAudio || audioLoading}
-            className={cn(
-              "w-16 h-16 rounded-full flex items-center justify-center transition-all transform",
-              "hover:scale-110 active:scale-95",
-              isLocked
-                ? "bg-stone-700 text-stone-400"
-                : "bg-amber-600 text-white shadow-lg"
-            )}
+            className="w-16 h-16 rounded-full flex items-center justify-center transition-all transform hover:scale-110 active:scale-95 shadow-lg"
+            style={{
+              backgroundColor: isLocked ? 'hsl(var(--muted))' : 'hsl(var(--primary))',
+              color: isLocked ? 'hsl(var(--text-muted))' : 'hsl(var(--primary-foreground))'
+            }}
           >
             {isLoadingAudio || (isCurrentTrack && audioLoading) ? (
               <Loader2 className="w-6 h-6 animate-spin" />
@@ -141,8 +143,8 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
         {/* Featured Badge */}
         {track.is_featured && (
           <div className="absolute top-2 left-2">
-            <Badge className="bg-amber-600/90 text-white border-0 backdrop-blur-sm">
-              <Star className="w-3 h-3 mr-1 fill-white" />
+            <Badge className="backdrop-blur-sm border-0" style={{ backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))' }}>
+              <Star className="w-3 h-3 mr-1 fill-current" />
               Featured
             </Badge>
           </div>
@@ -150,7 +152,7 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
 
         {/* Duration */}
         <div className="absolute bottom-2 right-2">
-          <Badge variant="outline" className="bg-black/60 backdrop-blur-sm border-stone-700 text-white font-mono text-xs">
+          <Badge variant="outline" className="bg-white/80 backdrop-blur-sm font-mono text-xs" style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             {formatDuration(track.duration_seconds)}
           </Badge>
         </div>
@@ -159,11 +161,11 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
       {/* Track Info */}
       <div className="p-4 space-y-3">
         <div>
-          <h3 className="text-white font-medium line-clamp-1 mb-1">
+          <h3 className="font-medium line-clamp-1 mb-1" style={{ color: 'hsl(var(--foreground))' }}>
             {track.title}
           </h3>
           {track.intention && (
-            <p className="text-stone-400 text-sm line-clamp-2">
+            <p className="text-sm line-clamp-2" style={{ color: 'hsl(var(--text-muted))' }}>
               {track.intention}
             </p>
           )}
@@ -180,13 +182,13 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
             </Badge>
           )}
           {isLocked && (
-            <Badge variant="outline" className="bg-stone-800 border-stone-700 text-stone-400 text-xs">
+            <Badge variant="outline" className="text-xs" style={{ backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--text-muted))' }}>
               <Lock className="w-3 h-3 mr-1" />
               {tierLabels[track.access_tier]}
             </Badge>
           )}
           {track.voice_present && (
-            <Badge variant="outline" className="bg-stone-800 border-stone-700 text-stone-400 text-xs">
+            <Badge variant="outline" className="text-xs" style={{ backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--text-muted))' }}>
               Guided
             </Badge>
           )}
@@ -198,7 +200,8 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
             {track.themes.slice(0, 3).map((theme) => (
               <span
                 key={theme}
-                className="text-xs text-stone-500 capitalize"
+                className="text-xs capitalize"
+                style={{ color: 'hsl(var(--text-subtle))' }}
               >
                 #{theme}
               </span>

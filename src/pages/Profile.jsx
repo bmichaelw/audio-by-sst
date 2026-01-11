@@ -125,36 +125,36 @@ export default function Profile() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--background))' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-stone-950 pb-32">
+    <div className="min-h-screen pb-32" style={{ backgroundColor: 'hsl(var(--background))' }}>
       {/* Header */}
-      <div className="bg-gradient-to-b from-stone-900 to-stone-950 border-b border-stone-800/50">
+      <div className="bg-gradient-to-b from-purple-50/50 to-transparent border-b" style={{ borderColor: 'hsl(var(--border))' }}>
         <div className="max-w-5xl mx-auto px-4 py-12">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-start gap-6"
           >
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-white text-2xl font-medium">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-medium" style={{ background: 'linear-gradient(to bottom right, hsl(var(--primary)), hsl(var(--primary-hover)))', color: 'hsl(var(--primary-foreground))' }}>
               {user?.full_name?.[0] || user?.email?.[0] || 'U'}
             </div>
             <div className="flex-1">
-              <h1 className="text-3xl font-light text-white mb-2">
+              <h1 className="text-3xl font-light mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>
                 {user?.full_name || 'User Profile'}
               </h1>
-              <p className="text-stone-400">{user?.email}</p>
+              <p style={{ color: 'hsl(var(--text-muted))' }}>{user?.email}</p>
               <div className="flex items-center gap-3 mt-4">
                 <Badge className={cn(tierColors[subscription?.tier || 'free'], 'text-white')}>
                   {tierLabels[subscription?.tier || 'free']}
                 </Badge>
                 {user?.role === 'admin' && (
-                  <Badge variant="outline" className="text-amber-400 border-amber-600">
+                  <Badge variant="outline" className="border-purple-300" style={{ color: 'hsl(var(--accent))' }}>
                     <Crown className="w-3 h-3 mr-1" />
                     Admin
                   </Badge>
@@ -167,7 +167,7 @@ export default function Profile() {
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="bg-stone-900/50 border border-stone-800">
+          <TabsList style={{ backgroundColor: 'hsl(var(--surface))', border: '1px solid hsl(var(--border))' }}>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="progress">ResonancePath Progress</TabsTrigger>
             <TabsTrigger value="history">Listening History</TabsTrigger>
@@ -176,10 +176,10 @@ export default function Profile() {
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
             {/* Subscription Card */}
-            <Card className="bg-stone-900/50 border-stone-800">
+            <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Crown className="w-5 h-5 text-amber-500" />
+                <CardTitle className="flex items-center gap-2" style={{ color: 'hsl(var(--foreground))' }}>
+                  <Crown className="w-5 h-5" style={{ color: 'hsl(var(--accent))' }} />
                   Subscription
                 </CardTitle>
               </CardHeader>
@@ -188,34 +188,35 @@ export default function Profile() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-stone-400 text-sm">Current Plan</p>
-                        <p className="text-white text-xl font-medium">
+                        <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Current Plan</p>
+                        <p className="text-xl font-medium" style={{ color: 'hsl(var(--foreground))' }}>
                           {tierLabels[subscription.tier]}
                         </p>
                       </div>
                       {subscription.expires_at && (
                         <div className="text-right">
-                          <p className="text-stone-400 text-sm">Renews</p>
-                          <p className="text-white">{formatDate(subscription.expires_at)}</p>
+                          <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Renews</p>
+                          <p style={{ color: 'hsl(var(--foreground))' }}>{formatDate(subscription.expires_at)}</p>
                         </div>
                       )}
                     </div>
                     <Button
                       onClick={() => navigate(createPageUrl('Pricing'))}
                       variant="outline"
-                      className="w-full border-stone-700 text-stone-300 hover:bg-stone-800"
+                      className="w-full"
+                      style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
                     >
                       Manage Subscription
                     </Button>
                   </div>
                 ) : (
                   <div className="text-center py-6">
-                    <p className="text-stone-400 mb-4">
+                    <p className="mb-4" style={{ color: 'hsl(var(--text-muted))' }}>
                       You're currently on the free plan
                     </p>
                     <Button
                       onClick={() => navigate(createPageUrl('Pricing'))}
-                      className="bg-amber-600 hover:bg-amber-500"
+                      style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
                     >
                       Upgrade Now
                     </Button>
@@ -226,43 +227,43 @@ export default function Profile() {
 
             {/* Stats Grid */}
             <div className="grid md:grid-cols-3 gap-4">
-              <Card className="bg-stone-900/50 border-stone-800">
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-600/10 flex items-center justify-center">
-                      <Music className="w-6 h-6 text-blue-500" />
+                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                      <Music className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                      <p className="text-stone-400 text-sm">Tracks Played</p>
-                      <p className="text-2xl font-medium text-white">{playHistory.length}</p>
+                      <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Tracks Played</p>
+                      <p className="text-2xl font-medium" style={{ color: 'hsl(var(--foreground))' }}>{playHistory.length}</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-stone-900/50 border-stone-800">
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-green-600/10 flex items-center justify-center">
-                      <CheckCircle2 className="w-6 h-6 text-green-500" />
+                    <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                      <CheckCircle2 className="w-6 h-6 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-stone-400 text-sm">Sessions Complete</p>
-                      <p className="text-2xl font-medium text-white">{completedSessions}</p>
+                      <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Sessions Complete</p>
+                      <p className="text-2xl font-medium" style={{ color: 'hsl(var(--foreground))' }}>{completedSessions}</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-stone-900/50 border-stone-800">
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-amber-600/10 flex items-center justify-center">
-                      <TrendingUp className="w-6 h-6 text-amber-500" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--accent) / 0.2)' }}>
+                      <TrendingUp className="w-6 h-6" style={{ color: 'hsl(var(--accent))' }} />
                     </div>
                     <div>
-                      <p className="text-stone-400 text-sm">Progress</p>
-                      <p className="text-2xl font-medium text-white">
+                      <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Progress</p>
+                      <p className="text-2xl font-medium" style={{ color: 'hsl(var(--foreground))' }}>
                         {Math.round(overallProgress)}%
                       </p>
                     </div>
@@ -275,25 +276,25 @@ export default function Profile() {
           {/* Progress Tab */}
           <TabsContent value="progress" className="space-y-6">
             {phases.length === 0 ? (
-              <Card className="bg-stone-900/50 border-stone-800">
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                 <CardContent className="pt-6 text-center py-12">
-                  <TrendingUp className="w-16 h-16 text-stone-600 mx-auto mb-4" />
-                  <p className="text-stone-400">
+                  <TrendingUp className="w-16 h-16 mx-auto mb-4" style={{ color: 'hsl(var(--text-subtle))' }} />
+                  <p style={{ color: 'hsl(var(--text-muted))' }}>
                     ResonancePath program not yet available.
                   </p>
                 </CardContent>
               </Card>
             ) : (
               <>
-                <Card className="bg-stone-900/50 border-stone-800">
+                <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-stone-400 text-sm">Overall Progress</span>
-                      <span className="text-white font-medium">
+                      <span className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Overall Progress</span>
+                      <span className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>
                         {completedSessions} / {totalSessions} sessions
                       </span>
                     </div>
-                    <Progress value={overallProgress} className="h-2 bg-stone-800" />
+                    <Progress value={overallProgress} className="h-2" />
                   </CardContent>
                 </Card>
 
@@ -309,17 +310,17 @@ export default function Profile() {
                     const phaseProgress = phaseTotal > 0 ? (phaseCompleted / phaseTotal) * 100 : 0;
 
                     return (
-                      <Card key={phase.id} className="bg-stone-900/50 border-stone-800">
+                      <Card key={phase.id} style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                         <CardContent className="pt-6">
                           <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-white font-medium">{phase.name}</h3>
-                            <span className="text-stone-400 text-sm">
+                            <h3 className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>{phase.name}</h3>
+                            <span className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
                               {phaseCompleted} / {phaseTotal}
                             </span>
                           </div>
-                          <Progress value={phaseProgress} className="h-1.5 bg-stone-800 mb-2" />
+                          <Progress value={phaseProgress} className="h-1.5 mb-2" />
                           {phase.description && (
-                            <p className="text-stone-500 text-sm">{phase.description}</p>
+                            <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>{phase.description}</p>
                           )}
                         </CardContent>
                       </Card>
@@ -329,7 +330,8 @@ export default function Profile() {
 
                 <Button
                   onClick={() => navigate(createPageUrl('ResonancePath'))}
-                  className="w-full bg-amber-600 hover:bg-amber-500"
+                  className="w-full"
+                  style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
                 >
                   Continue Program
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -341,13 +343,13 @@ export default function Profile() {
           {/* History Tab */}
           <TabsContent value="history" className="space-y-4">
             {playHistory.length === 0 ? (
-              <Card className="bg-stone-900/50 border-stone-800">
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                 <CardContent className="pt-6 text-center py-12">
-                  <Clock className="w-16 h-16 text-stone-600 mx-auto mb-4" />
-                  <p className="text-stone-400 mb-4">No listening history yet</p>
+                  <Clock className="w-16 h-16 mx-auto mb-4" style={{ color: 'hsl(var(--text-subtle))' }} />
+                  <p className="mb-4" style={{ color: 'hsl(var(--text-muted))' }}>No listening history yet</p>
                   <Button
                     onClick={() => navigate(createPageUrl('Library'))}
-                    className="bg-amber-600 hover:bg-amber-500"
+                    style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
                   >
                     Explore Library
                   </Button>
@@ -359,7 +361,7 @@ export default function Profile() {
                 if (!track) return null;
 
                 return (
-                  <Card key={history.id} className="bg-stone-900/50 border-stone-800">
+                  <Card key={history.id} style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                     <CardContent className="pt-6">
                       <div className="flex items-center gap-4">
                         {track.cover_image_url ? (
@@ -369,20 +371,20 @@ export default function Profile() {
                             className="w-16 h-16 rounded-lg object-cover"
                           />
                         ) : (
-                          <div className="w-16 h-16 rounded-lg bg-stone-800 flex items-center justify-center">
-                            <Music className="w-6 h-6 text-stone-600" />
+                          <div className="w-16 h-16 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--muted))' }}>
+                            <Music className="w-6 h-6" style={{ color: 'hsl(var(--text-subtle))' }} />
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-medium mb-1">{track.title}</h4>
-                          <div className="flex items-center gap-3 text-sm text-stone-400">
+                          <h4 className="font-medium mb-1" style={{ color: 'hsl(var(--foreground))' }}>{track.title}</h4>
+                          <div className="flex items-center gap-3 text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
                             <span>{formatDuration(track.duration_seconds)}</span>
                             <span>•</span>
                             <span>{formatDate(history.played_at)}</span>
                           </div>
                         </div>
                         {history.completed && (
-                          <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
                         )}
                       </div>
                     </CardContent>

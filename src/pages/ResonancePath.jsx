@@ -188,34 +188,35 @@ export default function ResonancePath() {
 
   if (checkingAccess) {
     return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--background))' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
       </div>
     );
   }
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center p-4">
-        <Card className="bg-stone-900 border-stone-800 max-w-md w-full">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'hsl(var(--background))' }}>
+        <Card className="max-w-md w-full" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <CardContent className="pt-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-4">
-              <Lock className="w-8 h-8 text-amber-500" />
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'hsl(var(--accent) / 0.15)' }}>
+              <Lock className="w-8 h-8" style={{ color: 'hsl(var(--accent))' }} />
             </div>
-            <h2 className="text-xl font-medium text-white mb-2">ResonancePath Access Required</h2>
-            <p className="text-stone-400 mb-6">
+            <h2 className="text-xl font-medium mb-2" style={{ color: 'hsl(var(--foreground))' }}>ResonancePath Access Required</h2>
+            <p className="mb-6" style={{ color: 'hsl(var(--text-muted))' }}>
               This guided program is exclusively available to ResonancePath members.
             </p>
             <Button
               onClick={() => navigate(createPageUrl('Pricing'))}
-              className="bg-amber-600 hover:bg-amber-500 mb-3"
+              className="mb-3"
+              style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
             >
               Upgrade to ResonancePath
             </Button>
             <Button
               variant="outline"
               onClick={() => navigate(createPageUrl('Home'))}
-              className="border-stone-700 text-stone-300"
+              style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
             >
               Back to Home
             </Button>
@@ -227,30 +228,30 @@ export default function ResonancePath() {
 
   if (phasesLoading || phaseTracksLoading) {
     return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--background))' }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-stone-950 pb-32">
+    <div className="min-h-screen pb-32" style={{ backgroundColor: 'hsl(var(--background))' }}>
       {/* Header */}
-      <div className="bg-gradient-to-b from-amber-900/20 via-stone-950 to-stone-950 border-b border-stone-800/50">
+      <div className="bg-gradient-to-b from-purple-100/20 to-transparent border-b" style={{ borderColor: 'hsl(var(--border))' }}>
         <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <Badge className="bg-amber-600/10 text-amber-400 border-amber-600/20 mb-4">
+            <Badge className="bg-purple-100 text-purple-900 border-purple-200 mb-4">
               <Award className="w-3 h-3 mr-1" />
               Guided Program
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-light text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-light mb-4" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>
               ResonancePath
             </h1>
-            <p className="text-lg text-stone-400 max-w-2xl mx-auto mb-4">
+            <p className="text-lg max-w-2xl mx-auto mb-4" style={{ color: 'hsl(var(--text-body))' }}>
               A structured journey through curated sessions designed to deepen your practice
               and support your nervous system regulation.
             </p>
@@ -258,10 +259,10 @@ export default function ResonancePath() {
             {/* Personalized Recommendations */}
             {preferences?.resonance_focus_areas?.length > 0 && (
               <div className="mb-8">
-                <p className="text-stone-500 text-sm mb-2">Based on your focus areas:</p>
+                <p className="text-sm mb-2" style={{ color: 'hsl(var(--text-muted))' }}>Based on your focus areas:</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {preferences.resonance_focus_areas.map(area => (
-                    <Badge key={area} variant="outline" className="border-amber-600/30 text-amber-400">
+                    <Badge key={area} variant="outline" className="border-purple-300" style={{ color: 'hsl(var(--accent))' }}>
                       {area}
                     </Badge>
                   ))}
@@ -270,15 +271,15 @@ export default function ResonancePath() {
             )}
 
             {/* Overall Progress */}
-            <div className="bg-stone-900/50 rounded-xl p-6 border border-stone-800">
+            <div className="rounded-xl p-6 border" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-stone-400 text-sm">Overall Progress</span>
-                <span className="text-white font-medium">
+                <span className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Overall Progress</span>
+                <span className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>
                   {completedSessions} / {totalSessions} sessions
                 </span>
               </div>
-              <Progress value={overallProgress} className="h-2 bg-stone-800" />
-              <div className="mt-2 text-stone-500 text-xs">
+              <Progress value={overallProgress} className="h-2" />
+              <div className="mt-2 text-xs" style={{ color: 'hsl(var(--text-subtle))' }}>
                 {Math.round(overallProgress)}% complete
               </div>
             </div>
@@ -289,10 +290,10 @@ export default function ResonancePath() {
       {/* Phases */}
       <div className="max-w-4xl mx-auto px-4 py-8">
         {phasesWithTracks.length === 0 ? (
-          <Card className="bg-stone-900/30 border-stone-800">
+          <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
             <CardContent className="pt-6 text-center py-12">
-              <TrendingUp className="w-16 h-16 text-stone-600 mx-auto mb-4" />
-              <p className="text-stone-400">
+              <TrendingUp className="w-16 h-16 mx-auto mb-4" style={{ color: 'hsl(var(--text-subtle))' }} />
+              <p style={{ color: 'hsl(var(--text-muted))' }}>
                 The ResonancePath program is being prepared. Check back soon!
               </p>
             </CardContent>
@@ -305,27 +306,27 @@ export default function ResonancePath() {
                 value={phase.id}
                 className="border-0"
               >
-                <Card className="bg-stone-900/50 border-stone-800 overflow-hidden">
-                  <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-stone-800/30">
+                <Card className="overflow-hidden" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+                  <AccordionTrigger className="px-6 py-4 hover:no-underline" style={{ ':hover': { backgroundColor: 'hsl(var(--muted))' } }}>
                     <div className="flex items-center gap-4 w-full text-left">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-600/10 flex items-center justify-center">
-                        <span className="text-amber-500 font-medium">{index + 1}</span>
+                      <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--accent) / 0.15)' }}>
+                        <span className="font-medium" style={{ color: 'hsl(var(--accent))' }}>{index + 1}</span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-medium text-white mb-1">
+                        <h3 className="text-lg font-medium mb-1" style={{ color: 'hsl(var(--foreground))' }}>
                           {phase.name}
                         </h3>
                         {phase.description && (
-                          <p className="text-stone-400 text-sm line-clamp-1">
+                          <p className="text-sm line-clamp-1" style={{ color: 'hsl(var(--text-muted))' }}>
                             {phase.description}
                           </p>
                         )}
                         <div className="flex items-center gap-3 mt-2">
                           <Progress
                             value={phase.progress}
-                            className="h-1.5 bg-stone-800 flex-1 max-w-xs"
+                            className="h-1.5 flex-1 max-w-xs"
                           />
-                          <span className="text-stone-500 text-xs whitespace-nowrap">
+                          <span className="text-xs whitespace-nowrap" style={{ color: 'hsl(var(--text-subtle))' }}>
                             {phase.completedCount} / {phase.totalCount}
                           </span>
                         </div>
@@ -345,12 +346,10 @@ export default function ResonancePath() {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: trackIndex * 0.05 }}
-                            className={cn(
-                              "flex items-center gap-4 p-4 rounded-lg border transition-all",
-                              isCurrentTrack
-                                ? "bg-amber-600/5 border-amber-600/30"
-                                : "bg-stone-800/30 border-stone-800 hover:bg-stone-800/50"
-                            )}
+                            className="flex items-center gap-4 p-4 rounded-lg border transition-all"
+                            style={isCurrentTrack ? 
+                              { backgroundColor: 'hsl(var(--accent) / 0.08)', borderColor: 'hsl(var(--accent) / 0.3)' } : 
+                              { backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))' }}
                           >
                             {/* Completion Status */}
                             <button
@@ -363,9 +362,9 @@ export default function ResonancePath() {
                               className="flex-shrink-0"
                             >
                               {track.isCompleted ? (
-                                <CheckCircle2 className="w-6 h-6 text-green-500 fill-green-500/20" />
+                                <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-100" />
                               ) : (
-                                <Circle className="w-6 h-6 text-stone-600 hover:text-stone-400" />
+                                <Circle className="w-6 h-6" style={{ color: 'hsl(var(--text-subtle))' }} />
                               )}
                             </button>
 
@@ -377,8 +376,8 @@ export default function ResonancePath() {
                                 className="w-12 h-12 rounded-lg object-cover"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-lg bg-stone-800 flex items-center justify-center">
-                                <span className="text-stone-600 text-sm">
+                              <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--muted))' }}>
+                                <span className="text-sm" style={{ color: 'hsl(var(--text-subtle))' }}>
                                   {trackIndex + 1}
                                 </span>
                               </div>
@@ -386,18 +385,18 @@ export default function ResonancePath() {
 
                             {/* Track Info */}
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-white font-medium">
+                              <h4 className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>
                                 {track.sessionTitle || track.title}
                               </h4>
                               {track.intention && (
-                                <p className="text-stone-500 text-sm line-clamp-1">
+                                <p className="text-sm line-clamp-1" style={{ color: 'hsl(var(--text-muted))' }}>
                                   {track.intention}
                                 </p>
                               )}
                             </div>
 
                             {/* Duration */}
-                            <span className="text-stone-500 text-sm font-mono">
+                            <span className="text-sm font-mono" style={{ color: 'hsl(var(--text-muted))' }}>
                               {formatDuration(track.duration_seconds)}
                             </span>
 
@@ -411,9 +410,9 @@ export default function ResonancePath() {
                                   : handlePlayTrack(track)
                               }
                               disabled={isTrackLoading}
-                              className={cn(
-                                isCurrentTrack && "bg-amber-600 hover:bg-amber-500"
-                              )}
+                              style={isCurrentTrack ? 
+                                { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' } : 
+                                {}}
                             >
                               {isTrackLoading ? (
                                 <Loader2 className="w-4 h-4 animate-spin" />

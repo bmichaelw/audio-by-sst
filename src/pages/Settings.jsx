@@ -139,23 +139,23 @@ export default function Settings() {
   const focusAreas = ['Stress Relief', 'Better Sleep', 'Focus & Clarity', 'Emotional Balance', 'Energy Boost', 'Self-Love', 'Creativity'];
 
   return (
-    <div className="min-h-screen bg-stone-950 py-12 px-4">
+    <div className="min-h-screen py-12 px-4" style={{ backgroundColor: 'hsl(var(--background))' }}>
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, hsl(var(--primary)), hsl(var(--primary-hover)))' }}>
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white">Your Preferences</h1>
-            <p className="text-stone-400">Personalize your experience</p>
+            <h1 className="text-3xl font-bold" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>Your Preferences</h1>
+            <p style={{ color: 'hsl(var(--text-muted))' }}>Personalize your healing journey</p>
           </div>
         </div>
 
         {/* Preferred Themes */}
-        <Card className="bg-stone-900 border-stone-800">
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <CardHeader>
-            <CardTitle className="text-white">Favorite Themes</CardTitle>
+            <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Favorite Themes</CardTitle>
             <CardDescription>Select themes you resonate with most</CardDescription>
           </CardHeader>
           <CardContent>
@@ -164,12 +164,10 @@ export default function Settings() {
                 <Badge
                   key={theme.id}
                   variant={formData.preferred_themes.includes(theme.name) ? 'default' : 'outline'}
-                  className={cn(
-                    "cursor-pointer transition-all",
-                    formData.preferred_themes.includes(theme.name)
-                      ? "bg-amber-600 hover:bg-amber-500 text-white"
-                      : "hover:bg-stone-800"
-                  )}
+                  className="cursor-pointer transition-all"
+                  style={formData.preferred_themes.includes(theme.name) ? 
+                    { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' } : 
+                    { borderColor: 'hsl(var(--border))' }}
                   onClick={() => toggleArrayItem('preferred_themes', theme.name)}
                 >
                   {theme.name}
@@ -181,9 +179,9 @@ export default function Settings() {
 
         {/* Chakras & Nervous System */}
         <div className="grid md:grid-cols-2 gap-6">
-          <Card className="bg-stone-900 border-stone-800">
+          <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
             <CardHeader>
-              <CardTitle className="text-white">Chakra Focus</CardTitle>
+              <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Chakra Focus</CardTitle>
               <CardDescription>Areas you want to work on</CardDescription>
             </CardHeader>
             <CardContent>
@@ -192,12 +190,10 @@ export default function Settings() {
                   <Badge
                     key={chakra}
                     variant={formData.preferred_chakras.includes(chakra) ? 'default' : 'outline'}
-                    className={cn(
-                      "cursor-pointer transition-all capitalize",
-                      formData.preferred_chakras.includes(chakra)
-                        ? "bg-amber-600 hover:bg-amber-500 text-white"
-                        : "hover:bg-stone-800"
-                    )}
+                    className="cursor-pointer transition-all capitalize"
+                    style={formData.preferred_chakras.includes(chakra) ? 
+                      { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' } : 
+                      { borderColor: 'hsl(var(--border))' }}
                     onClick={() => toggleArrayItem('preferred_chakras', chakra)}
                   >
                     {chakra.replace('_', ' ')}
@@ -207,9 +203,9 @@ export default function Settings() {
             </CardContent>
           </Card>
 
-          <Card className="bg-stone-900 border-stone-800">
+          <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
             <CardHeader>
-              <CardTitle className="text-white">Nervous System</CardTitle>
+              <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Nervous System</CardTitle>
               <CardDescription>Preferred effects</CardDescription>
             </CardHeader>
             <CardContent>
@@ -218,12 +214,10 @@ export default function Settings() {
                   <Badge
                     key={state}
                     variant={formData.preferred_nervous_system_states.includes(state) ? 'default' : 'outline'}
-                    className={cn(
-                      "cursor-pointer transition-all capitalize",
-                      formData.preferred_nervous_system_states.includes(state)
-                        ? "bg-amber-600 hover:bg-amber-500 text-white"
-                        : "hover:bg-stone-800"
-                    )}
+                    className="cursor-pointer transition-all capitalize"
+                    style={formData.preferred_nervous_system_states.includes(state) ? 
+                      { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' } : 
+                      { borderColor: 'hsl(var(--border))' }}
                     onClick={() => toggleArrayItem('preferred_nervous_system_states', state)}
                   >
                     {state}
@@ -235,9 +229,9 @@ export default function Settings() {
         </div>
 
         {/* ResonancePath Focus */}
-        <Card className="bg-stone-900 border-stone-800">
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <CardHeader>
-            <CardTitle className="text-white">ResonancePath Focus</CardTitle>
+            <CardTitle style={{ color: 'hsl(var(--foreground))' }}>ResonancePath Focus</CardTitle>
             <CardDescription>What you want to achieve</CardDescription>
           </CardHeader>
           <CardContent>
@@ -246,12 +240,10 @@ export default function Settings() {
                 <Badge
                   key={area}
                   variant={formData.resonance_focus_areas.includes(area) ? 'default' : 'outline'}
-                  className={cn(
-                    "cursor-pointer transition-all",
-                    formData.resonance_focus_areas.includes(area)
-                      ? "bg-amber-600 hover:bg-amber-500 text-white"
-                      : "hover:bg-stone-800"
-                  )}
+                  className="cursor-pointer transition-all"
+                  style={formData.resonance_focus_areas.includes(area) ? 
+                    { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' } : 
+                    { borderColor: 'hsl(var(--border))' }}
                   onClick={() => toggleArrayItem('resonance_focus_areas', area)}
                 >
                   {area}
@@ -262,20 +254,20 @@ export default function Settings() {
         </Card>
 
         {/* Session Preferences */}
-        <Card className="bg-stone-900 border-stone-800">
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <CardHeader>
-            <CardTitle className="text-white">Session Preferences</CardTitle>
+            <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Session Preferences</CardTitle>
             <CardDescription>Customize your practice</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-3 gap-4">
               <div>
-                <Label className="text-stone-300 mb-2 block">Experience Level</Label>
+                <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>Experience Level</Label>
                 <Select value={formData.difficulty_level} onValueChange={(val) => setFormData(prev => ({ ...prev, difficulty_level: val }))}>
-                  <SelectTrigger className="bg-stone-800 border-stone-700">
+                  <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
                     <SelectItem value="beginner">Beginner</SelectItem>
                     <SelectItem value="intermediate">Intermediate</SelectItem>
                     <SelectItem value="advanced">Advanced</SelectItem>
@@ -284,12 +276,12 @@ export default function Settings() {
               </div>
 
               <div>
-                <Label className="text-stone-300 mb-2 block">Voice Guidance</Label>
+                <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>Voice Guidance</Label>
                 <Select value={formData.voice_preference} onValueChange={(val) => setFormData(prev => ({ ...prev, voice_preference: val }))}>
-                  <SelectTrigger className="bg-stone-800 border-stone-700">
+                  <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
                     <SelectItem value="with_voice">Prefer Guided</SelectItem>
                     <SelectItem value="without_voice">Prefer Instrumental</SelectItem>
                     <SelectItem value="no_preference">No Preference</SelectItem>
@@ -298,12 +290,12 @@ export default function Settings() {
               </div>
 
               <div>
-                <Label className="text-stone-300 mb-2 block">Session Length</Label>
+                <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>Session Length</Label>
                 <Select value={formData.session_duration_preference} onValueChange={(val) => setFormData(prev => ({ ...prev, session_duration_preference: val }))}>
-                  <SelectTrigger className="bg-stone-800 border-stone-700">
+                  <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
                     <SelectItem value="short">Short (&lt;15 min)</SelectItem>
                     <SelectItem value="medium">Medium (15-30 min)</SelectItem>
                     <SelectItem value="long">Long (30+ min)</SelectItem>
@@ -312,10 +304,10 @@ export default function Settings() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-stone-800">
+            <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: 'hsl(var(--divider))' }}>
               <div>
-                <Label className="text-stone-300">Daily Reminder</Label>
-                <p className="text-stone-500 text-sm">Get reminded to practice</p>
+                <Label style={{ color: 'hsl(var(--text-body))' }}>Daily Reminder</Label>
+                <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Get reminded to practice</p>
               </div>
               <Switch
                 checked={formData.reminder_enabled}
@@ -325,12 +317,12 @@ export default function Settings() {
 
             {formData.reminder_enabled && (
               <div>
-                <Label className="text-stone-300 mb-2 block">Reminder Time</Label>
+                <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>Reminder Time</Label>
                 <Input
                   type="time"
                   value={formData.daily_reminder_time}
                   onChange={(e) => setFormData(prev => ({ ...prev, daily_reminder_time: e.target.value }))}
-                  className="bg-stone-800 border-stone-700"
+                  style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
                 />
               </div>
             )}
@@ -338,10 +330,10 @@ export default function Settings() {
         </Card>
 
         {/* Mood Tracking */}
-        <Card className="bg-stone-900 border-stone-800">
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
-              <Heart className="w-5 h-5 text-red-400" />
+            <CardTitle className="flex items-center gap-2" style={{ color: 'hsl(var(--foreground))' }}>
+              <Heart className="w-5 h-5 text-rose-500" />
               Daily Mood Check-in
             </CardTitle>
             <CardDescription>Track how you're feeling</CardDescription>
@@ -349,12 +341,12 @@ export default function Settings() {
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div>
-                <Label className="text-stone-300 mb-2 block">How are you feeling today?</Label>
+                <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>How are you feeling today?</Label>
                 <Select value={moodEntry.mood} onValueChange={(val) => setMoodEntry(prev => ({ ...prev, mood: val }))}>
-                  <SelectTrigger className="bg-stone-800 border-stone-700">
+                  <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}>
                     <SelectValue placeholder="Select mood..." />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
                     <SelectItem value="amazing">🌟 Amazing</SelectItem>
                     <SelectItem value="good">😊 Good</SelectItem>
                     <SelectItem value="okay">😐 Okay</SelectItem>
@@ -365,7 +357,7 @@ export default function Settings() {
               </div>
 
               <div>
-                <Label className="text-stone-300 mb-2 block">Energy Level: {moodEntry.energy_level}/10</Label>
+                <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>Energy Level: {moodEntry.energy_level}/10</Label>
                 <Input
                   type="range"
                   min="1"
@@ -377,12 +369,13 @@ export default function Settings() {
               </div>
 
               <div>
-                <Label className="text-stone-300 mb-2 block">Notes (optional)</Label>
+                <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>Notes (optional)</Label>
                 <Textarea
                   value={moodEntry.notes}
                   onChange={(e) => setMoodEntry(prev => ({ ...prev, notes: e.target.value }))}
                   placeholder="Any thoughts or reflections..."
-                  className="bg-stone-800 border-stone-700 resize-none"
+                  className="resize-none"
+                  style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
                   rows={2}
                 />
               </div>
@@ -390,24 +383,25 @@ export default function Settings() {
               <Button
                 onClick={handleAddMood}
                 disabled={!moodEntry.mood}
-                className="bg-amber-600 hover:bg-amber-500 w-full"
+                className="w-full"
+                style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
               >
                 Log Mood
               </Button>
             </div>
 
             {formData.mood_log.length > 0 && (
-              <div className="pt-4 border-t border-stone-800">
-                <h4 className="text-stone-300 text-sm font-medium mb-3">Recent Entries</h4>
+              <div className="pt-4 border-t" style={{ borderColor: 'hsl(var(--divider))' }}>
+                <h4 className="text-sm font-medium mb-3" style={{ color: 'hsl(var(--text-body))' }}>Recent Entries</h4>
                 <div className="space-y-2 max-h-48 overflow-y-auto">
                   {formData.mood_log.slice(-5).reverse().map((entry, idx) => (
-                    <div key={idx} className="bg-stone-800/50 rounded-lg p-3 text-sm">
+                    <div key={idx} className="rounded-lg p-3 text-sm" style={{ backgroundColor: 'hsl(var(--muted))' }}>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-white capitalize">{entry.mood}</span>
-                        <span className="text-stone-400">{new Date(entry.date).toLocaleDateString()}</span>
+                        <span className="capitalize" style={{ color: 'hsl(var(--foreground))' }}>{entry.mood}</span>
+                        <span style={{ color: 'hsl(var(--text-muted))' }}>{new Date(entry.date).toLocaleDateString()}</span>
                       </div>
-                      <div className="text-stone-400">Energy: {entry.energy_level}/10</div>
-                      {entry.notes && <p className="text-stone-500 text-xs mt-1">{entry.notes}</p>}
+                      <div style={{ color: 'hsl(var(--text-muted))' }}>Energy: {entry.energy_level}/10</div>
+                      {entry.notes && <p className="text-xs mt-1" style={{ color: 'hsl(var(--text-subtle))' }}>{entry.notes}</p>}
                     </div>
                   ))}
                 </div>
@@ -421,7 +415,8 @@ export default function Settings() {
           <Button
             onClick={handleSave}
             disabled={saveMutation.isPending}
-            className="bg-amber-600 hover:bg-amber-500 text-white px-8"
+            className="px-8"
+            style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
           >
             {saveMutation.isPending ? (
               <>
