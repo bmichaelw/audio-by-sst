@@ -30,7 +30,9 @@ export default function TrackUploadForm({
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
-    audio_url: initialData?.audio_url || '',
+    audio_file_uri: initialData?.audio_file_uri || '',
+    audio_mime_type: initialData?.audio_mime_type || '',
+    audio_file_size: initialData?.audio_file_size || 0,
     cover_image_url: initialData?.cover_image_url || '',
     duration_seconds: initialData?.duration_seconds || 0,
     themes: initialData?.themes || [],
@@ -51,14 +53,32 @@ export default function TrackUploadForm({
   const handleFileUpload = async (file, type) => {
     setIsUploading(prev => ({ ...prev, [type]: true }));
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
       if (type === 'audio') {
-        setFormData(prev => ({ ...prev, audio_url: file_url }));
-        const audio = new Audio(file_url);
+        // Upload to private storage for security
+        const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
+        
+        // Extract audio metadata
+        const audio = new Audio(URL.createObjectURL(file));
         audio.addEventListener('loadedmetadata', () => {
-          setFormData(prev => ({ ...prev, duration_seconds: Math.round(audio.duration) }));
+          setFormData(prev => ({ 
+            ...prev, 
+            duration_seconds: Math.round(audio.duration),
+            audio_file_uri: file_uri,
+            audio_mime_type: file.type,
+            audio_file_size: file.size,
+          }));
+          URL.revokeObjectURL(audio.src);
         });
+        
+        setFormData(prev => ({ 
+          ...prev, 
+          audio_file_uri: file_uri,
+          audio_mime_type: file.type,
+          audio_file_size: file.size,
+        }));
       } else {
+        // Cover images can be public
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
         setFormData(prev => ({ ...prev, cover_image_url: file_url }));
       }
       toast.success(`${type === 'audio' ? 'Audio' : 'Image'} uploaded successfully`);
@@ -71,7 +91,7 @@ export default function TrackUploadForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.audio_url) {
+    if (!formData.title || !formData.audio_file_uri) {
       toast.error('Title and audio file are required');
       return;
     }
@@ -150,10 +170,15 @@ export default function TrackUploadForm({
               onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'audio')}
             />
           </label>
-          {formData.audio_url && (
-            <span className="text-stone-400 text-sm truncate max-w-[200px]">
-              Audio uploaded ✓
-            </span>
+          {formData.audio_file_uri && (
+            <div className="text-stone-400 text-sm">
+              <div>Audio uploaded ✓</div>
+              {formData.audio_file_size > 0 && (
+                <div className="text-xs">
+                  {(formData.audio_file_size / 1024 / 1024).toFixed(2)} MB
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

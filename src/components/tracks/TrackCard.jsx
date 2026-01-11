@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Play, Pause, Lock, Loader2 } from 'lucide-react';
 import { useAudioPlayer } from '../audio/AudioPlayerContext.jsx';
+import { getPlaybackUrl, canAccessTrack } from '../audio/AudioHelper.jsx';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 const TIER_HIERARCHY = {
   free: 0,
@@ -33,16 +35,33 @@ const nervousSystemColors = {
 
 export default function TrackCard({ track, userTier, onUpgradeClick }) {
   const { currentTrack, isPlaying, isLoading, playTrack } = useAudioPlayer();
+  const [isGeneratingUrl, setIsGeneratingUrl] = useState(false);
   const isCurrentTrack = currentTrack?.id === track.id;
-  const canAccess = TIER_HIERARCHY[userTier] >= TIER_HIERARCHY[track.access_tier];
+  const canAccess = canAccessTrack(userTier, track.access_tier);
   const isLocked = !canAccess;
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (isLocked) {
       onUpgradeClick();
       return;
     }
-    playTrack(track);
+
+    // If already playing this track, just toggle
+    if (isCurrentTrack && !isGeneratingUrl) {
+      playTrack(track);
+      return;
+    }
+
+    setIsGeneratingUrl(true);
+    try {
+      // Generate signed URL for secure playback
+      const playbackUrl = await getPlaybackUrl(track);
+      await playTrack(track, playbackUrl);
+    } catch (error) {
+      toast.error('Unable to play track. Please try again.');
+    } finally {
+      setIsGeneratingUrl(false);
+    }
   };
 
   return (
@@ -94,7 +113,7 @@ export default function TrackCard({ track, userTier, onUpgradeClick }) {
           )}>
             {isLocked ? (
               <Lock className="w-6 h-6" />
-            ) : isCurrentTrack && isLoading ? (
+            ) : isGeneratingUrl || (isCurrentTrack && isLoading) ? (
               <Loader2 className="w-6 h-6 animate-spin" />
             ) : isCurrentTrack && isPlaying ? (
               <Pause className="w-6 h-6" />

@@ -56,7 +56,7 @@ export function AudioPlayerProvider({ children }) {
     };
   }, []);
 
-  const playTrack = (track) => {
+  const playTrack = async (track, playbackUrl) => {
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -72,7 +72,9 @@ export function AudioPlayerProvider({ children }) {
     }
 
     setState(prev => ({ ...prev, currentTrack: track, isLoading: true, currentTime: 0 }));
-    audio.src = track.audio_url;
+    
+    // Use the provided signed playback URL
+    audio.src = playbackUrl;
     audio.volume = state.volume;
     audio.play().then(() => {
       setState(prev => ({ ...prev, isPlaying: true }));
