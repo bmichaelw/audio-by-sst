@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import PhaseTrackEditor from '@/components/admin/PhaseTrackEditor.jsx';
 import {
   Select,
   SelectContent,
@@ -47,6 +48,8 @@ export default function PhaseManager() {
   const [showTrackDialog, setShowTrackDialog] = useState(false);
   const [selectedPhase, setSelectedPhase] = useState(null);
   const [phaseForm, setPhaseForm] = useState({ name: '', description: '', is_published: false });
+  const [editingPhaseTrack, setEditingPhaseTrack] = useState(null);
+  const [showDeletePhaseDialog, setShowDeletePhaseDialog] = useState(null);
 
   // Fetch data
   const { data: phases = [] } = useQuery({
@@ -67,14 +70,21 @@ export default function PhaseManager() {
   // Create/Update Phase
   const savePhase = useMutation({
     mutationFn: async (data) => {
-      if (editingPhase) {
-        return base44.entities.Phase.update(editingPhase.id, data);
-      } else {
-        return base44.entities.Phase.create({
-          ...data,
-          sort_order: phases.length,
-        });
-      }
+      const user = await base44.auth.me();
+      const result = editingPhase
+        ? await base44.entities.Phase.update(editingPhase.id, data)
+        : await base44.entities.Phase.create({ ...data, sort_order: phases.length });
+
+      // Log audit action
+      await base44.entities.AuditLog.create({
+        admin_email: user.email,
+        action: editingPhase ? 'update_phase' : 'create_phase',
+        target_type: 'Phase',
+        target_id: result.id || editingPhase?.id,
+        details: data,
+      });
+
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['phases'] });
@@ -92,10 +102,21 @@ export default function PhaseManager() {
       const tracksToDelete = phaseTracks.filter(pt => pt.phase_id === phaseId);
       await Promise.all(tracksToDelete.map(pt => base44.entities.PhaseTrack.delete(pt.id)));
       await base44.entities.Phase.delete(phaseId);
+
+      // Log audit action
+      const user = await base44.auth.me();
+      await base44.entities.AuditLog.create({
+        admin_email: user.email,
+        action: 'delete_phase',
+        target_type: 'Phase',
+        target_id: phaseId,
+        details: { tracks_deleted: tracksToDelete.length },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['phases'] });
       queryClient.invalidateQueries({ queryKey: ['phase-tracks'] });
+      setShowDeletePhaseDialog(null);
       toast.success('Phase deleted');
     },
   });
@@ -114,11 +135,23 @@ export default function PhaseManager() {
     mutationFn: async ({ phaseId, trackId }) => {
       const existingTracks = phaseTracks.filter(pt => pt.phase_id === phaseId);
       const sortOrder = existingTracks.length;
-      return base44.entities.PhaseTrack.create({
+      const result = await base44.entities.PhaseTrack.create({
         phase_id: phaseId,
         track_id: trackId,
         sort_order: sortOrder,
       });
+
+      // Log audit action
+      const user = await base44.auth.me();
+      await base44.entities.AuditLog.create({
+        admin_email: user.email,
+        action: 'add_track_to_phase',
+        target_type: 'PhaseTrack',
+        target_id: result.id,
+        details: { phase_id: phaseId, track_id: trackId },
+      });
+
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['phase-tracks'] });
@@ -261,7 +294,7 @@ export default function PhaseManager() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => deletePhase.mutate(phase.id)}
+                        onClick={() => setShowDeletePhaseDialog(phase.id)}
                         className="text-stone-400 hover:text-red-400"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -331,9 +364,22 @@ export default function PhaseManager() {
                                     )}
                                     <div className="flex-1 min-w-0">
                                       <p className="text-white text-sm font-medium truncate">
-                                        {track.title}
+                                        {phaseTrack.session_title || track.title}
                                       </p>
+                                      {phaseTrack.session_title && (
+                                        <p className="text-stone-500 text-xs truncate">
+                                          Original: {track.title}
+                                        </p>
+                                      )}
                                     </div>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => setEditingPhaseTrack({ phaseTrack, track })}
+                                      className="text-stone-400 hover:text-amber-400 h-8 w-8"
+                                    >
+                                      <Edit className="w-3 h-3" />
+                                    </Button>
                                     <Button
                                       variant="ghost"
                                       size="icon"
@@ -415,6 +461,45 @@ export default function PhaseManager() {
               className="bg-amber-600 hover:bg-amber-500"
             >
               {savePhase.isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Phase Track Editor */}
+      {editingPhaseTrack && (
+        <PhaseTrackEditor
+          phaseTrack={editingPhaseTrack.phaseTrack}
+          track={editingPhaseTrack.track}
+          isOpen={!!editingPhaseTrack}
+          onClose={() => setEditingPhaseTrack(null)}
+          onUpdate={() => queryClient.invalidateQueries({ queryKey: ['phase-tracks'] })}
+        />
+      )}
+
+      {/* Delete Phase Confirmation */}
+      <Dialog open={!!showDeletePhaseDialog} onOpenChange={() => setShowDeletePhaseDialog(null)}>
+        <DialogContent className="bg-stone-900 border-stone-800">
+          <DialogHeader>
+            <DialogTitle className="text-white">Delete Phase</DialogTitle>
+          </DialogHeader>
+          <p className="text-stone-400">
+            Are you sure you want to delete this phase? All tracks in this phase will be removed. This action cannot be undone.
+          </p>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeletePhaseDialog(null)}
+              className="border-stone-700"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => deletePhase.mutate(showDeletePhaseDialog)}
+              className="bg-red-600 hover:bg-red-500"
+              disabled={deletePhase.isLoading}
+            >
+              {deletePhase.isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Delete Phase'}
             </Button>
           </DialogFooter>
         </DialogContent>
