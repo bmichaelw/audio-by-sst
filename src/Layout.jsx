@@ -238,7 +238,7 @@ export default function Layout({ children, currentPageName }) {
                   </svg>
                 </div>
                 <span className="text-lg font-medium text-purple-900 tracking-wide" style={{ fontFamily: 'Cinzel, serif' }}>
-                  Sanguine Sound
+                  AU'DIO
                 </span>
               </Link>
 
