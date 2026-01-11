@@ -42,9 +42,9 @@ export default function Home() {
         }
       } catch {
 
+
         // User not logged in, default to free tier
-      }};
-    fetchUserData();
+      }};fetchUserData();
   }, []);
 
   // Fetch user preferences
@@ -214,9 +214,9 @@ export default function Home() {
               <span className="block bg-gradient-to-r from-purple-800 to-purple-600 bg-clip-text text-transparent">Modern healing.</span>
             </h1>
             <div className="h-px w-32 mx-auto mb-6" style={{ background: 'linear-gradient(to right, transparent, hsl(var(--accent)), transparent)' }} />
-            <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
-              A curated collection of therapeutic audio designed to support your nervous system, 
-              deepen your practice, and guide you toward inner peace.
+            <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>A curated collection of therapeutic audio designed to help you reprogram, support your nervous system, deepen your practice, and guide you toward inner peace.
+
+
             </p>
             
             {userTier === 'free' &&
