@@ -91,18 +91,58 @@ export default function TrackUploadForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.audio_file_uri) {
-      toast.error('Title and audio file are required');
+    
+    // Validation
+    if (!formData.title || !formData.title.trim()) {
+      toast.error('Title is required');
+      return;
+    }
+    if (!formData.audio_file_uri) {
+      toast.error('Audio file is required');
+      return;
+    }
+    if (!formData.duration_seconds || formData.duration_seconds <= 0) {
+      toast.error('Valid duration is required');
+      return;
+    }
+    if (!formData.access_tier) {
+      toast.error('Access tier is required');
       return;
     }
 
     setIsSaving(true);
     try {
+      const user = await base44.auth.me();
+      
       if (initialData?.id) {
         await base44.entities.Track.update(initialData.id, formData);
+        
+        // Log audit action
+        await base44.entities.AuditLog.create({
+          admin_email: user.email,
+          action: 'update_track',
+          target_type: 'Track',
+          target_id: initialData.id,
+          details: { title: formData.title },
+        });
+        
         toast.success('Track updated successfully');
       } else {
-        await base44.entities.Track.create({ ...formData, play_count: 0 });
+        const newTrack = await base44.entities.Track.create({ 
+          ...formData, 
+          play_count: 0,
+          is_archived: false,
+        });
+        
+        // Log audit action
+        await base44.entities.AuditLog.create({
+          admin_email: user.email,
+          action: 'create_track',
+          target_type: 'Track',
+          target_id: newTrack.id,
+          details: { title: formData.title },
+        });
+        
         toast.success('Track created successfully');
       }
       onSuccess();

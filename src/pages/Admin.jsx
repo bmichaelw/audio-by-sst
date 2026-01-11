@@ -4,7 +4,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TrackUploadForm from '@/components/admin/TrackUploadForm.jsx';
-import AdminTrackList from '@/components/admin/AdminTrackList.jsx';
+import AdminStats from '@/components/admin/AdminStats.jsx';
+import AdminTrackTable from '@/components/admin/AdminTrackTable.jsx';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -95,6 +96,16 @@ export default function Admin() {
     if (!deleteConfirmId) return;
     try {
       await base44.entities.Track.delete(deleteConfirmId);
+      
+      // Log audit action
+      const user = await base44.auth.me();
+      await base44.entities.AuditLog.create({
+        admin_email: user.email,
+        action: 'delete_track',
+        target_type: 'Track',
+        target_id: deleteConfirmId,
+      });
+      
       toast.success('Track deleted');
       queryClient.invalidateQueries({ queryKey: ['admin-tracks'] });
     } catch {
@@ -191,54 +202,8 @@ export default function Admin() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <Card className="bg-stone-900/50 border-stone-800">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-amber-600/10 flex items-center justify-center">
-                    <Music className="w-6 h-6 text-amber-500" />
-                  </div>
-                  <div>
-                    <p className="text-stone-400 text-sm">Total Tracks</p>
-                    <p className="text-2xl font-medium text-white">{totalTracks}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <Card className="bg-stone-900/50 border-stone-800">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-600/10 flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="text-stone-400 text-sm">Total Plays</p>
-                    <p className="text-2xl font-medium text-white">{totalPlays}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <Card className="bg-stone-900/50 border-stone-800">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-purple-600/10 flex items-center justify-center">
-                    <Users className="w-6 h-6 text-purple-500" />
-                  </div>
-                  <div>
-                    <p className="text-stone-400 text-sm">Active Subscribers</p>
-                    <p className="text-2xl font-medium text-white">{activeSubscribers}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+        <div className="mb-8">
+          <AdminStats tracks={tracks} subscriptions={subscriptions} />
         </div>
 
         {/* Tabs */}
@@ -276,10 +241,11 @@ export default function Admin() {
                 </CardContent>
               </Card>
             ) : (
-              <AdminTrackList
+              <AdminTrackTable
                 tracks={tracks}
                 onEdit={handleEditTrack}
                 onDelete={(id) => setDeleteConfirmId(id)}
+                onRefresh={() => queryClient.invalidateQueries({ queryKey: ['admin-tracks'] })}
               />
             )}
           </TabsContent>
