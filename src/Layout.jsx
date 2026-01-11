@@ -55,12 +55,20 @@ export default function Layout({ children, currentPageName }) {
 
   // Add ResonancePath for eligible users
   if (user) {
-    // Check if user has resonance_path or collaborations tier
-    // We'll show it to all logged-in users and handle access in the page
     navItems.push({ 
       name: 'ResonancePath', 
       icon: TrendingUp, 
       href: createPageUrl('ResonancePath') 
+    });
+    navItems.push({ 
+      name: 'Community', 
+      icon: User, 
+      href: createPageUrl('Community') 
+    });
+    navItems.push({ 
+      name: 'Playlists', 
+      icon: Library, 
+      href: createPageUrl('Playlists') 
     });
   }
 
