@@ -198,16 +198,6 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-purple-100/30 via-transparent to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-200/20 via-transparent to-transparent" />
         
-        {/* Background Logo */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6963e3baba38fec6b46ac249/c1e96d6f5_AuDiosanguinelogosquare.png" 
-            alt="" 
-            className="w-[600px] h-[600px] object-contain opacity-10"
-            style={{ filter: 'blur(2px)' }}
-          />
-        </div>
-        
         <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -219,12 +209,26 @@ export default function Home() {
               <Sparkles className="w-3 h-3 mr-1" />
               Healing Through VocalResonance™
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-light mb-4" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>
-              Au'Dio
-              <span className="block text-xl md:text-2xl mt-3 font-light" style={{ color: 'hsl(var(--text-muted))', fontFamily: 'var(--font-body)', letterSpacing: '0.05em' }}>
-                by Sanguine Sound Therapy
-              </span>
-            </h1>
+            
+            {/* Title with Logo Sigil */}
+            <div className="relative inline-block mb-4">
+              {/* Sacred Logo Sigil - Behind Title Only */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ top: '-20%', height: '140%' }}>
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6963e3baba38fec6b46ac249/c1e96d6f5_AuDiosanguinelogosquare.png" 
+                  alt="" 
+                  className="w-[280px] h-[280px] md:w-[380px] md:h-[380px] object-contain opacity-15"
+                />
+              </div>
+              
+              {/* Title Text */}
+              <h1 className="relative text-4xl md:text-6xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>
+                Au'Dio
+                <span className="block text-xl md:text-2xl mt-3 font-light" style={{ color: 'hsl(var(--text-muted))', fontFamily: 'var(--font-body)', letterSpacing: '0.05em' }}>
+                  by Sanguine Sound Therapy
+                </span>
+              </h1>
+            </div>
             <div className="h-px w-32 mx-auto my-6" style={{ background: 'linear-gradient(to right, transparent, hsl(var(--accent)), transparent)' }} />
             <p className="text-xl md:text-2xl font-light mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.02em' }}>
               Ancient sound. Modern healing.
