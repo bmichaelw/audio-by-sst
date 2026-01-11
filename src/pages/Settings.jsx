@@ -147,7 +147,8 @@ export default function Settings() {
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>Your Preferences</h1>
+            <h1 className="text-3xl font-bold mb-3" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>Your Preferences</h1>
+            <div className="h-px w-24 mb-2" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
             <p style={{ color: 'hsl(var(--text-muted))' }}>Personalize your healing journey</p>
           </div>
         </div>

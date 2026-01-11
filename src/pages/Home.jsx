@@ -209,10 +209,11 @@ export default function Home() {
               <Sparkles className="w-3 h-3 mr-1" />
               Healing Through VocalResonance™
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: 'var(--letter-spacing-heading)' }}>
+            <h1 className="text-4xl md:text-6xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>
               Ancient sound.
-              <span className="bg-clip-text text-[##a57ec8] block from-purple-800 to-purple-600">Modern healing.</span>
+              <span className="block bg-gradient-to-r from-purple-800 to-purple-600 bg-clip-text text-transparent">Modern healing.</span>
             </h1>
+            <div className="h-px w-32 mx-auto mb-6" style={{ background: 'linear-gradient(to right, transparent, hsl(var(--accent)), transparent)' }} />
             <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
               A curated collection of therapeutic audio designed to support your nervous system, 
               deepen your practice, and guide you toward inner peace.
@@ -250,11 +251,12 @@ export default function Home() {
 
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-2xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>
+                <h2 className="text-2xl font-light mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.025em' }}>
                   {recommendedTracks.length > 0 ? 'Recommended for You' : 'Featured Sessions'}
                 </h2>
+                <div className="h-px w-20 mb-2" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
                 {recommendedTracks.length > 0 &&
-              <p className="text-sm mt-1" style={{ color: 'hsl(var(--text-muted))' }}>Based on your preferences</p>
+              <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Based on your preferences</p>
               }
               </div>
               <Link

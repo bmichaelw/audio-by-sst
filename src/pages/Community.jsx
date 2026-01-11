@@ -56,7 +56,8 @@ export default function Community() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>Community</h1>
+            <h1 className="text-3xl font-bold mb-3" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>Community</h1>
+            <div className="h-px w-24 mb-3" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
             <p style={{ color: 'hsl(var(--text-muted))' }}>Connect, share experiences, and learn together</p>
           </div>
           {user && (
