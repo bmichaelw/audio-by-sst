@@ -63,7 +63,7 @@ export default function Header({ user, currentPageName, isMenuOpen, setIsMenuOpe
                 letterSpacing: '0.02em'
               }}
             >
-              Sanguine Sound
+              Au'Dio
             </span>
           </Link>
 

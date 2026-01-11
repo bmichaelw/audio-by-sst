@@ -209,11 +209,16 @@ export default function Home() {
               <Sparkles className="w-3 h-3 mr-1" />
               Healing Through VocalResonance™
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>
-              Ancient sound.
-              <span className="block bg-gradient-to-r from-purple-800 to-purple-600 bg-clip-text text-transparent">Modern healing.</span>
+            <h1 className="text-4xl md:text-6xl font-light mb-4" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>
+              Au'Dio
+              <span className="block text-2xl md:text-3xl mt-2" style={{ color: 'hsl(var(--text-muted))', letterSpacing: '0.05em' }}>
+                by Sanguine Sound Therapy
+              </span>
             </h1>
             <div className="h-px w-32 mx-auto mb-6" style={{ background: 'linear-gradient(to right, transparent, hsl(var(--accent)), transparent)' }} />
+            <p className="text-xl md:text-2xl font-light mb-4" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.02em' }}>
+              Ancient sound. Modern healing.
+            </p>
             <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
               A curated collection of therapeutic audio designed to support your nervous system, 
               deepen your practice, and guide you toward inner peace.
