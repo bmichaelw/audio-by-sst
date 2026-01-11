@@ -136,7 +136,7 @@ export default function Admin() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>Admin Portal</h1>
+              <h1 className="text-3xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>Admin Portal</h1>
               <div className="h-px w-24 mt-3 mb-2" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
               <p className="mt-1" style={{ color: 'hsl(var(--text-muted))' }}>Manage your sacred sound library</p>
             </div>

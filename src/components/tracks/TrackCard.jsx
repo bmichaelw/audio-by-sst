@@ -165,7 +165,7 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
       {/* Track Info */}
       <div className="p-5 space-y-3">
         <div>
-          <h3 className="font-medium line-clamp-1 mb-1.5" style={{ color: 'hsl(var(--foreground))', fontSize: '1.0625rem', lineHeight: '1.5' }}>
+          <h3 className="font-medium line-clamp-1 mb-1.5" style={{ color: 'hsl(var(--foreground))', fontSize: '1.0625rem', lineHeight: '1.5', fontFamily: 'var(--font-heading)', letterSpacing: '0.015em' }}>
             {track.title}
           </h3>
           {track.intention && (

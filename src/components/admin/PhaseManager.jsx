@@ -224,8 +224,9 @@ export default function PhaseManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>ResonancePath Phases</h2>
-          <p className="text-sm mt-1" style={{ color: 'hsl(var(--text-muted))' }}>
+          <h2 className="text-2xl font-light mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.025em' }}>ResonancePath Phases</h2>
+          <div className="h-px w-20 mb-2" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
+          <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
             Create and manage guided program phases
           </p>
         </div>

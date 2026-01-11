@@ -157,6 +157,7 @@ export default function Settings() {
         <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
           <CardHeader>
             <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Favorite Themes</CardTitle>
+            <div className="h-px w-16 mt-2 mb-1" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
             <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Select themes you resonate with most</CardDescription>
           </CardHeader>
           <CardContent>
@@ -183,6 +184,7 @@ export default function Settings() {
           <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
             <CardHeader>
               <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Chakra Focus</CardTitle>
+              <div className="h-px w-16 mt-2 mb-1" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
               <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Areas you want to work on</CardDescription>
             </CardHeader>
             <CardContent>
@@ -207,6 +209,7 @@ export default function Settings() {
           <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
             <CardHeader>
               <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Nervous System</CardTitle>
+              <div className="h-px w-16 mt-2 mb-1" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
               <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Preferred effects</CardDescription>
             </CardHeader>
             <CardContent>
@@ -233,6 +236,7 @@ export default function Settings() {
         <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
           <CardHeader>
             <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>ResonancePath Focus</CardTitle>
+            <div className="h-px w-16 mt-2 mb-1" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
             <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>What you want to achieve</CardDescription>
           </CardHeader>
           <CardContent>
@@ -258,6 +262,7 @@ export default function Settings() {
         <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
           <CardHeader>
             <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Session Preferences</CardTitle>
+            <div className="h-px w-16 mt-2 mb-1" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
             <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Customize your practice</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -337,6 +342,7 @@ export default function Settings() {
               <Heart className="w-5 h-5 text-rose-500" />
               Daily Mood Check-in
             </CardTitle>
+            <div className="h-px w-16 mt-2 mb-1" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
             <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Track how you're feeling</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
