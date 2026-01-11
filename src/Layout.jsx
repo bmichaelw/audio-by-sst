@@ -48,6 +48,10 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Pricing', icon: DollarSign, href: createPageUrl('Pricing') },
   ];
 
+  if (user) {
+    navItems.push({ name: 'Profile', icon: User, href: createPageUrl('Profile') });
+  }
+
   // Add ResonancePath for eligible users
   if (user) {
     // Check if user has resonance_path or collaborations tier

@@ -64,6 +64,17 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
         play_count: (track.play_count || 0) + 1,
       });
 
+      // Log play to history
+      const user = await base44.auth.me();
+      if (user) {
+        await base44.entities.PlayHistory.create({
+          user_email: user.email,
+          track_id: track.id,
+          played_at: new Date().toISOString(),
+          completed: false,
+        }).catch(() => {});
+      }
+
       playTrack({ ...track, audioUrl: signed_url });
     } catch (error) {
       console.error('Failed to load track:', error);

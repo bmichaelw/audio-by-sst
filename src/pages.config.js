@@ -4,6 +4,7 @@ import Admin from './pages/Admin';
 import ResonancePath from './pages/ResonancePath';
 import Pricing from './pages/Pricing';
 import NotFound from './pages/NotFound';
+import Profile from './pages/Profile';
 import __Layout from './Layout.jsx';
 
 
@@ -14,6 +15,7 @@ export const PAGES = {
     "ResonancePath": ResonancePath,
     "Pricing": Pricing,
     "NotFound": NotFound,
+    "Profile": Profile,
 }
 
 export const pagesConfig = {

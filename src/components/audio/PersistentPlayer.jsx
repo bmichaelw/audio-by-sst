@@ -48,16 +48,30 @@ export default function PersistentPlayer() {
     }
   }, [isPlaying, currentTrack]);
 
-  // Track 90% completion
+  // Track 90% completion and log to PlayHistory
   useEffect(() => {
     if (currentTrack && duration > 0 && currentTime > 0) {
       const progressPercent = (currentTime / duration) * 100;
       if (progressPercent >= 90 && !hasTracked90Percent.current) {
         hasTracked90Percent.current = true;
+        
+        // Track analytics
         base44.analytics.track({
           eventName: 'audio_complete_90_percent',
           properties: { track_id: currentTrack.id, track_title: currentTrack.title },
         });
+
+        // Log to PlayHistory
+        base44.auth.me().then(user => {
+          if (user) {
+            base44.entities.PlayHistory.create({
+              user_email: user.email,
+              track_id: currentTrack.id,
+              played_at: new Date().toISOString(),
+              completed: true,
+            }).catch(() => {});
+          }
+        }).catch(() => {});
       }
     }
   }, [currentTime, duration, currentTrack]);
