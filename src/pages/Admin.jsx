@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import AdminGuard from '@/components/admin/AdminGuard.jsx';
 import TrackUploadForm from '@/components/admin/TrackUploadForm.jsx';
 import AdminStats from '@/components/admin/AdminStats.jsx';
 import AdminTrackTable from '@/components/admin/AdminTrackTable.jsx';
@@ -37,49 +38,26 @@ import { motion } from 'framer-motion';
 export default function Admin() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [isAdmin, setIsAdmin] = useState(null);
   const [showTrackForm, setShowTrackForm] = useState(false);
   const [editingTrack, setEditingTrack] = useState(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [newTheme, setNewTheme] = useState('');
   const [isAddingTheme, setIsAddingTheme] = useState(false);
 
-  // Check admin access
-  useEffect(() => {
-    const checkAdmin = async () => {
-      try {
-        const user = await base44.auth.me();
-        if (!user) {
-          // Not logged in - redirect to login
-          base44.auth.redirectToLogin(window.location.href);
-          return;
-        }
-        setIsAdmin(user.role === 'admin');
-      } catch {
-        // Not logged in - redirect to login
-        base44.auth.redirectToLogin(window.location.href);
-      }
-    };
-    checkAdmin();
-  }, []);
-
   // Fetch data
   const { data: tracks = [], isLoading: tracksLoading } = useQuery({
     queryKey: ['admin-tracks'],
     queryFn: () => base44.entities.Track.list('-created_date'),
-    enabled: isAdmin === true,
   });
 
   const { data: themes = [], isLoading: themesLoading } = useQuery({
     queryKey: ['themes'],
     queryFn: () => base44.entities.Theme.list('sort_order'),
-    enabled: isAdmin === true,
   });
 
   const { data: subscriptions = [] } = useQuery({
     queryKey: ['subscriptions'],
     queryFn: () => base44.entities.UserSubscription.filter({ is_active: true }),
-    enabled: isAdmin === true,
   });
 
   const themeNames = themes.map((t) => t.name);
@@ -150,43 +128,9 @@ export default function Admin() {
     }
   };
 
-  // Loading state
-  if (isAdmin === null) {
-    return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
-      </div>
-    );
-  }
-
-  // Access denied
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center p-4">
-        <Card className="bg-stone-900 border-stone-800 max-w-md w-full">
-          <CardContent className="pt-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4">
-              <Users className="w-8 h-8 text-red-500" />
-            </div>
-            <h2 className="text-xl font-medium text-white mb-2">Access Denied</h2>
-            <p className="text-stone-400 mb-6">
-              You need admin privileges to access this page.
-            </p>
-            <Button
-              onClick={() => navigate(createPageUrl('Home'))}
-              className="bg-amber-600 hover:bg-amber-500"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-stone-950 pb-12">
+    <AdminGuard>
+      <div className="min-h-screen bg-stone-950 pb-12">
       {/* Header */}
       <div className="bg-gradient-to-b from-stone-900 to-stone-950 border-b border-stone-800/50">
         <div className="max-w-7xl mx-auto px-4 py-8">
@@ -349,6 +293,7 @@ export default function Admin() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </AdminGuard>
   );
 }

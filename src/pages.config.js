@@ -1,21 +1,21 @@
+import Admin from './pages/Admin';
 import Home from './pages/Home';
 import Library from './pages/Library';
-import Admin from './pages/Admin';
-import ResonancePath from './pages/ResonancePath';
-import Pricing from './pages/Pricing';
 import NotFound from './pages/NotFound';
+import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
+import ResonancePath from './pages/ResonancePath';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "Admin": Admin,
     "Home": Home,
     "Library": Library,
-    "Admin": Admin,
-    "ResonancePath": ResonancePath,
-    "Pricing": Pricing,
     "NotFound": NotFound,
+    "Pricing": Pricing,
     "Profile": Profile,
+    "ResonancePath": ResonancePath,
 }
 
 export const pagesConfig = {
