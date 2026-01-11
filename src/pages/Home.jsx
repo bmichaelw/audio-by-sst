@@ -210,6 +210,7 @@ export default function Home() {
     <Sparkles className="w-3 h-3 mr-1" />
     Healing Through Vocal Resonance™
   </Badge>
+</div>
             
             {/* Title with Logo Sigil */}
             <div className="relative inline-block mb-4">
