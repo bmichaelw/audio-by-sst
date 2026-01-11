@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { AudioPlayerProvider } from '@/components/audio/AudioPlayerContext.jsx';
 import PersistentPlayer from '@/components/audio/PersistentPlayer.jsx';
 import ErrorBoundary from '@/components/ErrorBoundary.jsx';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, Home, Library, Shield, DollarSign, TrendingUp } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import Header from '@/components/layout/Header.jsx';
 import { Toaster } from 'sonner';
 
 export default function Layout({ children, currentPageName }) {
@@ -41,40 +31,6 @@ export default function Layout({ children, currentPageName }) {
   const handleLogin = () => {
     base44.auth.redirectToLogin(window.location.href);
   };
-
-  const navItems = [
-    { name: 'Home', icon: Home, href: createPageUrl('Home') },
-    { name: 'Library', icon: Library, href: createPageUrl('Library') },
-    { name: 'Pricing', icon: DollarSign, href: createPageUrl('Pricing') },
-  ];
-
-  if (user) {
-    navItems.push({ name: 'Profile', icon: User, href: createPageUrl('Profile') });
-    navItems.push({ name: 'Settings', icon: User, href: createPageUrl('Settings') });
-  }
-
-  // Add ResonancePath for eligible users
-  if (user) {
-    navItems.push({ 
-      name: 'ResonancePath', 
-      icon: TrendingUp, 
-      href: createPageUrl('ResonancePath') 
-    });
-    navItems.push({ 
-      name: 'Community', 
-      icon: User, 
-      href: createPageUrl('Community') 
-    });
-    navItems.push({ 
-      name: 'Playlists', 
-      icon: Library, 
-      href: createPageUrl('Playlists') 
-    });
-  }
-
-  if (user?.role === 'admin') {
-    navItems.push({ name: 'Admin', icon: Shield, href: createPageUrl('Admin') });
-  }
 
   return (
     <ErrorBoundary>
