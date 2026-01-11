@@ -147,6 +147,7 @@ export default function TrackUploadForm({
       }
       onSuccess();
     } catch (error) {
+      console.error('Track save error:', error);
       toast.error('Failed to save track');
     } finally {
       setIsSaving(false);

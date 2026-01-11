@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { AudioPlayerProvider } from '@/components/audio/AudioPlayerContext.jsx';
 import PersistentPlayer from '@/components/audio/PersistentPlayer.jsx';
+import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -63,8 +64,9 @@ export default function Layout({ children, currentPageName }) {
   }
 
   return (
-    <AudioPlayerProvider>
-      <div className="min-h-screen bg-stone-950">
+    <ErrorBoundary>
+      <AudioPlayerProvider>
+        <div className="min-h-screen bg-stone-950">
         <style>{`
           :root {
             --background: 12 10% 3%;
@@ -252,7 +254,8 @@ export default function Layout({ children, currentPageName }) {
             },
           }}
         />
-      </div>
-    </AudioPlayerProvider>
+        </div>
+      </AudioPlayerProvider>
+    </ErrorBoundary>
   );
 }
