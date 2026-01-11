@@ -10,13 +10,13 @@ export default function QueuePanel({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 w-80 bg-stone-900/98 backdrop-blur-xl border-l border-stone-800 z-50 flex flex-col">
+    <div className="fixed inset-y-0 right-0 w-80 backdrop-blur-xl border-l z-50 flex flex-col" style={{ backgroundColor: 'hsl(var(--surface-elevated) / 0.98)', borderColor: 'hsl(var(--border))' }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-stone-800">
+      <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'hsl(var(--divider))' }}>
         <div className="flex items-center gap-2">
-          <Music className="w-5 h-5 text-amber-600" />
-          <h2 className="text-white font-medium">Queue</h2>
-          <span className="text-stone-400 text-sm">({queue.length})</span>
+          <Music className="w-5 h-5" style={{ color: 'hsl(var(--accent))' }} />
+          <h2 className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>Queue</h2>
+          <span className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>({queue.length})</span>
         </div>
         <div className="flex items-center gap-2">
           {queue.length > 0 && (
@@ -24,7 +24,8 @@ export default function QueuePanel({ isOpen, onClose }) {
               variant="ghost"
               size="sm"
               onClick={clearQueue}
-              className="text-stone-400 hover:text-red-400 h-8"
+              className="h-8 hover:text-red-600"
+              style={{ color: 'hsl(var(--text-muted))' }}
             >
               <Trash2 className="w-4 h-4" />
             </Button>
@@ -33,7 +34,8 @@ export default function QueuePanel({ isOpen, onClose }) {
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="text-stone-400 hover:text-white h-8 w-8"
+            className="h-8 w-8"
+            style={{ color: 'hsl(var(--text-muted))' }}
           >
             <X className="w-4 h-4" />
           </Button>
@@ -42,9 +44,9 @@ export default function QueuePanel({ isOpen, onClose }) {
 
       {/* Current Track */}
       {currentTrack && (
-        <div className="p-4 border-b border-stone-800">
-          <p className="text-stone-400 text-xs uppercase tracking-wide mb-2">Now Playing</p>
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-stone-800/50">
+        <div className="p-4 border-b" style={{ borderColor: 'hsl(var(--divider))' }}>
+          <p className="text-xs uppercase tracking-wide mb-2" style={{ color: 'hsl(var(--text-muted))', letterSpacing: 'var(--letter-spacing-wide)' }}>Now Playing</p>
+          <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: 'hsl(var(--muted))' }}>
             {currentTrack.cover_image_url ? (
               <img
                 src={currentTrack.cover_image_url}
@@ -52,14 +54,14 @@ export default function QueuePanel({ isOpen, onClose }) {
                 className="w-12 h-12 rounded object-cover"
               />
             ) : (
-              <div className="w-12 h-12 rounded bg-gradient-to-br from-amber-600/20 to-stone-800 flex items-center justify-center">
-                <div className="w-3 h-3 rounded-full bg-amber-600/50" />
+              <div className="w-12 h-12 rounded flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, hsl(var(--accent) / 0.2), hsl(var(--muted)))' }}>
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: 'hsl(var(--accent) / 0.5)' }} />
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <p className="text-white text-sm font-medium truncate">{currentTrack.title}</p>
+              <p className="text-sm font-medium truncate" style={{ color: 'hsl(var(--foreground))' }}>{currentTrack.title}</p>
               {currentTrack.intention && (
-                <p className="text-stone-400 text-xs truncate">{currentTrack.intention}</p>
+                <p className="text-xs truncate" style={{ color: 'hsl(var(--text-muted))' }}>{currentTrack.intention}</p>
               )}
             </div>
           </div>
@@ -70,22 +72,20 @@ export default function QueuePanel({ isOpen, onClose }) {
       <div className="flex-1 overflow-y-auto">
         {queue.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-6">
-            <Music className="w-12 h-12 text-stone-700 mb-3" />
-            <p className="text-stone-400 text-sm">Queue is empty</p>
-            <p className="text-stone-500 text-xs mt-1">Add tracks to play next</p>
+            <Music className="w-12 h-12 mb-3" style={{ color: 'hsl(var(--text-subtle))' }} />
+            <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Queue is empty</p>
+            <p className="text-xs mt-1" style={{ color: 'hsl(var(--text-subtle))' }}>Add tracks to play next</p>
           </div>
         ) : (
           <div className="p-4 space-y-2">
-            <p className="text-stone-400 text-xs uppercase tracking-wide mb-2">Up Next</p>
+            <p className="text-xs uppercase mb-2" style={{ color: 'hsl(var(--text-muted))', letterSpacing: 'var(--letter-spacing-wide)' }}>Up Next</p>
             {queue.map((item, index) => (
               <div
                 key={index}
-                className={cn(
-                  "flex items-center gap-3 p-3 rounded-lg transition-all group",
-                  index === queueIndex
-                    ? "bg-amber-600/20 border border-amber-600/30"
-                    : "bg-stone-800/30 hover:bg-stone-800/50"
-                )}
+                className="flex items-center gap-3 p-3 rounded-lg transition-all group border"
+                style={index === queueIndex ? 
+                  { backgroundColor: 'hsl(var(--accent) / 0.1)', borderColor: 'hsl(var(--accent) / 0.3)' } : 
+                  { backgroundColor: 'hsl(var(--muted))', borderColor: 'transparent' }}
               >
                 {item.track.cover_image_url ? (
                   <img
@@ -94,21 +94,22 @@ export default function QueuePanel({ isOpen, onClose }) {
                     className="w-10 h-10 rounded object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded bg-gradient-to-br from-amber-600/20 to-stone-800 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-amber-600/50" />
+                  <div className="w-10 h-10 rounded flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, hsl(var(--accent) / 0.2), hsl(var(--muted)))' }}>
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'hsl(var(--accent) / 0.5)' }} />
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-white text-sm truncate">{item.track.title}</p>
+                  <p className="text-sm truncate" style={{ color: 'hsl(var(--foreground))' }}>{item.track.title}</p>
                   {item.track.intention && (
-                    <p className="text-stone-400 text-xs truncate">{item.track.intention}</p>
+                    <p className="text-xs truncate" style={{ color: 'hsl(var(--text-muted))' }}>{item.track.intention}</p>
                   )}
                 </div>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => removeFromQueue(index)}
-                  className="opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-400 h-8 w-8"
+                  className="opacity-0 group-hover:opacity-100 h-8 w-8 hover:text-red-600"
+                  style={{ color: 'hsl(var(--text-muted))' }}
                 >
                   <X className="w-4 h-4" />
                 </Button>

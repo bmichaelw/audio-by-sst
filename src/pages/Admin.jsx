@@ -130,21 +130,22 @@ export default function Admin() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-stone-950 pb-12">
+      <div className="min-h-screen pb-12" style={{ backgroundColor: 'hsl(var(--background))' }}>
       {/* Header */}
-      <div className="bg-gradient-to-b from-stone-900 to-stone-950 border-b border-stone-800/50">
+      <div className="bg-gradient-to-b from-purple-50/50 to-transparent border-b" style={{ borderColor: 'hsl(var(--border))' }}>
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-light text-white">Admin Portal</h1>
-              <p className="text-stone-400 mt-1">Manage your sound library</p>
+              <h1 className="text-3xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>Admin Portal</h1>
+              <div className="h-px w-24 mt-3 mb-2" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
+              <p className="mt-1" style={{ color: 'hsl(var(--text-muted))' }}>Manage your sacred sound library</p>
             </div>
             <Button
               onClick={() => {
                 setEditingTrack(null);
                 setShowTrackForm(true);
               }}
-              className="bg-amber-600 hover:bg-amber-500"
+              style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Track
@@ -165,16 +166,16 @@ export default function Admin() {
 
         {/* Tabs */}
         <Tabs defaultValue="tracks" className="space-y-6">
-          <TabsList className="bg-stone-900/50 border border-stone-800">
-            <TabsTrigger value="tracks" className="data-[state=active]:bg-stone-800">
+          <TabsList style={{ backgroundColor: 'hsl(var(--surface))', border: '1px solid hsl(var(--border))' }}>
+            <TabsTrigger value="tracks">
               <Music className="w-4 h-4 mr-2" />
               Tracks
             </TabsTrigger>
-            <TabsTrigger value="phases" className="data-[state=active]:bg-stone-800">
+            <TabsTrigger value="phases">
               <PathIcon className="w-4 h-4 mr-2" />
               ResonancePath
             </TabsTrigger>
-            <TabsTrigger value="themes" className="data-[state=active]:bg-stone-800">
+            <TabsTrigger value="themes">
               <Tag className="w-4 h-4 mr-2" />
               Themes
             </TabsTrigger>
@@ -183,9 +184,9 @@ export default function Admin() {
           {/* Tracks Tab */}
           <TabsContent value="tracks">
             {showTrackForm ? (
-              <Card className="bg-stone-900/50 border-stone-800">
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                 <CardHeader>
-                  <CardTitle className="text-white">
+                  <CardTitle style={{ color: 'hsl(var(--foreground))' }}>
                     {editingTrack ? 'Edit Track' : 'Add New Track'}
                   </CardTitle>
                 </CardHeader>
@@ -218,9 +219,9 @@ export default function Admin() {
 
           {/* Themes Tab */}
           <TabsContent value="themes">
-            <Card className="bg-stone-900/50 border-stone-800">
+            <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
               <CardHeader>
-                <CardTitle className="text-white">Manage Themes</CardTitle>
+                <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Manage Themes</CardTitle>
               </CardHeader>
               <CardContent>
                 {/* Add Theme */}
@@ -229,13 +230,13 @@ export default function Admin() {
                     value={newTheme}
                     onChange={(e) => setNewTheme(e.target.value)}
                     placeholder="New theme name"
-                    className="bg-stone-800/50 border-stone-700 text-white"
+                    style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
                     onKeyPress={(e) => e.key === 'Enter' && handleAddTheme()}
                   />
                   <Button
                     onClick={handleAddTheme}
                     disabled={isAddingTheme || !newTheme.trim()}
-                    className="bg-amber-600 hover:bg-amber-500"
+                    style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
                   >
                     {isAddingTheme ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                   </Button>
@@ -245,22 +246,24 @@ export default function Admin() {
                 <div className="space-y-2">
                   {themesLoading ? (
                     <div className="text-center py-8">
-                      <Loader2 className="w-6 h-6 text-amber-500 animate-spin mx-auto" />
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto" style={{ color: 'hsl(var(--primary))' }} />
                     </div>
                   ) : themes.length === 0 ? (
-                    <p className="text-stone-400 text-center py-8">No themes yet. Add one above.</p>
+                    <p className="text-center py-8" style={{ color: 'hsl(var(--text-muted))' }}>No themes yet. Add one above.</p>
                   ) : (
                     themes.map((theme) => (
                       <div
                         key={theme.id}
-                        className="flex items-center justify-between p-3 bg-stone-800/30 rounded-lg"
+                        className="flex items-center justify-between p-3 rounded-lg"
+                        style={{ backgroundColor: 'hsl(var(--muted))' }}
                       >
-                        <span className="text-white">{theme.name}</span>
+                        <span style={{ color: 'hsl(var(--foreground))' }}>{theme.name}</span>
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDeleteTheme(theme.id)}
-                          className="text-stone-400 hover:text-red-400 h-8 w-8"
+                          className="h-8 w-8 hover:text-red-600"
+                          style={{ color: 'hsl(var(--text-muted))' }}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -276,18 +279,18 @@ export default function Admin() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={!!deleteConfirmId} onOpenChange={() => setDeleteConfirmId(null)}>
-        <DialogContent className="bg-stone-900 border-stone-800">
+        <DialogContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
           <DialogHeader>
-            <DialogTitle className="text-white">Delete Track</DialogTitle>
-            <DialogDescription className="text-stone-400">
+            <DialogTitle style={{ color: 'hsl(var(--foreground))' }}>Delete Track</DialogTitle>
+            <DialogDescription style={{ color: 'hsl(var(--text-muted))' }}>
               Are you sure you want to delete this track? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirmId(null)} className="border-stone-700">
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)} style={{ borderColor: 'hsl(var(--border))' }}>
               Cancel
             </Button>
-            <Button onClick={handleDeleteTrack} className="bg-red-600 hover:bg-red-500">
+            <Button onClick={handleDeleteTrack} className="bg-red-600 hover:bg-red-500 text-white">
               Delete
             </Button>
           </DialogFooter>

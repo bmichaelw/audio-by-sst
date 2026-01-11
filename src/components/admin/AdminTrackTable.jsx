@@ -166,9 +166,9 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
 
   if (tracks.length === 0) {
     return (
-      <div className="text-center py-12 bg-stone-900/30 rounded-xl border border-stone-800">
-        <Music className="w-16 h-16 text-stone-600 mx-auto mb-4" />
-        <p className="text-stone-400">No tracks yet. Upload your first track to get started.</p>
+      <div className="text-center py-12 rounded-xl border" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+        <Music className="w-16 h-16 mx-auto mb-4" style={{ color: 'hsl(var(--text-subtle))' }} />
+        <p style={{ color: 'hsl(var(--text-muted))' }}>No tracks yet. Upload your first track to get started.</p>
       </div>
     );
   }
@@ -178,19 +178,20 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
       {/* Search and Filters */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'hsl(var(--text-subtle))' }} />
           <Input
             placeholder="Search tracks..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-stone-800/50 border-stone-700 text-white"
+            className="pl-10"
+            style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
           />
         </div>
         <Select value={filterTier} onValueChange={setFilterTier}>
-          <SelectTrigger className="w-full md:w-[180px] bg-stone-800/50 border-stone-700 text-white">
+          <SelectTrigger className="w-full md:w-[180px]" style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             <SelectValue placeholder="All Tiers" />
           </SelectTrigger>
-          <SelectContent className="bg-stone-800 border-stone-700">
+          <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             <SelectItem value="all">All Tiers</SelectItem>
             <SelectItem value="free">Free</SelectItem>
             <SelectItem value="member">Member</SelectItem>
@@ -199,10 +200,10 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
           </SelectContent>
         </Select>
         <Select value={filterArchived} onValueChange={setFilterArchived}>
-          <SelectTrigger className="w-full md:w-[180px] bg-stone-800/50 border-stone-700 text-white">
+          <SelectTrigger className="w-full md:w-[180px]" style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             <SelectValue placeholder="Status" />
           </SelectTrigger>
-          <SelectContent className="bg-stone-800 border-stone-700">
+          <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             <SelectItem value="all">All Tracks</SelectItem>
             <SelectItem value="active">Active Only</SelectItem>
             <SelectItem value="archived">Archived Only</SelectItem>
@@ -212,8 +213,8 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
 
       {/* Bulk Actions */}
       {selectedTracks.length > 0 && (
-        <div className="flex items-center gap-2 p-3 bg-amber-600/10 border border-amber-600/30 rounded-lg">
-          <span className="text-amber-400 text-sm">
+        <div className="flex items-center gap-2 p-3 border rounded-lg" style={{ backgroundColor: 'hsl(var(--accent) / 0.1)', borderColor: 'hsl(var(--accent) / 0.3)' }}>
+          <span className="text-sm" style={{ color: 'hsl(var(--accent))' }}>
             {selectedTracks.length} track{selectedTracks.length > 1 ? 's' : ''} selected
           </span>
           <div className="flex-1" />
@@ -222,19 +223,19 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
               <Button
                 size="sm"
                 disabled={isBulkUpdating}
-                className="bg-amber-600 hover:bg-amber-500 text-white"
+                style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
               >
                 Bulk Actions
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-stone-800 border-stone-700">
+            <DropdownMenuContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
               <DropdownMenuItem onClick={() => handleBulkAction('featured', true)}>
                 Set as Featured
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleBulkAction('featured', false)}>
                 Remove from Featured
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-stone-700" />
+              <DropdownMenuSeparator style={{ backgroundColor: 'hsl(var(--border))' }} />
               <DropdownMenuItem onClick={() => handleBulkAction('tier', 'free')}>
                 Set Tier: Free
               </DropdownMenuItem>
@@ -244,7 +245,7 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
               <DropdownMenuItem onClick={() => handleBulkAction('tier', 'resonance_path')}>
                 Set Tier: ResonancePath
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-stone-700" />
+              <DropdownMenuSeparator style={{ backgroundColor: 'hsl(var(--border))' }} />
               <DropdownMenuItem onClick={() => handleBulkAction('archive')}>
                 Archive Tracks
               </DropdownMenuItem>
@@ -257,7 +258,7 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
             size="sm"
             variant="ghost"
             onClick={() => setSelectedTracks([])}
-            className="text-stone-400"
+            style={{ color: 'hsl(var(--text-muted))' }}
           >
             Clear
           </Button>
@@ -265,27 +266,27 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
       )}
 
       {/* Table */}
-      <div className="rounded-xl border border-stone-800 overflow-hidden">
+      <div className="rounded-xl border overflow-hidden" style={{ borderColor: 'hsl(var(--border))', backgroundColor: 'hsl(var(--card))' }}>
         <Table>
           <TableHeader>
-            <TableRow className="border-stone-800 hover:bg-transparent">
+            <TableRow className="hover:bg-transparent" style={{ borderColor: 'hsl(var(--divider))' }}>
               <TableHead className="w-12">
                 <Checkbox
                   checked={selectedTracks.length === filteredTracks.length && filteredTracks.length > 0}
                   onCheckedChange={toggleSelectAll}
                 />
               </TableHead>
-              <TableHead className="text-stone-400">Track</TableHead>
-              <TableHead className="text-stone-400">Duration</TableHead>
-              <TableHead className="text-stone-400">Tier</TableHead>
-              <TableHead className="text-stone-400">Status</TableHead>
-              <TableHead className="text-stone-400">Plays</TableHead>
-              <TableHead className="text-stone-400 text-right">Actions</TableHead>
+              <TableHead style={{ color: 'hsl(var(--text-muted))' }}>Track</TableHead>
+              <TableHead style={{ color: 'hsl(var(--text-muted))' }}>Duration</TableHead>
+              <TableHead style={{ color: 'hsl(var(--text-muted))' }}>Tier</TableHead>
+              <TableHead style={{ color: 'hsl(var(--text-muted))' }}>Status</TableHead>
+              <TableHead style={{ color: 'hsl(var(--text-muted))' }}>Plays</TableHead>
+              <TableHead className="text-right" style={{ color: 'hsl(var(--text-muted))' }}>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredTracks.map((track) => (
-              <TableRow key={track.id} className="border-stone-800 hover:bg-stone-800/30">
+              <TableRow key={track.id} className="hover:bg-purple-50/30" style={{ borderColor: 'hsl(var(--divider))' }}>
                 <TableCell>
                   <Checkbox
                     checked={selectedTracks.includes(track.id)}
@@ -301,23 +302,23 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
                         className="w-10 h-10 rounded-lg object-cover"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-lg bg-stone-800 flex items-center justify-center">
-                        <Music className="w-5 h-5 text-stone-600" />
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--muted))' }}>
+                        <Music className="w-5 h-5" style={{ color: 'hsl(var(--text-subtle))' }} />
                       </div>
                     )}
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-white font-medium">{track.title}</span>
-                        {track.is_featured && <Star className="w-4 h-4 text-amber-500 fill-amber-500" />}
-                        {track.is_archived && <Archive className="w-4 h-4 text-stone-500" />}
+                        <span className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>{track.title}</span>
+                        {track.is_featured && <Star className="w-4 h-4 fill-current" style={{ color: 'hsl(var(--accent))' }} />}
+                        {track.is_archived && <Archive className="w-4 h-4" style={{ color: 'hsl(var(--text-subtle))' }} />}
                       </div>
                       {track.themes && track.themes.length > 0 && (
-                        <span className="text-stone-500 text-sm">{track.themes.slice(0, 2).join(', ')}</span>
+                        <span className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>{track.themes.slice(0, 2).join(', ')}</span>
                       )}
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-stone-300 font-mono text-sm">
+                <TableCell className="font-mono text-sm" style={{ color: 'hsl(var(--text-body))' }}>
                   {formatDuration(track.duration_seconds)}
                 </TableCell>
                 <TableCell>
@@ -326,36 +327,36 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline" className={track.is_archived ? 'text-stone-500' : 'text-green-400'}>
+                  <Badge variant="outline" className={track.is_archived ? '' : 'text-green-600'} style={{ color: track.is_archived ? 'hsl(var(--text-subtle))' : undefined }}>
                     {track.is_archived ? 'Archived' : 'Active'}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-stone-400">{track.play_count || 0}</TableCell>
+                <TableCell style={{ color: 'hsl(var(--text-muted))' }}>{track.play_count || 0}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="text-stone-400 hover:text-white">
+                      <Button variant="ghost" size="icon" style={{ color: 'hsl(var(--text-muted))' }}>
                         <MoreVertical className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="bg-stone-800 border-stone-700">
+                    <DropdownMenuContent align="end" style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
                       <DropdownMenuItem
                         onClick={() => onEdit(track)}
-                        className="text-stone-300 focus:text-white focus:bg-stone-700"
+                        style={{ color: 'hsl(var(--foreground))' }}
                       >
                         <Edit className="w-4 h-4 mr-2" />
                         Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => handleToggleFeatured(track)}
-                        className="text-stone-300 focus:text-white focus:bg-stone-700"
+                        style={{ color: 'hsl(var(--foreground))' }}
                       >
                         <Star className="w-4 h-4 mr-2" />
                         {track.is_featured ? 'Unfeature' : 'Feature'}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => handleToggleArchive(track)}
-                        className="text-stone-300 focus:text-white focus:bg-stone-700"
+                        style={{ color: 'hsl(var(--foreground))' }}
                       >
                         {track.is_archived ? (
                           <><ArchiveRestore className="w-4 h-4 mr-2" />Unarchive</>
@@ -363,7 +364,7 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
                           <><Archive className="w-4 h-4 mr-2" />Archive</>
                         )}
                       </DropdownMenuItem>
-                      <DropdownMenuSeparator className="bg-stone-700" />
+                      <DropdownMenuSeparator style={{ backgroundColor: 'hsl(var(--border))' }} />
                       <DropdownMenuItem
                         onClick={() => onDelete(track.id)}
                         className="text-red-400 focus:text-red-300 focus:bg-stone-700"
@@ -380,7 +381,7 @@ export default function AdminTrackTable({ tracks, onEdit, onDelete, onRefresh })
         </Table>
       </div>
 
-      <div className="text-stone-400 text-sm">
+      <div className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
         Showing {filteredTracks.length} of {tracks.length} tracks
       </div>
     </div>

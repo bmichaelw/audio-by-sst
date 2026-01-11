@@ -22,7 +22,7 @@ export default function AudioVisualizer({ width = 200, height = 60, barCount = 4
       if (!isPlaying) {
         // Draw flat line when paused
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = 'rgba(251, 191, 36, 0.1)';
+        ctx.fillStyle = 'rgba(186, 150, 80, 0.15)'; // Gold muted
         for (let i = 0; i < barCount; i++) {
           const barWidth = width / barCount;
           const x = i * barWidth;
@@ -47,10 +47,10 @@ export default function AudioVisualizer({ width = 200, height = 60, barCount = 4
         const x = i * barWidth;
         const y = (height - barHeight) / 2;
 
-        // Create gradient
+        // Create gradient - Gold/purple theme
         const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
-        gradient.addColorStop(0, 'rgba(251, 191, 36, 0.8)');
-        gradient.addColorStop(1, 'rgba(251, 191, 36, 0.3)');
+        gradient.addColorStop(0, 'rgba(186, 150, 80, 0.85)'); // Gold
+        gradient.addColorStop(1, 'rgba(186, 150, 80, 0.35)');
         
         ctx.fillStyle = gradient;
         ctx.fillRect(x, y, barWidth - 2, barHeight);

@@ -224,8 +224,8 @@ export default function PhaseManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-light text-white">ResonancePath Phases</h2>
-          <p className="text-stone-400 text-sm mt-1">
+          <h2 className="text-2xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>ResonancePath Phases</h2>
+          <p className="text-sm mt-1" style={{ color: 'hsl(var(--text-muted))' }}>
             Create and manage guided program phases
           </p>
         </div>
@@ -235,7 +235,7 @@ export default function PhaseManager() {
             setPhaseForm({ name: '', description: '', is_published: false });
             setShowPhaseDialog(true);
           }}
-          className="bg-amber-600 hover:bg-amber-500"
+          style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Phase
@@ -244,10 +244,10 @@ export default function PhaseManager() {
 
       {/* Phases List */}
       {phases.length === 0 ? (
-        <Card className="bg-stone-900/30 border-stone-800">
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <CardContent className="pt-6 text-center py-12">
-            <Music className="w-16 h-16 text-stone-600 mx-auto mb-4" />
-            <p className="text-stone-400">No phases yet. Create your first phase to get started.</p>
+            <Music className="w-16 h-16 mx-auto mb-4" style={{ color: 'hsl(var(--text-subtle))' }} />
+            <p style={{ color: 'hsl(var(--text-muted))' }}>No phases yet. Create your first phase to get started.</p>
           </CardContent>
         </Card>
       ) : (
@@ -258,12 +258,12 @@ export default function PhaseManager() {
               .sort((a, b) => a.sort_order - b.sort_order);
 
             return (
-              <Card key={phase.id} className="bg-stone-900/50 border-stone-800">
+              <Card key={phase.id} style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <CardTitle className="text-white text-lg">{phase.name}</CardTitle>
+                        <CardTitle className="text-lg" style={{ color: 'hsl(var(--foreground))' }}>{phase.name}</CardTitle>
                         <Badge variant={phase.is_published ? "default" : "outline"} className="text-xs">
                           {phase.is_published ? (
                             <><Eye className="w-3 h-3 mr-1" />Published</>
@@ -273,7 +273,7 @@ export default function PhaseManager() {
                         </Badge>
                       </div>
                       {phase.description && (
-                        <p className="text-stone-400 text-sm">{phase.description}</p>
+                        <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>{phase.description}</p>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
@@ -287,7 +287,7 @@ export default function PhaseManager() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleEditPhase(phase)}
-                        className="text-stone-400 hover:text-white"
+                        style={{ color: 'hsl(var(--text-muted))' }}
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -295,7 +295,8 @@ export default function PhaseManager() {
                         variant="ghost"
                         size="icon"
                         onClick={() => setShowDeletePhaseDialog(phase.id)}
-                        className="text-stone-400 hover:text-red-400"
+                        className="hover:text-red-600"
+                        style={{ color: 'hsl(var(--text-muted))' }}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -304,7 +305,7 @@ export default function PhaseManager() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-stone-400 text-sm">
+                    <span className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
                       {phaseTracksList.length} session{phaseTracksList.length !== 1 ? 's' : ''}
                     </span>
                     <Button
@@ -314,7 +315,7 @@ export default function PhaseManager() {
                         setSelectedPhase(phase.id);
                         setShowTrackDialog(true);
                       }}
-                      className="border-stone-700 text-stone-300 hover:bg-stone-800"
+                      style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
                     >
                       <Plus className="w-3 h-3 mr-1" />
                       Add Track
@@ -345,14 +346,15 @@ export default function PhaseManager() {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     className={cn(
-                                      "flex items-center gap-3 p-3 bg-stone-800/30 rounded-lg border border-stone-800",
+                                      "flex items-center gap-3 p-3 rounded-lg border",
                                       snapshot.isDragging && "shadow-lg"
                                     )}
+                                    style={{ backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))' }}
                                   >
                                     <div {...provided.dragHandleProps} className="cursor-grab">
-                                      <GripVertical className="w-4 h-4 text-stone-600" />
+                                      <GripVertical className="w-4 h-4" style={{ color: 'hsl(var(--text-subtle))' }} />
                                     </div>
-                                    <span className="text-stone-500 text-sm font-mono w-6">
+                                    <span className="text-sm font-mono w-6" style={{ color: 'hsl(var(--text-muted))' }}>
                                       {index + 1}
                                     </span>
                                     {track.cover_image_url && (
@@ -363,11 +365,11 @@ export default function PhaseManager() {
                                       />
                                     )}
                                     <div className="flex-1 min-w-0">
-                                      <p className="text-white text-sm font-medium truncate">
+                                      <p className="text-sm font-medium truncate" style={{ color: 'hsl(var(--foreground))' }}>
                                         {phaseTrack.session_title || track.title}
                                       </p>
                                       {phaseTrack.session_title && (
-                                        <p className="text-stone-500 text-xs truncate">
+                                        <p className="text-xs truncate" style={{ color: 'hsl(var(--text-muted))' }}>
                                           Original: {track.title}
                                         </p>
                                       )}
@@ -376,7 +378,8 @@ export default function PhaseManager() {
                                       variant="ghost"
                                       size="icon"
                                       onClick={() => setEditingPhaseTrack({ phaseTrack, track })}
-                                      className="text-stone-400 hover:text-amber-400 h-8 w-8"
+                                      className="h-8 w-8"
+                                      style={{ color: 'hsl(var(--text-muted))' }}
                                     >
                                       <Edit className="w-3 h-3" />
                                     </Button>
@@ -384,7 +387,8 @@ export default function PhaseManager() {
                                       variant="ghost"
                                       size="icon"
                                       onClick={() => removeTrackFromPhase.mutate(phaseTrack.id)}
-                                      className="text-stone-400 hover:text-red-400 h-8 w-8"
+                                      className="h-8 w-8 hover:text-red-600"
+                                      style={{ color: 'hsl(var(--text-muted))' }}
                                     >
                                       <Trash2 className="w-3 h-3" />
                                     </Button>
@@ -400,7 +404,7 @@ export default function PhaseManager() {
                   </DragDropContext>
 
                   {phaseTracksList.length === 0 && (
-                    <div className="text-center py-8 text-stone-500 text-sm">
+                    <div className="text-center py-8 text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
                       No tracks added yet
                     </div>
                   )}
@@ -413,29 +417,31 @@ export default function PhaseManager() {
 
       {/* Phase Dialog */}
       <Dialog open={showPhaseDialog} onOpenChange={setShowPhaseDialog}>
-        <DialogContent className="bg-stone-900 border-stone-800">
+        <DialogContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
           <DialogHeader>
-            <DialogTitle className="text-white">
+            <DialogTitle style={{ color: 'hsl(var(--foreground))' }}>
               {editingPhase ? 'Edit Phase' : 'Create Phase'}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label className="text-stone-300">Phase Name</Label>
+              <Label style={{ color: 'hsl(var(--text-body))' }}>Phase Name</Label>
               <Input
                 value={phaseForm.name}
                 onChange={(e) => setPhaseForm({ ...phaseForm, name: e.target.value })}
                 placeholder="e.g., Phase 1: Foundation"
-                className="bg-stone-800/50 border-stone-700 text-white mt-2"
+                style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
+                className="mt-2"
               />
             </div>
             <div>
-              <Label className="text-stone-300">Description</Label>
+              <Label style={{ color: 'hsl(var(--text-body))' }}>Description</Label>
               <Textarea
                 value={phaseForm.description}
                 onChange={(e) => setPhaseForm({ ...phaseForm, description: e.target.value })}
                 placeholder="Describe this phase..."
-                className="bg-stone-800/50 border-stone-700 text-white mt-2"
+                style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
+                className="mt-2"
                 rows={3}
               />
             </div>
@@ -444,21 +450,21 @@ export default function PhaseManager() {
                 checked={phaseForm.is_published}
                 onCheckedChange={(checked) => setPhaseForm({ ...phaseForm, is_published: checked })}
               />
-              <Label className="text-stone-300">Publish (visible to users)</Label>
+              <Label style={{ color: 'hsl(var(--text-body))' }}>Publish (visible to users)</Label>
             </div>
           </div>
           <DialogFooter>
             <Button
               variant="outline"
               onClick={() => setShowPhaseDialog(false)}
-              className="border-stone-700"
+              style={{ borderColor: 'hsl(var(--border))' }}
             >
               Cancel
             </Button>
             <Button
               onClick={handleSavePhase}
               disabled={savePhase.isLoading}
-              className="bg-amber-600 hover:bg-amber-500"
+              style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
             >
               {savePhase.isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save'}
             </Button>
@@ -479,24 +485,24 @@ export default function PhaseManager() {
 
       {/* Delete Phase Confirmation */}
       <Dialog open={!!showDeletePhaseDialog} onOpenChange={() => setShowDeletePhaseDialog(null)}>
-        <DialogContent className="bg-stone-900 border-stone-800">
+        <DialogContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
           <DialogHeader>
-            <DialogTitle className="text-white">Delete Phase</DialogTitle>
+            <DialogTitle style={{ color: 'hsl(var(--foreground))' }}>Delete Phase</DialogTitle>
           </DialogHeader>
-          <p className="text-stone-400">
+          <p style={{ color: 'hsl(var(--text-muted))' }}>
             Are you sure you want to delete this phase? All tracks in this phase will be removed. This action cannot be undone.
           </p>
           <DialogFooter>
             <Button
               variant="outline"
               onClick={() => setShowDeletePhaseDialog(null)}
-              className="border-stone-700"
+              style={{ borderColor: 'hsl(var(--border))' }}
             >
               Cancel
             </Button>
             <Button
               onClick={() => deletePhase.mutate(showDeletePhaseDialog)}
-              className="bg-red-600 hover:bg-red-500"
+              className="bg-red-600 hover:bg-red-500 text-white"
               disabled={deletePhase.isLoading}
             >
               {deletePhase.isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Delete Phase'}
@@ -507,20 +513,21 @@ export default function PhaseManager() {
 
       {/* Add Track Dialog */}
       <Dialog open={showTrackDialog} onOpenChange={setShowTrackDialog}>
-        <DialogContent className="bg-stone-900 border-stone-800 max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto" style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
           <DialogHeader>
-            <DialogTitle className="text-white">Add Track to Phase</DialogTitle>
+            <DialogTitle style={{ color: 'hsl(var(--foreground))' }}>Add Track to Phase</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
             {selectedPhase && availableTracksForPhase(selectedPhase).length === 0 ? (
-              <p className="text-stone-400 text-center py-8">
+              <p className="text-center py-8" style={{ color: 'hsl(var(--text-muted))' }}>
                 All tracks have been added to this phase.
               </p>
             ) : (
               availableTracksForPhase(selectedPhase).map((track) => (
                 <div
                   key={track.id}
-                  className="flex items-center gap-3 p-3 bg-stone-800/30 rounded-lg hover:bg-stone-800/50 cursor-pointer"
+                  className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:shadow-sm transition-all"
+                  style={{ backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))' }}
                   onClick={() => {
                     addTrackToPhase.mutate({ phaseId: selectedPhase, trackId: track.id });
                     setShowTrackDialog(false);
@@ -534,12 +541,12 @@ export default function PhaseManager() {
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium">{track.title}</p>
+                    <p className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>{track.title}</p>
                     {track.intention && (
-                      <p className="text-stone-400 text-sm truncate">{track.intention}</p>
+                      <p className="text-sm truncate" style={{ color: 'hsl(var(--text-muted))' }}>{track.intention}</p>
                     )}
                   </div>
-                  <Plus className="w-5 h-5 text-amber-500" />
+                  <Plus className="w-5 h-5" style={{ color: 'hsl(var(--accent))' }} />
                 </div>
               ))
             )}

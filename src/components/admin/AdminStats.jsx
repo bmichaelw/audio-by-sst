@@ -57,12 +57,12 @@ export default function AdminStats({ tracks, subscriptions }) {
   ];
 
   const colorClasses = {
-    amber: 'bg-amber-600/10 text-amber-500',
-    yellow: 'bg-yellow-600/10 text-yellow-500',
-    green: 'bg-green-600/10 text-green-500',
-    blue: 'bg-blue-600/10 text-blue-500',
-    purple: 'bg-purple-600/10 text-purple-500',
-    stone: 'bg-stone-600/10 text-stone-400',
+    amber: { bg: 'hsl(var(--accent) / 0.15)', text: 'hsl(var(--accent))' },
+    yellow: { bg: 'hsl(40 80% 90%)', text: 'hsl(40 80% 45%)' },
+    green: { bg: 'hsl(140 50% 90%)', text: 'hsl(140 50% 40%)' },
+    blue: { bg: 'hsl(220 60% 90%)', text: 'hsl(220 60% 45%)' },
+    purple: { bg: 'hsl(280 50% 90%)', text: 'hsl(var(--primary))' },
+    stone: { bg: 'hsl(var(--muted))', text: 'hsl(var(--text-muted))' },
   };
 
   return (
@@ -76,17 +76,17 @@ export default function AdminStats({ tracks, subscriptions }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Card className="bg-stone-900/50 border-stone-800">
+            <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
               <CardContent className="pt-4 pb-4">
                 <div className="flex flex-col gap-2">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colorClasses[stat.color]}`}>
-                    <Icon className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: colorClasses[stat.color].bg }}>
+                    <Icon className="w-5 h-5" style={{ color: colorClasses[stat.color].text }} />
                   </div>
                   <div>
-                    <p className="text-stone-400 text-xs">{stat.label}</p>
-                    <p className="text-xl font-medium text-white">{stat.value}</p>
+                    <p className="text-xs" style={{ color: 'hsl(var(--text-muted))' }}>{stat.label}</p>
+                    <p className="text-xl font-medium" style={{ color: 'hsl(var(--foreground))' }}>{stat.value}</p>
                     {stat.subValue && (
-                      <p className="text-stone-500 text-xs mt-0.5">{stat.subValue}</p>
+                      <p className="text-xs mt-0.5" style={{ color: 'hsl(var(--text-subtle))' }}>{stat.subValue}</p>
                     )}
                   </div>
                 </div>

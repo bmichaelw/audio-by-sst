@@ -177,31 +177,27 @@ export default function TrackUploadForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="title" className="text-stone-300">Title *</Label>
+        <Label htmlFor="title" style={{ color: 'hsl(var(--text-body))' }}>Title *</Label>
         <Input
           id="title"
           value={formData.title}
           onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-          className="bg-stone-800/50 border-stone-700 text-white"
+          style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
           placeholder="Enter track title"
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label className="text-stone-300">Audio File *</Label>
+        <Label style={{ color: 'hsl(var(--text-body))' }}>Audio File *</Label>
         <div className="flex items-center gap-4">
-          <label className={cn(
-            "flex items-center gap-2 px-4 py-3 rounded-lg cursor-pointer transition-all",
-            "bg-stone-800/50 border border-stone-700 hover:border-amber-600/50",
-            formData.audio_url && "border-amber-600/30"
-          )}>
+          <label className="flex items-center gap-2 px-4 py-3 rounded-lg cursor-pointer transition-all border" style={{ backgroundColor: 'hsl(var(--input))', borderColor: formData.audio_file_uri ? 'hsl(var(--accent) / 0.4)' : 'hsl(var(--border))' }}>
             {isUploading.audio ? (
-              <Loader2 className="w-5 h-5 text-amber-500 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
             ) : (
-              <Music className="w-5 h-5 text-stone-400" />
+              <Music className="w-5 h-5" style={{ color: 'hsl(var(--text-muted))' }} />
             )}
-            <span className="text-stone-300 text-sm">
+            <span className="text-sm" style={{ color: 'hsl(var(--foreground))' }}>
               {formData.audio_url ? 'Change audio' : 'Upload audio'}
             </span>
             <input
@@ -212,7 +208,7 @@ export default function TrackUploadForm({
             />
           </label>
           {formData.audio_file_uri && (
-            <div className="text-stone-400 text-sm">
+            <div className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
               <div>Audio uploaded ✓</div>
               {formData.audio_file_size > 0 && (
                 <div className="text-xs">
@@ -225,18 +221,15 @@ export default function TrackUploadForm({
       </div>
 
       <div className="space-y-2">
-        <Label className="text-stone-300">Cover Image</Label>
+        <Label style={{ color: 'hsl(var(--text-body))' }}>Cover Image</Label>
         <div className="flex items-center gap-4">
-          <label className={cn(
-            "flex items-center gap-2 px-4 py-3 rounded-lg cursor-pointer transition-all",
-            "bg-stone-800/50 border border-stone-700 hover:border-amber-600/50"
-          )}>
+          <label className="flex items-center gap-2 px-4 py-3 rounded-lg cursor-pointer transition-all border" style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}>
             {isUploading.image ? (
-              <Loader2 className="w-5 h-5 text-amber-500 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" style={{ color: 'hsl(var(--primary))' }} />
             ) : (
-              <Image className="w-5 h-5 text-stone-400" />
+              <Image className="w-5 h-5" style={{ color: 'hsl(var(--text-muted))' }} />
             )}
-            <span className="text-stone-300 text-sm">
+            <span className="text-sm" style={{ color: 'hsl(var(--foreground))' }}>
               {formData.cover_image_url ? 'Change image' : 'Upload image'}
             </span>
             <input
@@ -257,52 +250,52 @@ export default function TrackUploadForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="duration" className="text-stone-300">Duration (seconds)</Label>
+        <Label htmlFor="duration" style={{ color: 'hsl(var(--text-body))' }}>Duration (seconds)</Label>
         <Input
           id="duration"
           type="number"
           value={formData.duration_seconds}
           onChange={(e) => setFormData(prev => ({ ...prev, duration_seconds: parseInt(e.target.value) || 0 }))}
-          className="bg-stone-800/50 border-stone-700 text-white w-32"
+          style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
+          className="w-32"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description" className="text-stone-300">Description</Label>
+        <Label htmlFor="description" style={{ color: 'hsl(var(--text-body))' }}>Description</Label>
         <Textarea
           id="description"
           value={formData.description}
           onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-          className="bg-stone-800/50 border-stone-700 text-white min-h-[100px]"
+          style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
+          className="min-h-[100px]"
           placeholder="Describe this track..."
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="intention" className="text-stone-300">Intention</Label>
+        <Label htmlFor="intention" style={{ color: 'hsl(var(--text-body))' }}>Intention</Label>
         <Input
           id="intention"
           value={formData.intention}
           onChange={(e) => setFormData(prev => ({ ...prev, intention: e.target.value }))}
-          className="bg-stone-800/50 border-stone-700 text-white"
+          style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
           placeholder="e.g., Deep relaxation, Energy activation"
         />
       </div>
 
       <div className="space-y-2">
-        <Label className="text-stone-300">Themes</Label>
+        <Label style={{ color: 'hsl(var(--text-body))' }}>Themes</Label>
         <div className="flex flex-wrap gap-2">
           {themes.map((theme) => (
             <button
               key={theme}
               type="button"
               onClick={() => toggleTheme(theme)}
-              className={cn(
-                "px-3 py-1.5 rounded-full text-sm transition-all",
-                formData.themes.includes(theme)
-                  ? "bg-amber-600 text-white"
-                  : "bg-stone-800 text-stone-400 hover:bg-stone-700"
-              )}
+              className="px-3 py-1.5 rounded-full text-sm transition-all"
+              style={formData.themes.includes(theme) ? 
+                { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' } : 
+                { backgroundColor: 'hsl(var(--muted))', color: 'hsl(var(--text-muted))' }}
             >
               {theme}
             </button>
@@ -311,16 +304,16 @@ export default function TrackUploadForm({
       </div>
 
       <div className="space-y-2">
-        <Label className="text-stone-300">Tags</Label>
+        <Label style={{ color: 'hsl(var(--text-body))' }}>Tags</Label>
         <div className="flex gap-2">
           <Input
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-            className="bg-stone-800/50 border-stone-700 text-white"
+            style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
             placeholder="Add a tag"
           />
-          <Button type="button" onClick={addTag} variant="outline" className="border-stone-700">
+          <Button type="button" onClick={addTag} variant="outline" style={{ borderColor: 'hsl(var(--border))' }}>
             Add
           </Button>
         </div>
@@ -329,7 +322,8 @@ export default function TrackUploadForm({
             {formData.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-2 py-1 bg-stone-800 text-stone-300 rounded-full text-sm flex items-center gap-1"
+                className="px-2 py-1 rounded-full text-sm flex items-center gap-1"
+                style={{ backgroundColor: 'hsl(var(--muted))', color: 'hsl(var(--foreground))' }}
               >
                 {tag}
                 <button type="button" onClick={() => removeTag(tag)}>
@@ -343,12 +337,12 @@ export default function TrackUploadForm({
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="space-y-2">
-          <Label className="text-stone-300">Chakra</Label>
+          <Label style={{ color: 'hsl(var(--text-body))' }}>Chakra</Label>
           <Select value={formData.chakra} onValueChange={(v) => setFormData(prev => ({ ...prev, chakra: v }))}>
-            <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+            <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-stone-800 border-stone-700">
+            <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
               {chakraOptions.map((opt) => (
                 <SelectItem key={opt} value={opt} className="capitalize">
                   {opt.replace('_', ' ')}
@@ -359,12 +353,12 @@ export default function TrackUploadForm({
         </div>
 
         <div className="space-y-2">
-          <Label className="text-stone-300">Nervous System</Label>
+          <Label style={{ color: 'hsl(var(--text-body))' }}>Nervous System</Label>
           <Select value={formData.nervous_system_state} onValueChange={(v) => setFormData(prev => ({ ...prev, nervous_system_state: v }))}>
-            <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+            <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-stone-800 border-stone-700">
+            <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
               {nervousSystemOptions.map((opt) => (
                 <SelectItem key={opt} value={opt} className="capitalize">{opt}</SelectItem>
               ))}
@@ -373,12 +367,12 @@ export default function TrackUploadForm({
         </div>
 
         <div className="space-y-2">
-          <Label className="text-stone-300">Difficulty</Label>
+          <Label style={{ color: 'hsl(var(--text-body))' }}>Difficulty</Label>
           <Select value={formData.difficulty_level} onValueChange={(v) => setFormData(prev => ({ ...prev, difficulty_level: v }))}>
-            <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+            <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-stone-800 border-stone-700">
+            <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
               {difficultyOptions.map((opt) => (
                 <SelectItem key={opt} value={opt} className="capitalize">{opt}</SelectItem>
               ))}
@@ -387,12 +381,12 @@ export default function TrackUploadForm({
         </div>
 
         <div className="space-y-2">
-          <Label className="text-stone-300">Access Tier</Label>
+          <Label style={{ color: 'hsl(var(--text-body))' }}>Access Tier</Label>
           <Select value={formData.access_tier} onValueChange={(v) => setFormData(prev => ({ ...prev, access_tier: v }))}>
-            <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+            <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-stone-800 border-stone-700">
+            <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
               {accessTierOptions.map((opt) => (
                 <SelectItem key={opt} value={opt} className="capitalize">
                   {opt.replace('_', ' ')}
@@ -409,22 +403,22 @@ export default function TrackUploadForm({
             checked={formData.voice_present}
             onCheckedChange={(v) => setFormData(prev => ({ ...prev, voice_present: v }))}
           />
-          <Label className="text-stone-300">Voice/Guidance Present</Label>
+          <Label style={{ color: 'hsl(var(--text-body))' }}>Voice/Guidance Present</Label>
         </div>
         <div className="flex items-center gap-3">
           <Switch
             checked={formData.is_featured}
             onCheckedChange={(v) => setFormData(prev => ({ ...prev, is_featured: v }))}
           />
-          <Label className="text-stone-300">Featured Track</Label>
+          <Label style={{ color: 'hsl(var(--text-body))' }}>Featured Track</Label>
         </div>
       </div>
 
       <div className="flex justify-end gap-3 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel} className="border-stone-700 text-stone-300">
+        <Button type="button" variant="outline" onClick={onCancel} style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
           Cancel
         </Button>
-        <Button type="submit" disabled={isSaving} className="bg-amber-600 hover:bg-amber-500 text-white">
+        <Button type="submit" disabled={isSaving} style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
           {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
           {initialData?.id ? 'Update Track' : 'Create Track'}
         </Button>
