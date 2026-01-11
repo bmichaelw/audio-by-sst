@@ -6,6 +6,7 @@ import { createPageUrl } from '@/utils';
 import TrackUploadForm from '@/components/admin/TrackUploadForm.jsx';
 import AdminStats from '@/components/admin/AdminStats.jsx';
 import AdminTrackTable from '@/components/admin/AdminTrackTable.jsx';
+import PhaseManager from '@/components/admin/PhaseManager.jsx';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,6 +28,7 @@ import {
   Loader2,
   ArrowLeft,
   Trash2,
+  TrendingUp as PathIcon,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -213,6 +215,10 @@ export default function Admin() {
               <Music className="w-4 h-4 mr-2" />
               Tracks
             </TabsTrigger>
+            <TabsTrigger value="phases" className="data-[state=active]:bg-stone-800">
+              <PathIcon className="w-4 h-4 mr-2" />
+              ResonancePath
+            </TabsTrigger>
             <TabsTrigger value="themes" className="data-[state=active]:bg-stone-800">
               <Tag className="w-4 h-4 mr-2" />
               Themes
@@ -248,6 +254,11 @@ export default function Admin() {
                 onRefresh={() => queryClient.invalidateQueries({ queryKey: ['admin-tracks'] })}
               />
             )}
+          </TabsContent>
+
+          {/* ResonancePath Tab */}
+          <TabsContent value="phases">
+            <PhaseManager />
           </TabsContent>
 
           {/* Themes Tab */}

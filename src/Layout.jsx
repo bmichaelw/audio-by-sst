@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, Home, Library, Shield, DollarSign } from 'lucide-react';
+import { Menu, X, User, LogOut, Home, Library, Shield, DollarSign, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Toaster } from 'sonner';
 
@@ -46,6 +46,17 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Library', icon: Library, href: createPageUrl('Library') },
     { name: 'Pricing', icon: DollarSign, href: createPageUrl('Pricing') },
   ];
+
+  // Add ResonancePath for eligible users
+  if (user) {
+    // Check if user has resonance_path or collaborations tier
+    // We'll show it to all logged-in users and handle access in the page
+    navItems.push({ 
+      name: 'ResonancePath', 
+      icon: TrendingUp, 
+      href: createPageUrl('ResonancePath') 
+    });
+  }
 
   if (user?.role === 'admin') {
     navItems.push({ name: 'Admin', icon: Shield, href: createPageUrl('Admin') });
