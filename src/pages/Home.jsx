@@ -22,7 +22,7 @@ export default function Home() {
     chakra: 'all',
     difficulty: 'all',
     voicePresent: 'all',
-    accessTier: 'all',
+    accessTier: 'all'
   });
 
   // Fetch user and subscription
@@ -34,16 +34,16 @@ export default function Home() {
           setUserEmail(user.email);
           const subscriptions = await base44.entities.UserSubscription.filter({
             user_email: user.email,
-            is_active: true,
+            is_active: true
           });
           if (subscriptions.length > 0) {
             setUserTier(subscriptions[0].tier);
           }
         }
       } catch {
+
         // User not logged in, default to free tier
-      }
-    };
+      }};
     fetchUserData();
   }, []);
 
@@ -54,19 +54,19 @@ export default function Home() {
       const prefs = await base44.entities.UserPreferences.filter({ user_email: userEmail });
       return prefs[0] || null;
     },
-    enabled: !!userEmail,
+    enabled: !!userEmail
   });
 
   // Fetch tracks
   const { data: tracks = [], isLoading } = useQuery({
     queryKey: ['tracks'],
-    queryFn: () => base44.entities.Track.list('-created_date'),
+    queryFn: () => base44.entities.Track.list('-created_date')
   });
 
   // Fetch themes for filter options
   const { data: themesData = [] } = useQuery({
     queryKey: ['themes'],
-    queryFn: () => base44.entities.Theme.list('sort_order'),
+    queryFn: () => base44.entities.Theme.list('sort_order')
   });
 
   const themeNames = useMemo(() => themesData.map((t) => t.name), [themesData]);
@@ -78,11 +78,11 @@ export default function Home() {
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const matchesSearch =
-          track.title?.toLowerCase().includes(searchLower) ||
-          track.description?.toLowerCase().includes(searchLower) ||
-          track.intention?.toLowerCase().includes(searchLower) ||
-          track.themes?.some((t) => t.toLowerCase().includes(searchLower)) ||
-          track.tags?.some((t) => t.toLowerCase().includes(searchLower));
+        track.title?.toLowerCase().includes(searchLower) ||
+        track.description?.toLowerCase().includes(searchLower) ||
+        track.intention?.toLowerCase().includes(searchLower) ||
+        track.themes?.some((t) => t.toLowerCase().includes(searchLower)) ||
+        track.tags?.some((t) => t.toLowerCase().includes(searchLower));
         if (!matchesSearch) return false;
       }
 
@@ -125,12 +125,12 @@ export default function Home() {
   const recommendedTracks = useMemo(() => {
     if (!preferences || tracks.length === 0) return [];
 
-    const scored = tracks.map(track => {
+    const scored = tracks.map((track) => {
       let score = 0;
 
       // Match preferred themes
       if (preferences.preferred_themes?.length > 0) {
-        const themeMatch = track.themes?.some(t => preferences.preferred_themes.includes(t));
+        const themeMatch = track.themes?.some((t) => preferences.preferred_themes.includes(t));
         if (themeMatch) score += 3;
       }
 
@@ -164,11 +164,11 @@ export default function Home() {
       return { track, score };
     });
 
-    return scored
-      .filter(item => item.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 4)
-      .map(item => item.track);
+    return scored.
+    filter((item) => item.score > 0).
+    sort((a, b) => b.score - a.score).
+    slice(0, 4).
+    map((item) => item.track);
   }, [tracks, preferences]);
 
   // Featured tracks
@@ -203,28 +203,28 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+            className="text-center max-w-3xl mx-auto">
+
             <Badge className="bg-purple-100 text-purple-900 border-purple-200 mb-6">
               <Sparkles className="w-3 h-3 mr-1" />
               Healing Through VocalResonance™
             </Badge>
             <h1 className="text-4xl md:text-6xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: 'var(--letter-spacing-heading)' }}>
               Ancient sound.
-              <span className="block bg-gradient-to-r from-purple-800 to-purple-600 bg-clip-text text-transparent">Modern healing.</span>
+              <span className="bg-clip-text text-[##a57ec8] block from-purple-800 to-purple-600">Modern healing.</span>
             </h1>
             <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
               A curated collection of therapeutic audio designed to support your nervous system, 
               deepen your practice, and guide you toward inner peace.
             </p>
             
-            {userTier === 'free' && (
-              <div className="flex flex-wrap justify-center gap-4">
+            {userTier === 'free' &&
+            <div className="flex flex-wrap justify-center gap-4">
                 <Button
-                  onClick={() => setIsUpgradeOpen(true)}
-                  className="px-8 py-6 text-base"
-                  style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
-                >
+                onClick={() => setIsUpgradeOpen(true)}
+                className="px-8 py-6 text-base"
+                style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
+
                   <Heart className="w-4 h-4 mr-2" />
                   Begin Your Journey
                 </Button>
@@ -235,46 +235,46 @@ export default function Home() {
                   </Button>
                 </Link>
               </div>
-            )}
+            }
           </motion.div>
         </div>
       </section>
 
       {/* Recommended/Featured Tracks */}
-      {heroTracks.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 pb-16">
+      {heroTracks.length > 0 &&
+      <section className="max-w-7xl mx-auto px-4 pb-16">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}>
+
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>
                   {recommendedTracks.length > 0 ? 'Recommended for You' : 'Featured Sessions'}
                 </h2>
-                {recommendedTracks.length > 0 && (
-                  <p className="text-sm mt-1" style={{ color: 'hsl(var(--text-muted))' }}>Based on your preferences</p>
-                )}
+                {recommendedTracks.length > 0 &&
+              <p className="text-sm mt-1" style={{ color: 'hsl(var(--text-muted))' }}>Based on your preferences</p>
+              }
               </div>
               <Link
-                to={createPageUrl('Library')}
-                className="text-sm flex items-center gap-1 transition-colors"
-                style={{ color: 'hsl(var(--accent))', hover: { color: 'hsl(var(--accent-hover))' } }}
-              >
+              to={createPageUrl('Library')}
+              className="text-sm flex items-center gap-1 transition-colors"
+              style={{ color: 'hsl(var(--accent))', hover: { color: 'hsl(var(--accent-hover))' } }}>
+
                 View all
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
             <TrackList
-              tracks={heroTracks}
-              isLoading={false}
-              userTier={userTier}
-              onUpgradeClick={() => setIsUpgradeOpen(true)}
-            />
+            tracks={heroTracks}
+            isLoading={false}
+            userTier={userTier}
+            onUpgradeClick={() => setIsUpgradeOpen(true)} />
+
           </motion.div>
         </section>
-      )}
+      }
 
       {/* All Tracks with Filters */}
       <section className="max-w-7xl mx-auto px-4 pb-32">
@@ -284,24 +284,24 @@ export default function Home() {
             filters={filters}
             onFilterChange={setFilters}
             themes={themeNames}
-            activeFiltersCount={activeFiltersCount}
-          />
+            activeFiltersCount={activeFiltersCount} />
+
         </div>
 
         <TrackList
           tracks={filteredTracks}
           isLoading={isLoading}
           userTier={userTier}
-          onUpgradeClick={() => setIsUpgradeOpen(true)}
-        />
+          onUpgradeClick={() => setIsUpgradeOpen(true)} />
+
       </section>
 
       {/* Upgrade Modal */}
       <UpgradeModal
         isOpen={isUpgradeOpen}
         onClose={() => setIsUpgradeOpen(false)}
-        currentTier={userTier}
-      />
-    </div>
-  );
+        currentTier={userTier} />
+
+    </div>);
+
 }
