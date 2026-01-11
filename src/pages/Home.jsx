@@ -205,10 +205,11 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto">
 
-            <Badge className="bg-purple-100 text-purple-900 border-purple-200 mb-6">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Healing Through VocalResonance™
-            </Badge>
+<div className="flex justify-center mb-6">
+  <Badge className="inline-flex items-center bg-purple-100 text-purple-900 border-purple-200">
+    <Sparkles className="w-3 h-3 mr-1" />
+    Healing Through Vocal Resonance™
+  </Badge>
             
             {/* Title with Logo Sigil */}
             <div className="relative inline-block mb-4">
