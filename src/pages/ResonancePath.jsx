@@ -42,7 +42,7 @@ export default function ResonancePath() {
   const [hasAccess, setHasAccess] = useState(false);
   const [checkingAccess, setCheckingAccess] = useState(true);
 
-  // Check user access
+  // Check user access and fetch preferences
   useEffect(() => {
     const checkAccess = async () => {
       try {
@@ -65,6 +65,16 @@ export default function ResonancePath() {
     };
     checkAccess();
   }, []);
+
+  // Fetch user preferences for recommendations
+  const { data: preferences } = useQuery({
+    queryKey: ['user-preferences', user?.email],
+    queryFn: async () => {
+      const prefs = await base44.entities.UserPreferences.filter({ user_email: user.email });
+      return prefs[0] || null;
+    },
+    enabled: hasAccess && !!user,
+  });
 
   // Fetch phases
   const { data: phases = [], isLoading: phasesLoading } = useQuery({
@@ -240,10 +250,24 @@ export default function ResonancePath() {
             <h1 className="text-4xl md:text-5xl font-light text-white mb-4">
               ResonancePath
             </h1>
-            <p className="text-lg text-stone-400 max-w-2xl mx-auto mb-8">
+            <p className="text-lg text-stone-400 max-w-2xl mx-auto mb-4">
               A structured journey through curated sessions designed to deepen your practice
               and support your nervous system regulation.
             </p>
+
+            {/* Personalized Recommendations */}
+            {preferences?.resonance_focus_areas?.length > 0 && (
+              <div className="mb-8">
+                <p className="text-stone-500 text-sm mb-2">Based on your focus areas:</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {preferences.resonance_focus_areas.map(area => (
+                    <Badge key={area} variant="outline" className="border-amber-600/30 text-amber-400">
+                      {area}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Overall Progress */}
             <div className="bg-stone-900/50 rounded-xl p-6 border border-stone-800">
