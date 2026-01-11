@@ -84,12 +84,12 @@ export default function TrackFilters({
     <div className="space-y-6">
       {/* Theme */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-300">Theme</label>
+        <label className="text-sm font-medium" style={{ color: 'hsl(var(--text-body))' }}>Theme</label>
         <Select value={filters.theme} onValueChange={(v) => updateFilter('theme', v)}>
-          <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+          <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             <SelectValue placeholder="All Themes" />
           </SelectTrigger>
-          <SelectContent className="bg-stone-800 border-stone-700">
+          <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             <SelectItem value="all">All Themes</SelectItem>
             {themes.map((theme) => (
               <SelectItem key={theme} value={theme} className="capitalize">
@@ -102,23 +102,23 @@ export default function TrackFilters({
 
       {/* Intention */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-300">Intention</label>
+        <label className="text-sm font-medium" style={{ color: 'hsl(var(--text-body))' }}>Intention</label>
         <Input
           value={filters.intention}
           onChange={(e) => updateFilter('intention', e.target.value)}
           placeholder="e.g., relaxation, focus"
-          className="bg-stone-800/50 border-stone-700 text-white placeholder:text-stone-500"
+          style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
         />
       </div>
 
       {/* Nervous System State */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-300">Nervous System</label>
+        <label className="text-sm font-medium" style={{ color: 'hsl(var(--text-body))' }}>Nervous System</label>
         <Select value={filters.nervousSystem} onValueChange={(v) => updateFilter('nervousSystem', v)}>
-          <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+          <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             <SelectValue placeholder="All States" />
           </SelectTrigger>
-          <SelectContent className="bg-stone-800 border-stone-700">
+          <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             {nervousSystemOptions.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
@@ -130,12 +130,12 @@ export default function TrackFilters({
 
       {/* Chakra */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-300">Chakra</label>
+        <label className="text-sm font-medium" style={{ color: 'hsl(var(--text-body))' }}>Chakra</label>
         <Select value={filters.chakra} onValueChange={(v) => updateFilter('chakra', v)}>
-          <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+          <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             <SelectValue placeholder="All Chakras" />
           </SelectTrigger>
-          <SelectContent className="bg-stone-800 border-stone-700">
+          <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             {chakraOptions.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
@@ -147,12 +147,12 @@ export default function TrackFilters({
 
       {/* Difficulty */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-300">Level</label>
+        <label className="text-sm font-medium" style={{ color: 'hsl(var(--text-body))' }}>Level</label>
         <Select value={filters.difficulty} onValueChange={(v) => updateFilter('difficulty', v)}>
-          <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+          <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             <SelectValue placeholder="All Levels" />
           </SelectTrigger>
-          <SelectContent className="bg-stone-800 border-stone-700">
+          <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             {difficultyOptions.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
@@ -164,12 +164,12 @@ export default function TrackFilters({
 
       {/* Voice */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-300">Guidance</label>
+        <label className="text-sm font-medium" style={{ color: 'hsl(var(--text-body))' }}>Guidance</label>
         <Select value={filters.voicePresent} onValueChange={(v) => updateFilter('voicePresent', v)}>
-          <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+          <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             <SelectValue placeholder="All Tracks" />
           </SelectTrigger>
-          <SelectContent className="bg-stone-800 border-stone-700">
+          <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             {voiceOptions.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
@@ -181,12 +181,12 @@ export default function TrackFilters({
 
       {/* Access Tier */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-300">Access</label>
+        <label className="text-sm font-medium" style={{ color: 'hsl(var(--text-body))' }}>Access</label>
         <Select value={filters.accessTier} onValueChange={(v) => updateFilter('accessTier', v)}>
-          <SelectTrigger className="bg-stone-800/50 border-stone-700 text-white">
+          <SelectTrigger style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
             <SelectValue placeholder="All Tiers" />
           </SelectTrigger>
-          <SelectContent className="bg-stone-800 border-stone-700">
+          <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             {tierOptions.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
@@ -200,7 +200,8 @@ export default function TrackFilters({
         <Button
           variant="outline"
           onClick={clearFilters}
-          className="w-full border-stone-700 text-stone-300 hover:bg-stone-800"
+          className="w-full"
+          style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
         >
           <X className="w-4 h-4 mr-2" />
           Clear All Filters
@@ -213,22 +214,19 @@ export default function TrackFilters({
     <div className="w-full">
       {/* Search Bar */}
       <div className="relative mb-4">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-500" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'hsl(var(--text-subtle))' }} />
         <Input
           placeholder="Search by title, description, tags, themes..."
           value={filters.search}
           onChange={(e) => updateFilter('search', e.target.value)}
-          className={cn(
-            "pl-12 pr-4 py-6 text-base w-full",
-            "bg-stone-900/50 border-stone-800 text-white placeholder:text-stone-500",
-            "focus:border-amber-600/50 focus:ring-amber-600/20",
-            "rounded-xl"
-          )}
+          className="pl-12 pr-4 py-6 text-base w-full rounded-xl"
+          style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
         />
         {filters.search && (
           <button
             onClick={() => updateFilter('search', '')}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-500 hover:text-white"
+            className="absolute right-4 top-1/2 -translate-y-1/2"
+            style={{ color: 'hsl(var(--text-muted))' }}
           >
             <X className="w-5 h-5" />
           </button>
@@ -241,23 +239,22 @@ export default function TrackFilters({
           <SheetTrigger asChild>
             <Button
               variant="outline"
-              className={cn(
-                "border-stone-700 text-stone-300 hover:bg-stone-800",
-                activeFiltersCount > 0 && "border-amber-600/50 text-amber-400"
-              )}
+              style={activeFiltersCount > 0 ? 
+                { borderColor: 'hsl(var(--accent))', color: 'hsl(var(--accent))' } : 
+                { borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
             >
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Filters</span>
               {activeFiltersCount > 0 && (
-                <Badge className="ml-2 bg-amber-600 text-white text-xs">
+                <Badge className="ml-2 text-xs" style={{ backgroundColor: 'hsl(var(--accent))', color: 'white' }}>
                   {activeFiltersCount}
                 </Badge>
               )}
             </Button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="bg-stone-900 border-stone-800 h-[85vh] sm:h-auto sm:side-right sm:w-96">
+          <SheetContent side="bottom" className="h-[85vh] sm:h-auto sm:side-right sm:w-96" style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
             <SheetHeader>
-              <SheetTitle className="text-white">Filter Tracks</SheetTitle>
+              <SheetTitle style={{ color: 'hsl(var(--foreground))' }}>Filter Tracks</SheetTitle>
             </SheetHeader>
             <div className="mt-6 overflow-y-auto max-h-[calc(85vh-80px)] sm:max-h-[calc(100vh-120px)]">
               <FilterContent />
@@ -271,7 +268,8 @@ export default function TrackFilters({
             {filters.nervousSystem !== 'all' && (
               <Badge
                 variant="outline"
-                className="bg-stone-800 border-stone-700 text-stone-300 capitalize cursor-pointer hover:bg-stone-700"
+                className="capitalize cursor-pointer"
+                style={{ backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
                 onClick={() => updateFilter('nervousSystem', 'all')}
               >
                 {filters.nervousSystem}
@@ -281,7 +279,8 @@ export default function TrackFilters({
             {filters.theme !== 'all' && (
               <Badge
                 variant="outline"
-                className="bg-stone-800 border-stone-700 text-stone-300 capitalize cursor-pointer hover:bg-stone-700"
+                className="capitalize cursor-pointer"
+                style={{ backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
                 onClick={() => updateFilter('theme', 'all')}
               >
                 {filters.theme}
@@ -291,7 +290,8 @@ export default function TrackFilters({
             {filters.chakra !== 'all' && (
               <Badge
                 variant="outline"
-                className="bg-stone-800 border-stone-700 text-stone-300 capitalize cursor-pointer hover:bg-stone-700"
+                className="capitalize cursor-pointer"
+                style={{ backgroundColor: 'hsl(var(--muted))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
                 onClick={() => updateFilter('chakra', 'all')}
               >
                 {filters.chakra.replace('_', ' ')}

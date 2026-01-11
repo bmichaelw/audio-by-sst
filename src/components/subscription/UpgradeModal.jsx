@@ -79,12 +79,12 @@ export default function UpgradeModal({ isOpen, onClose, currentTier }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-stone-900 border-stone-800 max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
         <DialogHeader className="text-center pb-6">
-          <DialogTitle className="text-2xl md:text-3xl font-light text-white">
+          <DialogTitle className="text-2xl md:text-3xl font-light" style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading))' }}>
             Expand Your Practice
           </DialogTitle>
-          <DialogDescription className="text-stone-400 text-base mt-2">
+          <DialogDescription className="text-base mt-2" style={{ color: 'hsl(var(--text-muted))' }}>
             Choose a path that resonates with your journey
           </DialogDescription>
         </DialogHeader>
@@ -101,54 +101,50 @@ export default function UpgradeModal({ isOpen, onClose, currentTier }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={cn(
-                  "relative rounded-2xl p-6 border transition-all duration-300",
-                  tier.popular
-                    ? "border-amber-500/50 bg-stone-800/50"
-                    : "border-stone-700/50 bg-stone-800/30",
-                  "hover:border-stone-600"
-                )}
+                className="relative rounded-2xl p-6 border transition-all duration-300 hover:shadow-lg"
+                style={{
+                  backgroundColor: tier.popular ? 'hsl(var(--surface-elevated))' : 'hsl(var(--card))',
+                  borderColor: tier.popular ? 'hsl(var(--accent) / 0.4)' : 'hsl(var(--border))'
+                }}
               >
                 {tier.popular && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-600 text-white border-0">
+                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 border-0" style={{ backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))' }}>
                     Most Popular
                   </Badge>
                 )}
 
                 <div className="text-center mb-6">
-                  <div className={cn(
-                    "w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center",
-                    `bg-gradient-to-br ${tier.color}`
-                  )}>
+                  <div 
+                    className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center"
+                    style={{ background: `linear-gradient(to bottom right, ${tier.color.replace('from-', '').replace(' to-', ', ')})` }}
+                  >
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-xl font-medium text-white mb-1">{tier.name}</h3>
-                  <p className="text-stone-400 text-sm">{tier.description}</p>
+                  <h3 className="text-xl font-medium mb-1" style={{ color: 'hsl(var(--foreground))' }}>{tier.name}</h3>
+                  <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>{tier.description}</p>
                 </div>
 
                 <div className="text-center mb-6">
-                  <span className="text-4xl font-light text-white">{tier.price}</span>
-                  <span className="text-stone-400">{tier.period}</span>
+                  <span className="text-4xl font-light" style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading))' }}>{tier.price}</span>
+                  <span style={{ color: 'hsl(var(--text-muted))' }}>{tier.period}</span>
                 </div>
 
                 <ul className="space-y-3 mb-6">
                   {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm text-stone-300">
-                      <Check className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                    <li key={feature} className="flex items-start gap-3 text-sm" style={{ color: 'hsl(var(--text-body))' }}>
+                      <Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'hsl(var(--accent))' }} />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <Button
-                  className={cn(
-                    "w-full",
-                    isCurrentTier
-                      ? "bg-stone-700 text-stone-300 cursor-default"
-                      : isComingSoon
-                      ? "bg-stone-700 text-stone-400 cursor-not-allowed"
-                      : tier.buttonColor + " text-white"
-                  )}
+                  className="w-full"
+                  style={isCurrentTier ? 
+                    { backgroundColor: 'hsl(var(--muted))', color: 'hsl(var(--text-muted))' } : 
+                    isComingSoon ? 
+                      { backgroundColor: 'hsl(var(--muted))', color: 'hsl(var(--text-subtle))' } : 
+                      { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
                   disabled={isCurrentTier || isComingSoon}
                   onClick={() => !isCurrentTier && !isComingSoon && handleUpgrade(tier.id)}
                 >
@@ -159,7 +155,7 @@ export default function UpgradeModal({ isOpen, onClose, currentTier }) {
           })}
         </div>
 
-        <p className="text-center text-stone-500 text-sm mt-6">
+        <p className="text-center text-sm mt-6" style={{ color: 'hsl(var(--text-muted))' }}>
           All plans include a 7-day free trial. Cancel anytime.
         </p>
       </DialogContent>
