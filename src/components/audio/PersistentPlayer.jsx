@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAudioPlayer } from './AudioPlayerContext';
+import { useAudioPlayer } from './AudioPlayerContext.jsx';
 import { Play, Pause, X, Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';

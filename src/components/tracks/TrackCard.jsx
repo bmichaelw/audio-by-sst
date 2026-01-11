@@ -1,6 +1,6 @@
 import React from 'react';
 import { Play, Pause, Lock, Loader2 } from 'lucide-react';
-import { useAudioPlayer } from '../audio/AudioPlayerContext';
+import { useAudioPlayer } from '../audio/AudioPlayerContext.jsx';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';

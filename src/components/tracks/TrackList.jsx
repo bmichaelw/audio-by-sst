@@ -1,5 +1,5 @@
 import React from 'react';
-import TrackCard from './TrackCard';
+import TrackCard from './TrackCard.jsx';
 import { Loader2, Music } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import TrackList from '@/components/tracks/TrackList';
-import TrackFilters from '@/components/tracks/TrackFilters';
-import UpgradeModal from '@/components/subscription/UpgradeModal';
+import TrackList from '@/components/tracks/TrackList.jsx';
+import TrackFilters from '@/components/tracks/TrackFilters.jsx';
+import UpgradeModal from '@/components/subscription/UpgradeModal.jsx';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { motion } from 'framer-motion';
 
