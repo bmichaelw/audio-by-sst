@@ -97,10 +97,11 @@ export default function PersistentPlayer() {
     <>
       <QueuePanel isOpen={showQueue} onClose={() => setShowQueue(false)} />
       
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-stone-950/95 backdrop-blur-xl border-t border-stone-800/50 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl border-t safe-area-bottom" style={{ backgroundColor: 'hsl(var(--surface-elevated) / 0.98)', borderColor: 'hsl(var(--border))' }}>
       {/* Progress bar - clickable */}
       <div 
-        className="absolute top-0 left-0 right-0 h-1 bg-stone-800 cursor-pointer group"
+        className="absolute top-0 left-0 right-0 h-1 cursor-pointer group"
+        style={{ backgroundColor: 'hsl(var(--muted))' }}
         onClick={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           const percent = (e.clientX - rect.left) / rect.width;
@@ -108,12 +109,12 @@ export default function PersistentPlayer() {
         }}
       >
         <div 
-          className="h-full bg-gradient-to-r from-amber-600 to-amber-500 transition-all duration-100"
-          style={{ width: `${progress}%` }}
+          className="h-full bg-gradient-to-r transition-all duration-100"
+          style={{ width: `${progress}%`, background: 'linear-gradient(to right, hsl(var(--accent)), hsl(var(--accent-hover)))' }}
         />
         <div 
-          className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-amber-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ left: `${progress}%`, transform: 'translate(-50%, -50%)' }}
+          className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{ left: `${progress}%`, transform: 'translate(-50%, -50%)', backgroundColor: 'hsl(var(--accent))' }}
         />
       </div>
 
@@ -133,11 +134,11 @@ export default function PersistentPlayer() {
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <p className="text-white font-medium text-sm md:text-base truncate">
+              <p className="font-medium text-sm md:text-base truncate" style={{ color: 'hsl(var(--foreground))' }}>
                 {currentTrack.title}
               </p>
               {currentTrack.intention && (
-                <p className="text-stone-400 text-xs md:text-sm truncate">
+                <p className="text-xs md:text-sm truncate" style={{ color: 'hsl(var(--text-muted))' }}>
                   {currentTrack.intention}
                 </p>
               )}
@@ -152,7 +153,7 @@ export default function PersistentPlayer() {
             </div>
 
             {/* Time - hidden on mobile */}
-            <span className="hidden md:block text-stone-400 text-sm font-mono min-w-[4rem] text-right">
+            <span className="hidden md:block text-sm font-mono min-w-[4rem] text-right" style={{ color: 'hsl(var(--text-muted))' }}>
               {formatTime(currentTime)}
             </span>
 
@@ -162,7 +163,8 @@ export default function PersistentPlayer() {
               size="icon"
               onClick={playPrevious}
               disabled={queueIndex <= 0 && currentTime < 3}
-              className="hidden md:flex text-stone-400 hover:text-white h-9 w-9"
+              className="hidden md:flex h-9 w-9"
+              style={{ color: 'hsl(var(--text-muted))' }}
             >
               <SkipBack className="w-4 h-4" />
             </Button>
@@ -173,11 +175,8 @@ export default function PersistentPlayer() {
               size="icon"
               onClick={togglePlay}
               disabled={isLoading}
-              className={cn(
-                "w-12 h-12 rounded-full transition-all",
-                "bg-amber-600 hover:bg-amber-500 text-white",
-                "shadow-lg shadow-amber-600/20"
-              )}
+              className="w-12 h-12 rounded-full transition-all shadow-lg"
+              style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', boxShadow: '0 4px 14px 0 hsl(var(--primary) / 0.25)' }}
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -194,13 +193,14 @@ export default function PersistentPlayer() {
               size="icon"
               onClick={playNext}
               disabled={!hasQueue || queueIndex >= queue.length - 1}
-              className="hidden md:flex text-stone-400 hover:text-white h-9 w-9"
+              className="hidden md:flex h-9 w-9"
+              style={{ color: 'hsl(var(--text-muted))' }}
             >
               <SkipForward className="w-4 h-4" />
             </Button>
 
             {/* Duration - hidden on mobile */}
-            <span className="hidden md:block text-stone-400 text-sm font-mono min-w-[4rem]">
+            <span className="hidden md:block text-sm font-mono min-w-[4rem]" style={{ color: 'hsl(var(--text-muted))' }}>
               {formatTime(duration)}
             </span>
 
@@ -210,7 +210,8 @@ export default function PersistentPlayer() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setVolume(volume > 0 ? 0 : 0.7)}
-                className="text-stone-400 hover:text-white h-8 w-8"
+                className="h-8 w-8"
+                style={{ color: 'hsl(var(--text-muted))' }}
               >
                 {volume > 0 ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
               </Button>
@@ -229,14 +230,12 @@ export default function PersistentPlayer() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowQueue(!showQueue)}
-                className={cn(
-                  "text-stone-400 hover:text-white h-8 w-8 relative",
-                  showQueue && "text-amber-600"
-                )}
+                className="h-8 w-8 relative"
+                style={{ color: showQueue ? 'hsl(var(--accent))' : 'hsl(var(--text-muted))' }}
               >
                 <List className="w-4 h-4" />
                 {queue.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-600 text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-4 h-4 text-xs rounded-full flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--accent))', color: 'white' }}>
                     {queue.length}
                   </span>
                 )}
@@ -248,7 +247,8 @@ export default function PersistentPlayer() {
               variant="ghost"
               size="icon"
               onClick={closePlayer}
-              className="text-stone-400 hover:text-white h-8 w-8"
+              className="h-8 w-8"
+              style={{ color: 'hsl(var(--text-muted))' }}
             >
               <X className="w-4 h-4" />
             </Button>

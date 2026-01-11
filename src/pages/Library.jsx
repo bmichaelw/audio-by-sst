@@ -178,19 +178,19 @@ export default function Library() {
   }, [filters]);
 
   return (
-    <div className="min-h-screen bg-stone-950 pb-32">
+    <div className="min-h-screen pb-32" style={{ backgroundColor: 'hsl(var(--background))' }}>
       {/* Header */}
-      <div className="bg-gradient-to-b from-stone-900 to-stone-950 border-b border-stone-800/50">
+      <div className="bg-gradient-to-b from-purple-50/50 to-transparent border-b" style={{ borderColor: 'hsl(var(--border))' }}>
         <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="text-3xl md:text-4xl font-light text-white mb-2">
+            <h1 className="text-3xl md:text-4xl font-light mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>
               Sound Library
             </h1>
-            <p className="text-stone-400">
-              {allTracks.length} tracks available for your practice
+            <p style={{ color: 'hsl(var(--text-muted))' }}>
+              {allTracks.length} sacred tracks available
             </p>
           </motion.div>
         </div>
@@ -200,28 +200,29 @@ export default function Library() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Tier Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <TabsList className="bg-stone-900/50 border border-stone-800">
+          <TabsList style={{ backgroundColor: 'hsl(var(--surface))', border: '1px solid hsl(var(--border))' }}>
             <TabsTrigger
               value="all"
-              className="data-[state=active]:bg-stone-800 data-[state=active]:text-white"
+              className="data-[state=active]:text-purple-900"
+              style={{ '--tw-ring-color': 'hsl(var(--primary))' }}
             >
               All Tracks
             </TabsTrigger>
             <TabsTrigger
               value="free"
-              className="data-[state=active]:bg-stone-800 data-[state=active]:text-white"
+              className="data-[state=active]:text-purple-900"
             >
               Sample Library
             </TabsTrigger>
             <TabsTrigger
               value="member"
-              className="data-[state=active]:bg-stone-800 data-[state=active]:text-white"
+              className="data-[state=active]:text-purple-900"
             >
               Member
             </TabsTrigger>
             <TabsTrigger
               value="resonance"
-              className="data-[state=active]:bg-stone-800 data-[state=active]:text-white"
+              className="data-[state=active]:text-purple-900"
             >
               ResonancePath
             </TabsTrigger>
@@ -241,12 +242,12 @@ export default function Library() {
             />
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <span className="text-stone-400 text-sm whitespace-nowrap">Sort by:</span>
+              <span className="text-sm whitespace-nowrap" style={{ color: 'hsl(var(--text-muted))' }}>Sort by:</span>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="bg-stone-900/50 border-stone-800 text-white w-full sm:w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]" style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-stone-800 border-stone-700">
+                <SelectContent style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
                   <SelectItem value="featured">Featured First</SelectItem>
                   <SelectItem value="newest">Newest First</SelectItem>
                   <SelectItem value="duration_short">Shortest First</SelectItem>
@@ -259,7 +260,7 @@ export default function Library() {
 
         {/* Results count */}
         {!isLoadingTracks && (
-          <div className="mb-4 text-stone-400 text-sm">
+          <div className="mb-4 text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
             Showing {paginatedTracks.length} of {filteredAndSortedTracks.length} tracks
           </div>
         )}
@@ -289,7 +290,7 @@ export default function Library() {
               size="icon"
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="border-stone-700 text-stone-300 hover:bg-stone-800"
+              style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--text-body))' }}
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
@@ -313,11 +314,9 @@ export default function Library() {
                     variant={currentPage === pageNum ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCurrentPage(pageNum)}
-                    className={
-                      currentPage === pageNum
-                        ? "bg-amber-600 hover:bg-amber-500 text-white"
-                        : "border-stone-700 text-stone-300 hover:bg-stone-800"
-                    }
+                    style={currentPage === pageNum ? 
+                      { backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' } : 
+                      { borderColor: 'hsl(var(--border))', color: 'hsl(var(--text-body))' }}
                   >
                     {pageNum}
                   </Button>
@@ -330,7 +329,7 @@ export default function Library() {
               size="icon"
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="border-stone-700 text-stone-300 hover:bg-stone-800"
+              style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--text-body))' }}
             >
               <ChevronRight className="w-4 h-4" />
             </Button>

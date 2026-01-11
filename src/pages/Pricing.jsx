@@ -168,7 +168,7 @@ export default function Pricing() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-950 py-16 px-4">
+    <div className="min-h-screen py-16 px-4" style={{ backgroundColor: 'hsl(var(--background))' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -176,15 +176,15 @@ export default function Pricing() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <Badge className="bg-amber-600/10 text-amber-400 border-amber-600/20 mb-6">
+          <Badge className="bg-purple-100 text-purple-900 border-purple-200 mb-6">
             <Sparkles className="w-3 h-3 mr-1" />
-            Choose Your Path
+            Sacred Investment
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-light text-white mb-4">
-            Pricing & Plans
+          <h1 className="text-4xl md:text-5xl font-light mb-4" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>
+            Membership Tiers
           </h1>
-          <p className="text-stone-400 text-lg max-w-2xl mx-auto">
-            Start your healing journey with the plan that fits your practice
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'hsl(var(--text-body))' }}>
+            Choose the path that resonates with your healing journey
           </p>
         </motion.div>
 

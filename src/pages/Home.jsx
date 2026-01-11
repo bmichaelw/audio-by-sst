@@ -192,11 +192,11 @@ export default function Home() {
   }, [filters]);
 
   return (
-    <div className="min-h-screen bg-stone-950">
+    <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--background))' }}>
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-900/10 via-stone-950 to-stone-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-600/5 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-100/30 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-200/20 via-transparent to-transparent" />
         
         <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
           <motion.div
@@ -205,15 +205,15 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <Badge className="bg-amber-600/10 text-amber-400 border-amber-600/20 mb-6">
+            <Badge className="bg-purple-100 text-purple-900 border-purple-200 mb-6">
               <Sparkles className="w-3 h-3 mr-1" />
-              Therapeutic Sound Library
+              Healing Through VocalResonance™
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-light text-white mb-6 tracking-tight">
-              Sounds for your
-              <span className="block text-amber-500">healing journey</span>
+            <h1 className="text-4xl md:text-6xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: 'var(--letter-spacing-heading)' }}>
+              Ancient sound.
+              <span className="block bg-gradient-to-r from-purple-800 to-purple-600 bg-clip-text text-transparent">Modern healing.</span>
             </h1>
-            <p className="text-lg text-stone-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
               A curated collection of therapeutic audio designed to support your nervous system, 
               deepen your practice, and guide you toward inner peace.
             </p>
@@ -222,14 +222,15 @@ export default function Home() {
               <div className="flex flex-wrap justify-center gap-4">
                 <Button
                   onClick={() => setIsUpgradeOpen(true)}
-                  className="bg-amber-600 hover:bg-amber-500 text-white px-8 py-6 text-base"
+                  className="px-8 py-6 text-base"
+                  style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
                 >
                   <Heart className="w-4 h-4 mr-2" />
-                  Start Your Journey
+                  Begin Your Journey
                 </Button>
                 <Link to={createPageUrl('Library')}>
-                  <Button variant="outline" className="border-stone-700 text-stone-300 hover:bg-stone-800 px-8 py-6 text-base">
-                    Explore Free Tracks
+                  <Button variant="outline" className="px-8 py-6 text-base border-purple-300 text-purple-900 hover:bg-purple-50">
+                    Explore Sample Tracks
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -249,16 +250,17 @@ export default function Home() {
           >
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-2xl font-light text-white">
-                  {recommendedTracks.length > 0 ? 'Recommended for You' : 'Featured'}
+                <h2 className="text-2xl font-light" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>
+                  {recommendedTracks.length > 0 ? 'Recommended for You' : 'Featured Sessions'}
                 </h2>
                 {recommendedTracks.length > 0 && (
-                  <p className="text-stone-400 text-sm mt-1">Based on your preferences</p>
+                  <p className="text-sm mt-1" style={{ color: 'hsl(var(--text-muted))' }}>Based on your preferences</p>
                 )}
               </div>
               <Link
                 to={createPageUrl('Library')}
-                className="text-amber-500 hover:text-amber-400 text-sm flex items-center gap-1"
+                className="text-sm flex items-center gap-1 transition-colors"
+                style={{ color: 'hsl(var(--accent))', hover: { color: 'hsl(var(--accent-hover))' } }}
               >
                 View all
                 <ArrowRight className="w-4 h-4" />
@@ -277,7 +279,7 @@ export default function Home() {
       {/* All Tracks with Filters */}
       <section className="max-w-7xl mx-auto px-4 pb-32">
         <div className="mb-8">
-          <h2 className="text-2xl font-light text-white mb-6">Sound Library</h2>
+          <h2 className="text-2xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>Sound Library</h2>
           <TrackFilters
             filters={filters}
             onFilterChange={setFilters}
