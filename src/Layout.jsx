@@ -180,128 +180,71 @@ export default function Layout({ children, currentPageName }) {
           .safe-area-bottom {
             padding-bottom: env(safe-area-inset-bottom, 0);
           }
+          
+          /* Sacred aesthetic touches */
+          .gold-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, hsl(var(--accent)), transparent);
+            opacity: 0.4;
+          }
+          
+          /* Heading letter spacing - ceremonial feel */
+          h1 {
+            letter-spacing: 0.03em;
+            font-weight: 400;
+          }
+          
+          h2 {
+            letter-spacing: 0.025em;
+            font-weight: 400;
+          }
+          
+          h3 {
+            letter-spacing: 0.02em;
+          }
+          
+          /* Smooth transitions */
+          * {
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          /* Softer shadows for cards */
+          .shadow-sm {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+          }
+          
+          .shadow {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+          }
+          
+          .shadow-md {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+          }
+          
+          .shadow-lg {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+          }
+          
+          /* Softer borders */
+          .border {
+            border-color: hsl(var(--border) / 0.5);
+          }
+          
+          /* More organic spacing */
+          .space-organic > * + * {
+            margin-top: 2rem;
+          }
         `}</style>
 
         {/* Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-40 bg-[#f5f0e8]/95 backdrop-blur-xl border-b border-[#d4c4a8]/30 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between h-16">
-              {/* Logo */}
-              <Link to={createPageUrl('Home')} className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-100 to-purple-50 border-2 border-purple-900/20 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 text-purple-900" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                </div>
-                <span className="text-lg font-medium text-purple-900 tracking-wide" style={{ fontFamily: 'Cinzel, serif' }}>
-                  Sanguine Sound
-                </span>
-              </Link>
-
-              {/* Desktop Nav */}
-              <div className="hidden md:flex items-center gap-1">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = currentPageName === item.name;
-                  return (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className={cn(
-                        "flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all",
-                        isActive
-                          ? "bg-purple-900/10 text-purple-900 font-medium"
-                          : "text-purple-900/60 hover:text-purple-900 hover:bg-purple-900/5"
-                      )}
-                    >
-                      <Icon className="w-4 h-4" />
-                      {item.name}
-                    </Link>
-                  );
-                })}
-              </div>
-
-              {/* User Menu */}
-              <div className="flex items-center gap-2">
-                {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="h-9 px-3 text-purple-900/70 hover:text-purple-900 hover:bg-purple-900/5"
-                      >
-                        <User className="w-4 h-4 mr-2" />
-                        <span className="hidden sm:inline">{user.full_name || user.email}</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="bg-[#faf8f4] border-[#d4c4a8] w-48">
-                      <div className="px-2 py-1.5">
-                        <p className="text-sm text-purple-900 font-medium truncate">
-                          {user.full_name || 'User'}
-                        </p>
-                        <p className="text-xs text-purple-900/60 truncate">{user.email}</p>
-                      </div>
-                      <DropdownMenuSeparator className="bg-[#d4c4a8]" />
-                      <DropdownMenuItem
-                        onClick={handleLogout}
-                        className="text-purple-900/70 focus:text-purple-900 focus:bg-purple-900/5"
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Sign out
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Button
-                    onClick={handleLogin}
-                    className="bg-purple-900 hover:bg-purple-800 text-white"
-                  >
-                    Sign in
-                  </Button>
-                )}
-
-                {/* Mobile Menu Button */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden"
-                  style={{ color: 'hsl(var(--text-muted))' }}
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                >
-                  {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                </Button>
-                </div>
-                </div>
-          </div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div className="md:hidden border-t border-[#d4c4a8]/30 bg-[#f5f0e8]/98 backdrop-blur-xl">
-              <div className="px-4 py-3 space-y-1">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = currentPageName === item.name;
-                  return (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={cn(
-                        "flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all",
-                        isActive
-                          ? "bg-purple-900/10 text-purple-900 font-medium"
-                          : "text-purple-900/60 hover:text-purple-900 hover:bg-purple-900/5"
-                      )}
-                    >
-                      <Icon className="w-5 h-5" />
-                      {item.name}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </nav>
+        <Header
+          user={user}
+          currentPageName={currentPageName}
+          isMenuOpen={isMenuOpen}
+          setIsMenuOpen={setIsMenuOpen}
+          onLogin={handleLogin}
+          onLogout={handleLogout}
+        />
 
         {/* Main Content */}
         <main className="pt-16">
