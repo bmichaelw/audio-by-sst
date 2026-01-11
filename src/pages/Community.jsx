@@ -112,10 +112,15 @@ export default function Community() {
               <Card
                 key={post.id}
                 className="hover:shadow-md transition-all cursor-pointer"
-                style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}
+                style={{ 
+                  backgroundColor: 'hsl(var(--card))', 
+                  borderColor: 'hsl(var(--border) / 0.5)',
+                  borderRadius: '1rem',
+                  padding: '1.25rem'
+                }}
                 onClick={() => setSelectedPost(post.id)}
               >
-                <CardContent className="p-4">
+                <CardContent className="p-0">
                   <div className="flex items-start gap-4">
                     <div className="flex flex-col items-center gap-1 pt-1">
                       <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, hsl(var(--accent) / 0.3), hsl(var(--muted)))' }}>

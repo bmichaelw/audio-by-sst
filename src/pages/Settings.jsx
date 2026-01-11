@@ -153,10 +153,10 @@ export default function Settings() {
         </div>
 
         {/* Preferred Themes */}
-        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
           <CardHeader>
-            <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Favorite Themes</CardTitle>
-            <CardDescription>Select themes you resonate with most</CardDescription>
+            <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Favorite Themes</CardTitle>
+            <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Select themes you resonate with most</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
@@ -179,10 +179,10 @@ export default function Settings() {
 
         {/* Chakras & Nervous System */}
         <div className="grid md:grid-cols-2 gap-6">
-          <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+          <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
             <CardHeader>
-              <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Chakra Focus</CardTitle>
-              <CardDescription>Areas you want to work on</CardDescription>
+              <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Chakra Focus</CardTitle>
+              <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Areas you want to work on</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
@@ -203,10 +203,10 @@ export default function Settings() {
             </CardContent>
           </Card>
 
-          <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+          <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
             <CardHeader>
-              <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Nervous System</CardTitle>
-              <CardDescription>Preferred effects</CardDescription>
+              <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Nervous System</CardTitle>
+              <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Preferred effects</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
@@ -229,10 +229,10 @@ export default function Settings() {
         </div>
 
         {/* ResonancePath Focus */}
-        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
           <CardHeader>
-            <CardTitle style={{ color: 'hsl(var(--foreground))' }}>ResonancePath Focus</CardTitle>
-            <CardDescription>What you want to achieve</CardDescription>
+            <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>ResonancePath Focus</CardTitle>
+            <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>What you want to achieve</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
@@ -254,10 +254,10 @@ export default function Settings() {
         </Card>
 
         {/* Session Preferences */}
-        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
           <CardHeader>
-            <CardTitle style={{ color: 'hsl(var(--foreground))' }}>Session Preferences</CardTitle>
-            <CardDescription>Customize your practice</CardDescription>
+            <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Session Preferences</CardTitle>
+            <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Customize your practice</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-3 gap-4">
@@ -330,13 +330,13 @@ export default function Settings() {
         </Card>
 
         {/* Mood Tracking */}
-        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+        <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2" style={{ color: 'hsl(var(--foreground))' }}>
+            <CardTitle className="flex items-center gap-2" style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>
               <Heart className="w-5 h-5 text-rose-500" />
               Daily Mood Check-in
             </CardTitle>
-            <CardDescription>Track how you're feeling</CardDescription>
+            <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>Track how you're feeling</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">

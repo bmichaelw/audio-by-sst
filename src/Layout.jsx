@@ -308,13 +308,14 @@ export default function Layout({ children, currentPageName }) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="md:hidden text-purple-900/60"
+                  className="md:hidden"
+                  style={{ color: 'hsl(var(--text-muted))' }}
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                   {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </Button>
-              </div>
-            </div>
+                </div>
+                </div>
           </div>
 
           {/* Mobile Menu */}

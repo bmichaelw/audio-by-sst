@@ -87,14 +87,16 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
   return (
     <Card
       className={cn(
-        "group overflow-hidden border transition-all duration-300 hover:shadow-lg",
-        isCurrentTrack
-          ? "border-purple-300 shadow-lg"
-          : "hover:border-purple-200"
+        "group overflow-hidden transition-all duration-500",
+        isCurrentTrack && "shadow-xl"
       )}
       style={{ 
         backgroundColor: isCurrentTrack ? 'hsl(var(--surface-elevated))' : 'hsl(var(--card))',
-        borderColor: isCurrentTrack ? 'hsl(var(--primary) / 0.3)' : undefined
+        borderRadius: '1rem',
+        border: isCurrentTrack ? '1.5px solid hsl(var(--accent) / 0.4)' : '1px solid hsl(var(--border) / 0.5)',
+        boxShadow: isCurrentTrack 
+          ? '0 8px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px hsl(var(--accent) / 0.1)' 
+          : '0 1px 3px rgba(0, 0, 0, 0.04)'
       }}
     >
       {/* Cover Image */}
@@ -122,10 +124,12 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
           <button
             onClick={handlePlayClick}
             disabled={isLoadingAudio || audioLoading}
-            className="w-16 h-16 rounded-full flex items-center justify-center transition-all transform hover:scale-110 active:scale-95 shadow-lg"
+            className="w-16 h-16 rounded-full flex items-center justify-center transition-all transform hover:scale-110 active:scale-95"
             style={{
               backgroundColor: isLocked ? 'hsl(var(--muted))' : 'hsl(var(--primary))',
-              color: isLocked ? 'hsl(var(--text-muted))' : 'hsl(var(--primary-foreground))'
+              color: isLocked ? 'hsl(var(--text-muted))' : 'hsl(var(--primary-foreground))',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1)',
+              backdropFilter: 'blur(8px)'
             }}
           >
             {isLoadingAudio || (isCurrentTrack && audioLoading) ? (
@@ -159,13 +163,13 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
       </div>
 
       {/* Track Info */}
-      <div className="p-4 space-y-3">
+      <div className="p-5 space-y-3">
         <div>
-          <h3 className="font-medium line-clamp-1 mb-1" style={{ color: 'hsl(var(--foreground))' }}>
+          <h3 className="font-medium line-clamp-1 mb-1.5" style={{ color: 'hsl(var(--foreground))', fontSize: '1.0625rem', lineHeight: '1.5' }}>
             {track.title}
           </h3>
           {track.intention && (
-            <p className="text-sm line-clamp-2" style={{ color: 'hsl(var(--text-muted))' }}>
+            <p className="text-sm line-clamp-2 leading-relaxed" style={{ color: 'hsl(var(--text-muted))' }}>
               {track.intention}
             </p>
           )}
