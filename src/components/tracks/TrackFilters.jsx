@@ -71,6 +71,7 @@ export default function TrackFilters({
     onFilterChange({
       search: '',
       theme: 'all',
+      intention: '',
       nervousSystem: 'all',
       chakra: 'all',
       difficulty: 'all',
@@ -97,6 +98,17 @@ export default function TrackFilters({
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      {/* Intention */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-stone-300">Intention</label>
+        <Input
+          value={filters.intention}
+          onChange={(e) => updateFilter('intention', e.target.value)}
+          placeholder="e.g., relaxation, focus"
+          className="bg-stone-800/50 border-stone-700 text-white placeholder:text-stone-500"
+        />
       </div>
 
       {/* Nervous System State */}
@@ -198,16 +210,16 @@ export default function TrackFilters({
   );
 
   return (
-    <div className="space-y-4">
+    <div className="w-full">
       {/* Search Bar */}
-      <div className="relative">
+      <div className="relative mb-4">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-500" />
         <Input
-          placeholder="Search tracks, themes, intentions..."
+          placeholder="Search by title, description, tags, themes..."
           value={filters.search}
           onChange={(e) => updateFilter('search', e.target.value)}
           className={cn(
-            "pl-12 pr-4 py-6 text-base",
+            "pl-12 pr-4 py-6 text-base w-full",
             "bg-stone-900/50 border-stone-800 text-white placeholder:text-stone-500",
             "focus:border-amber-600/50 focus:ring-amber-600/20",
             "rounded-xl"
@@ -223,19 +235,19 @@ export default function TrackFilters({
         )}
       </div>
 
-      {/* Filter Button - Mobile */}
+      {/* Filter Button */}
       <div className="flex items-center gap-3">
         <Sheet>
           <SheetTrigger asChild>
             <Button
               variant="outline"
               className={cn(
-                "flex-1 md:flex-none border-stone-700 text-stone-300 hover:bg-stone-800",
+                "border-stone-700 text-stone-300 hover:bg-stone-800",
                 activeFiltersCount > 0 && "border-amber-600/50 text-amber-400"
               )}
             >
               <SlidersHorizontal className="w-4 h-4 mr-2" />
-              Filters
+              <span className="hidden sm:inline">Filters</span>
               {activeFiltersCount > 0 && (
                 <Badge className="ml-2 bg-amber-600 text-white text-xs">
                   {activeFiltersCount}
@@ -243,39 +255,51 @@ export default function TrackFilters({
               )}
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="bg-stone-900 border-stone-800 w-80">
+          <SheetContent side="bottom" className="bg-stone-900 border-stone-800 h-[85vh] sm:h-auto sm:side-right sm:w-96">
             <SheetHeader>
               <SheetTitle className="text-white">Filter Tracks</SheetTitle>
             </SheetHeader>
-            <div className="mt-6">
+            <div className="mt-6 overflow-y-auto max-h-[calc(85vh-80px)] sm:max-h-[calc(100vh-120px)]">
               <FilterContent />
             </div>
           </SheetContent>
         </Sheet>
 
-        {/* Quick Filter Badges */}
-        <div className="hidden md:flex items-center gap-2 flex-wrap">
-          {filters.nervousSystem !== 'all' && (
-            <Badge
-              variant="outline"
-              className="bg-stone-800 border-stone-700 text-stone-300 capitalize cursor-pointer hover:bg-stone-700"
-              onClick={() => updateFilter('nervousSystem', 'all')}
-            >
-              {filters.nervousSystem}
-              <X className="w-3 h-3 ml-1" />
-            </Badge>
-          )}
-          {filters.theme !== 'all' && (
-            <Badge
-              variant="outline"
-              className="bg-stone-800 border-stone-700 text-stone-300 capitalize cursor-pointer hover:bg-stone-700"
-              onClick={() => updateFilter('theme', 'all')}
-            >
-              {filters.theme}
-              <X className="w-3 h-3 ml-1" />
-            </Badge>
-          )}
-        </div>
+        {/* Active Filter Badges */}
+        {activeFiltersCount > 0 && (
+          <div className="flex items-center gap-2 flex-wrap">
+            {filters.nervousSystem !== 'all' && (
+              <Badge
+                variant="outline"
+                className="bg-stone-800 border-stone-700 text-stone-300 capitalize cursor-pointer hover:bg-stone-700"
+                onClick={() => updateFilter('nervousSystem', 'all')}
+              >
+                {filters.nervousSystem}
+                <X className="w-3 h-3 ml-1" />
+              </Badge>
+            )}
+            {filters.theme !== 'all' && (
+              <Badge
+                variant="outline"
+                className="bg-stone-800 border-stone-700 text-stone-300 capitalize cursor-pointer hover:bg-stone-700"
+                onClick={() => updateFilter('theme', 'all')}
+              >
+                {filters.theme}
+                <X className="w-3 h-3 ml-1" />
+              </Badge>
+            )}
+            {filters.chakra !== 'all' && (
+              <Badge
+                variant="outline"
+                className="bg-stone-800 border-stone-700 text-stone-300 capitalize cursor-pointer hover:bg-stone-700"
+                onClick={() => updateFilter('chakra', 'all')}
+              >
+                {filters.chakra.replace('_', ' ')}
+                <X className="w-3 h-3 ml-1" />
+              </Badge>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

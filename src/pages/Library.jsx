@@ -5,21 +5,35 @@ import TrackList from '@/components/tracks/TrackList.jsx';
 import TrackFilters from '@/components/tracks/TrackFilters.jsx';
 import UpgradeModal from '@/components/subscription/UpgradeModal.jsx';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Library() {
   const [userTier, setUserTier] = useState('free');
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
+  const [sortBy, setSortBy] = useState('newest');
+  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     search: '',
     theme: 'all',
+    intention: '',
     nervousSystem: 'all',
     chakra: 'all',
     difficulty: 'all',
     voicePresent: 'all',
     accessTier: 'all',
   });
+
+  const TRACKS_PER_PAGE = 12;
 
   // Fetch user and subscription
   useEffect(() => {
@@ -42,10 +56,11 @@ export default function Library() {
     fetchUserData();
   }, []);
 
-  // Fetch tracks
-  const { data: tracks = [], isLoading } = useQuery({
+  // Fetch tracks with caching
+  const { data: allTracks = [], isLoading } = useQuery({
     queryKey: ['tracks'],
     queryFn: () => base44.entities.Track.list('-created_date'),
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
   // Fetch themes
@@ -56,15 +71,15 @@ export default function Library() {
 
   const themeNames = useMemo(() => themesData.map((t) => t.name), [themesData]);
 
-  // Filter tracks based on all criteria
-  const filteredTracks = useMemo(() => {
-    return tracks.filter((track) => {
+  // Filter and sort tracks
+  const filteredAndSortedTracks = useMemo(() => {
+    let result = allTracks.filter((track) => {
       // Tab filter (access tier)
       if (activeTab === 'free' && track.access_tier !== 'free') return false;
       if (activeTab === 'member' && track.access_tier !== 'member') return false;
       if (activeTab === 'resonance' && track.access_tier !== 'resonance_path') return false;
 
-      // Search filter
+      // Search filter - searches across multiple fields
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const matchesSearch =
@@ -78,6 +93,11 @@ export default function Library() {
 
       // Theme filter
       if (filters.theme !== 'all' && !track.themes?.includes(filters.theme)) {
+        return false;
+      }
+
+      // Intention filter (text search)
+      if (filters.intention && !track.intention?.toLowerCase().includes(filters.intention.toLowerCase())) {
         return false;
       }
 
@@ -102,19 +122,52 @@ export default function Library() {
         if (track.voice_present !== hasVoice) return false;
       }
 
-      // Access tier filter from filters
+      // Access tier filter
       if (filters.accessTier !== 'all' && track.access_tier !== filters.accessTier) {
         return false;
       }
 
       return true;
     });
-  }, [tracks, filters, activeTab]);
+
+    // Apply sorting
+    switch (sortBy) {
+      case 'featured':
+        result.sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0));
+        break;
+      case 'newest':
+        result.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+        break;
+      case 'duration_short':
+        result.sort((a, b) => a.duration_seconds - b.duration_seconds);
+        break;
+      case 'duration_long':
+        result.sort((a, b) => b.duration_seconds - a.duration_seconds);
+        break;
+      default:
+        // Keep original order
+    }
+
+    return result;
+  }, [allTracks, filters, activeTab, sortBy]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredAndSortedTracks.length / TRACKS_PER_PAGE);
+  const paginatedTracks = useMemo(() => {
+    const startIndex = (currentPage - 1) * TRACKS_PER_PAGE;
+    return filteredAndSortedTracks.slice(startIndex, startIndex + TRACKS_PER_PAGE);
+  }, [filteredAndSortedTracks, currentPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, activeTab, sortBy]);
 
   // Count active filters
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (filters.theme !== 'all') count++;
+    if (filters.intention) count++;
     if (filters.nervousSystem !== 'all') count++;
     if (filters.chakra !== 'all') count++;
     if (filters.difficulty !== 'all') count++;
@@ -174,19 +227,39 @@ export default function Library() {
           </TabsList>
         </Tabs>
 
-        {/* Filters */}
-        <div className="mb-8">
+        {/* Filters and Sort */}
+        <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <TrackFilters
             filters={filters}
             onFilterChange={setFilters}
             themes={themeNames}
             activeFiltersCount={activeFiltersCount}
           />
+
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <span className="text-stone-400 text-sm whitespace-nowrap">Sort by:</span>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="bg-stone-900/50 border-stone-800 text-white w-full sm:w-[180px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-stone-800 border-stone-700">
+                <SelectItem value="featured">Featured First</SelectItem>
+                <SelectItem value="newest">Newest First</SelectItem>
+                <SelectItem value="duration_short">Shortest First</SelectItem>
+                <SelectItem value="duration_long">Longest First</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Results count */}
+        <div className="mb-4 text-stone-400 text-sm">
+          Showing {paginatedTracks.length} of {filteredAndSortedTracks.length} tracks
         </div>
 
         {/* Track List */}
         <TrackList
-          tracks={filteredTracks}
+          tracks={paginatedTracks}
           isLoading={isLoading}
           userTier={userTier}
           onUpgradeClick={() => setIsUpgradeOpen(true)}
@@ -196,6 +269,62 @@ export default function Library() {
               : "No tracks found matching your criteria."
           }
         />
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-8 flex items-center justify-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="border-stone-700 text-stone-300 hover:bg-stone-800"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={
+                      currentPage === pageNum
+                        ? "bg-amber-600 hover:bg-amber-500 text-white"
+                        : "border-stone-700 text-stone-300 hover:bg-stone-800"
+                    }
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="border-stone-700 text-stone-300 hover:bg-stone-800"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Upgrade Modal */}
