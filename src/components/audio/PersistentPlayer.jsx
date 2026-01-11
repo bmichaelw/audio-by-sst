@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useAudioPlayer } from './AudioPlayerContext.jsx';
-import { Play, Pause, X, Volume2, VolumeX, Loader2 } from 'lucide-react';
+import AudioVisualizer from './AudioVisualizer.jsx';
+import QueuePanel from './QueuePanel.jsx';
+import { Play, Pause, X, Volume2, VolumeX, Loader2, SkipForward, SkipBack, List } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -21,13 +23,18 @@ export default function PersistentPlayer() {
     duration,
     volume,
     isLoading,
+    queue,
+    queueIndex,
     togglePlay,
     seek,
     setVolume,
     closePlayer,
+    playNext,
+    playPrevious,
   } = useAudioPlayer();
 
   const hasTracked90Percent = useRef(false);
+  const [showQueue, setShowQueue] = useState(false);
 
   // Track play/pause analytics
   useEffect(() => {
@@ -84,9 +91,13 @@ export default function PersistentPlayer() {
   if (!currentTrack) return null;
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const hasQueue = queue.length > 0;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-stone-950/95 backdrop-blur-xl border-t border-stone-800/50 safe-area-bottom">
+    <>
+      <QueuePanel isOpen={showQueue} onClose={() => setShowQueue(false)} />
+      
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-stone-950/95 backdrop-blur-xl border-t border-stone-800/50 safe-area-bottom">
       {/* Progress bar - clickable */}
       <div 
         className="absolute top-0 left-0 right-0 h-1 bg-stone-800 cursor-pointer group"
@@ -135,10 +146,26 @@ export default function PersistentPlayer() {
 
           {/* Controls */}
           <div className="flex items-center gap-2 md:gap-4">
+            {/* Visualizer - desktop only */}
+            <div className="hidden lg:block">
+              <AudioVisualizer width={200} height={40} barCount={40} />
+            </div>
+
             {/* Time - hidden on mobile */}
             <span className="hidden md:block text-stone-400 text-sm font-mono min-w-[4rem] text-right">
               {formatTime(currentTime)}
             </span>
+
+            {/* Previous */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={playPrevious}
+              disabled={queueIndex <= 0 && currentTime < 3}
+              className="hidden md:flex text-stone-400 hover:text-white h-9 w-9"
+            >
+              <SkipBack className="w-4 h-4" />
+            </Button>
 
             {/* Play/Pause */}
             <Button
@@ -159,6 +186,17 @@ export default function PersistentPlayer() {
               ) : (
                 <Play className="w-5 h-5 ml-0.5" />
               )}
+            </Button>
+
+            {/* Next */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={playNext}
+              disabled={!hasQueue || queueIndex >= queue.length - 1}
+              className="hidden md:flex text-stone-400 hover:text-white h-9 w-9"
+            >
+              <SkipForward className="w-4 h-4" />
             </Button>
 
             {/* Duration - hidden on mobile */}
@@ -185,6 +223,26 @@ export default function PersistentPlayer() {
               />
             </div>
 
+            {/* Queue */}
+            {hasQueue && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowQueue(!showQueue)}
+                className={cn(
+                  "text-stone-400 hover:text-white h-8 w-8 relative",
+                  showQueue && "text-amber-600"
+                )}
+              >
+                <List className="w-4 h-4" />
+                {queue.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-600 text-white text-xs rounded-full flex items-center justify-center">
+                    {queue.length}
+                  </span>
+                )}
+              </Button>
+            )}
+
             {/* Close */}
             <Button
               variant="ghost"
@@ -197,6 +255,18 @@ export default function PersistentPlayer() {
           </div>
         </div>
       </div>
+      
+      {/* Keyboard shortcuts hint */}
+      <div className="hidden lg:block absolute bottom-full left-4 mb-2 bg-stone-900/90 backdrop-blur-sm border border-stone-800 rounded-lg px-3 py-2 text-xs text-stone-400 opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
+        <div className="space-y-1">
+          <div><kbd className="px-1.5 py-0.5 bg-stone-800 rounded">Space</kbd> Play/Pause</div>
+          <div><kbd className="px-1.5 py-0.5 bg-stone-800 rounded">←/→</kbd> Seek ±10s</div>
+          <div><kbd className="px-1.5 py-0.5 bg-stone-800 rounded">↑/↓</kbd> Volume</div>
+          <div><kbd className="px-1.5 py-0.5 bg-stone-800 rounded">N/P</kbd> Next/Previous</div>
+          <div><kbd className="px-1.5 py-0.5 bg-stone-800 rounded">M</kbd> Mute</div>
+        </div>
+      </div>
     </div>
+    </>
   );
 }
