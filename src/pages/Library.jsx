@@ -58,7 +58,7 @@ export default function Library() {
   }, []);
 
   // Fetch tracks with caching
-  const { data: allTracks = [], isLoading } = useQuery({
+  const { data: allTracks = [], isLoading: isLoadingTracks } = useQuery({
     queryKey: ['tracks'],
     queryFn: () => base44.entities.Track.list('-created_date'),
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
@@ -190,7 +190,7 @@ export default function Library() {
               Sound Library
             </h1>
             <p className="text-stone-400">
-              {tracks.length} tracks available for your practice
+              {allTracks.length} tracks available for your practice
             </p>
           </motion.div>
         </div>
@@ -229,47 +229,57 @@ export default function Library() {
         </Tabs>
 
         {/* Filters and Sort */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          <TrackFilters
-            filters={filters}
-            onFilterChange={setFilters}
-            themes={themeNames}
-            activeFiltersCount={activeFiltersCount}
-          />
+        {isLoadingTracks ? (
+          <FiltersSkeleton />
+        ) : (
+          <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <TrackFilters
+              filters={filters}
+              onFilterChange={setFilters}
+              themes={themeNames}
+              activeFiltersCount={activeFiltersCount}
+            />
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <span className="text-stone-400 text-sm whitespace-nowrap">Sort by:</span>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="bg-stone-900/50 border-stone-800 text-white w-full sm:w-[180px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-stone-800 border-stone-700">
-                <SelectItem value="featured">Featured First</SelectItem>
-                <SelectItem value="newest">Newest First</SelectItem>
-                <SelectItem value="duration_short">Shortest First</SelectItem>
-                <SelectItem value="duration_long">Longest First</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <span className="text-stone-400 text-sm whitespace-nowrap">Sort by:</span>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="bg-stone-900/50 border-stone-800 text-white w-full sm:w-[180px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-stone-800 border-stone-700">
+                  <SelectItem value="featured">Featured First</SelectItem>
+                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="duration_short">Shortest First</SelectItem>
+                  <SelectItem value="duration_long">Longest First</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Results count */}
-        <div className="mb-4 text-stone-400 text-sm">
-          Showing {paginatedTracks.length} of {filteredAndSortedTracks.length} tracks
-        </div>
+        {!isLoadingTracks && (
+          <div className="mb-4 text-stone-400 text-sm">
+            Showing {paginatedTracks.length} of {filteredAndSortedTracks.length} tracks
+          </div>
+        )}
 
         {/* Track List */}
-        <TrackList
-          tracks={paginatedTracks}
-          isLoading={isLoading}
-          userTier={userTier}
-          onUpgradeClick={() => setIsUpgradeOpen(true)}
-          emptyMessage={
-            activeTab === 'free'
-              ? "No free sample tracks available at the moment."
-              : "No tracks found matching your criteria."
-          }
-        />
+        {isLoadingTracks ? (
+          <TrackListSkeleton count={TRACKS_PER_PAGE} />
+        ) : (
+          <TrackList
+            tracks={paginatedTracks}
+            isLoading={false}
+            userTier={userTier}
+            onUpgradeClick={() => setIsUpgradeOpen(true)}
+            emptyMessage={
+              activeTab === 'free'
+                ? "No free sample tracks available at the moment."
+                : "No tracks found matching your criteria."
+            }
+          />
+        )}
 
         {/* Pagination */}
         {totalPages > 1 && (
