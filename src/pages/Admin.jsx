@@ -49,9 +49,15 @@ export default function Admin() {
     const checkAdmin = async () => {
       try {
         const user = await base44.auth.me();
-        setIsAdmin(user?.role === 'admin');
+        if (!user) {
+          // Not logged in - redirect to login
+          base44.auth.redirectToLogin(window.location.href);
+          return;
+        }
+        setIsAdmin(user.role === 'admin');
       } catch {
-        setIsAdmin(false);
+        // Not logged in - redirect to login
+        base44.auth.redirectToLogin(window.location.href);
       }
     };
     checkAdmin();
