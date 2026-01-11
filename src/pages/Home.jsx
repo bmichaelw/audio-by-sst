@@ -198,6 +198,16 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-purple-100/30 via-transparent to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-200/20 via-transparent to-transparent" />
         
+        {/* Background Logo */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6963e3baba38fec6b46ac249/c1e96d6f5_AuDiosanguinelogosquare.png" 
+            alt="" 
+            className="w-[600px] h-[600px] object-contain opacity-10"
+            style={{ filter: 'blur(2px)' }}
+          />
+        </div>
+        
         <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
