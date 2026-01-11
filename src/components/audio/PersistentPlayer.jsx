@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { base44 } from '@/api/base44Client';
 import { useAudioPlayer } from './AudioPlayerContext.jsx';
 import { Play, Pause, X, Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
@@ -25,6 +26,46 @@ export default function PersistentPlayer() {
     setVolume,
     closePlayer,
   } = useAudioPlayer();
+
+  const hasTracked90Percent = useRef(false);
+
+  // Track play/pause analytics
+  useEffect(() => {
+    if (currentTrack && isPlaying) {
+      base44.analytics.track({
+        eventName: 'audio_play',
+        properties: { track_id: currentTrack.id, track_title: currentTrack.title },
+      });
+    } else if (currentTrack && !isPlaying && currentTime > 0) {
+      base44.analytics.track({
+        eventName: 'audio_pause',
+        properties: { 
+          track_id: currentTrack.id, 
+          track_title: currentTrack.title,
+          progress_seconds: currentTime 
+        },
+      });
+    }
+  }, [isPlaying, currentTrack]);
+
+  // Track 90% completion
+  useEffect(() => {
+    if (currentTrack && duration > 0 && currentTime > 0) {
+      const progressPercent = (currentTime / duration) * 100;
+      if (progressPercent >= 90 && !hasTracked90Percent.current) {
+        hasTracked90Percent.current = true;
+        base44.analytics.track({
+          eventName: 'audio_complete_90_percent',
+          properties: { track_id: currentTrack.id, track_title: currentTrack.title },
+        });
+      }
+    }
+  }, [currentTime, duration, currentTrack]);
+
+  // Reset tracking when track changes
+  useEffect(() => {
+    hasTracked90Percent.current = false;
+  }, [currentTrack?.id]);
 
   if (!currentTrack) return null;
 

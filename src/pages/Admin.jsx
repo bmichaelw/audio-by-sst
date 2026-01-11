@@ -7,6 +7,7 @@ import TrackUploadForm from '@/components/admin/TrackUploadForm.jsx';
 import AdminStats from '@/components/admin/AdminStats.jsx';
 import AdminTrackTable from '@/components/admin/AdminTrackTable.jsx';
 import PhaseManager from '@/components/admin/PhaseManager.jsx';
+import { StatsSkeleton } from '@/components/LoadingSkeleton.jsx';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -205,7 +206,11 @@ export default function Admin() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Stats */}
         <div className="mb-8">
-          <AdminStats tracks={tracks} subscriptions={subscriptions} />
+          {tracksLoading ? (
+            <StatsSkeleton />
+          ) : (
+            <AdminStats tracks={tracks} subscriptions={subscriptions} />
+          )}
         </div>
 
         {/* Tabs */}

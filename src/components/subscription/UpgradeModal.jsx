@@ -1,4 +1,5 @@
 import React from 'react';
+import { base44 } from '@/api/base44Client';
 import {
   Dialog,
   DialogContent,
@@ -69,7 +70,10 @@ const tiers = [
 
 export default function UpgradeModal({ isOpen, onClose, currentTier }) {
   const handleUpgrade = (tierId) => {
-    console.log('Upgrade to:', tierId);
+    base44.analytics.track({
+      eventName: 'upgrade_click',
+      properties: { tier: tierId, from_tier: currentTier || 'free' },
+    });
     onClose();
   };
 
