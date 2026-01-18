@@ -34,7 +34,7 @@ function formatDuration(seconds) {
 }
 
 export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) {
-  const { currentTrack, isPlaying, playTrack, togglePlayPause, isLoading: audioLoading } = useAudioPlayer();
+  const { currentTrack, isPlaying, playTrack, togglePlay, isLoading: audioLoading } = useAudioPlayer();
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
 
   const isLocked = TIER_HIERARCHY[userTier] < TIER_HIERARCHY[track.access_tier];
@@ -48,7 +48,7 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
     }
 
     if (isCurrentTrack) {
-      togglePlayPause();
+      togglePlay();
       return;
     }
 
