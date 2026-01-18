@@ -8,6 +8,7 @@ import TrackUploadForm from '@/components/admin/TrackUploadForm.jsx';
 import AdminStats from '@/components/admin/AdminStats.jsx';
 import AdminTrackTable from '@/components/admin/AdminTrackTable.jsx';
 import PhaseManager from '@/components/admin/PhaseManager.jsx';
+import LiveSessionManager from '@/components/admin/LiveSessionManager.jsx';
 import { StatsSkeleton } from '@/components/LoadingSkeleton.jsx';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -31,6 +32,7 @@ import {
   ArrowLeft,
   Trash2,
   TrendingUp as PathIcon,
+  Radio,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -179,6 +181,10 @@ export default function Admin() {
               <Tag className="w-4 h-4 mr-2" />
               Themes
             </TabsTrigger>
+            <TabsTrigger value="live">
+              <Radio className="w-4 h-4 mr-2" />
+              Live Sessions
+            </TabsTrigger>
           </TabsList>
 
           {/* Tracks Tab */}
@@ -215,6 +221,11 @@ export default function Admin() {
           {/* ResonancePath Tab */}
           <TabsContent value="phases">
             <PhaseManager />
+          </TabsContent>
+
+          {/* Live Sessions Tab */}
+          <TabsContent value="live">
+            <LiveSessionManager />
           </TabsContent>
 
           {/* Themes Tab */}

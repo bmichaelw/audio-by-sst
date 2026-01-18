@@ -8,6 +8,8 @@ import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
 import ResonancePath from './pages/ResonancePath';
 import Settings from './pages/Settings';
+import LiveSessions from './pages/LiveSessions';
+import LiveSessionViewer from './pages/LiveSessionViewer';
 import __Layout from './Layout.jsx';
 
 
@@ -22,6 +24,8 @@ export const PAGES = {
     "Profile": Profile,
     "ResonancePath": ResonancePath,
     "Settings": Settings,
+    "LiveSessions": LiveSessions,
+    "LiveSessionViewer": LiveSessionViewer,
 }
 
 export const pagesConfig = {
