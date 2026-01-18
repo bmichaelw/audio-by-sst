@@ -75,7 +75,7 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
         }).catch(() => {});
       }
 
-      playTrack({ ...track, audioUrl: signed_url });
+      playTrack(track, signed_url);
     } catch (error) {
       console.error('Failed to load track:', error);
       toast.error('Failed to load track');
