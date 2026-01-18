@@ -54,10 +54,18 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
 
     setIsLoadingAudio(true);
     try {
+      console.log('Loading track:', track.title, 'URI:', track.audio_file_uri);
+      
+      if (!track.audio_file_uri) {
+        throw new Error('Track has no audio file');
+      }
+
       const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({
         file_uri: track.audio_file_uri,
         expires_in: 3600,
       });
+
+      console.log('Got signed URL:', signed_url);
 
       // Increment play count
       await base44.entities.Track.update(track.id, {
@@ -78,7 +86,7 @@ export default function TrackCard({ track, userTier = 'free', onUpgradeClick }) 
       playTrack(track, signed_url);
     } catch (error) {
       console.error('Failed to load track:', error);
-      toast.error('Failed to load track');
+      toast.error(`Failed to load track: ${error.message}`);
     } finally {
       setIsLoadingAudio(false);
     }

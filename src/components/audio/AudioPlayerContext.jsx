@@ -60,7 +60,8 @@ export function AudioPlayerProvider({ children }) {
       setState(prev => ({ ...prev, isLoading: false }));
     });
 
-    audio.addEventListener('error', () => {
+    audio.addEventListener('error', (e) => {
+      console.error('Audio playback error:', audio.error, e);
       setState(prev => ({ ...prev, isLoading: false, isPlaying: false }));
     });
 
@@ -122,7 +123,8 @@ export function AudioPlayerProvider({ children }) {
     
     audio.play().then(() => {
       setState(prev => ({ ...prev, isPlaying: true }));
-    }).catch(() => {
+    }).catch((err) => {
+      console.error('Audio play error:', err);
       setState(prev => ({ ...prev, isPlaying: false, isLoading: false }));
     });
   };
