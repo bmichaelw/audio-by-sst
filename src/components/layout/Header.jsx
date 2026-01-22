@@ -23,7 +23,6 @@ export default function Header({ user, currentPageName, isMenuOpen, setIsMenuOpe
   if (user) {
     navItems.push({ name: 'Profile', icon: User, href: createPageUrl('Profile') });
     navItems.push({ name: 'Settings', icon: User, href: createPageUrl('Settings') });
-    navItems.push({ name: 'ResonancePath', icon: TrendingUp, href: createPageUrl('ResonancePath') });
     navItems.push({ name: 'Community', icon: User, href: createPageUrl('Community') });
     navItems.push({ name: 'Playlists', icon: Library, href: createPageUrl('Playlists') });
   }
