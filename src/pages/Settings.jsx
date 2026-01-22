@@ -9,7 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Save, Sparkles, Heart, Moon, Sun, X } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Loader2, Save, Sparkles, Heart, Moon, Sun, X, User, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -17,9 +18,26 @@ export default function Settings() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState(null);
   const [moodEntry, setMoodEntry] = useState({ mood: '', energy_level: 5, notes: '' });
+  const [artistData, setArtistData] = useState({
+    artist_tagline: '',
+    artist_bio: '',
+    artist_avatar_url: '',
+  });
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    const fetchUser = async () => {
+      try {
+        const userData = await base44.auth.me();
+        setUser(userData);
+        setArtistData({
+          artist_tagline: userData.artist_tagline || '',
+          artist_bio: userData.artist_bio || '',
+          artist_avatar_url: userData.artist_avatar_url || '',
+        });
+      } catch {}
+    };
+    fetchUser();
   }, []);
 
   const { data: preferences, isLoading } = useQuery({
@@ -118,6 +136,39 @@ export default function Settings() {
     toast.success('Mood logged!');
   };
 
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    setUploadingAvatar(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setArtistData(prev => ({ ...prev, artist_avatar_url: file_url }));
+      toast.success('Avatar uploaded!');
+    } catch {
+      toast.error('Failed to upload avatar');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
+  const saveArtistProfile = useMutation({
+    mutationFn: async (data) => {
+      return base44.auth.updateMe(data);
+    },
+    onSuccess: () => {
+      toast.success('Artist profile updated!');
+      queryClient.invalidateQueries({ queryKey: ['artist'] });
+    },
+    onError: () => {
+      toast.error('Failed to update profile');
+    },
+  });
+
+  const handleSaveArtistProfile = () => {
+    saveArtistProfile.mutate(artistData);
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen bg-stone-950 flex items-center justify-center">
@@ -147,11 +198,129 @@ export default function Settings() {
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold mb-3" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>Your Preferences</h1>
+            <h1 className="text-3xl font-bold mb-3" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}>Settings</h1>
             <div className="h-px w-24 mb-2" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
-            <p style={{ color: 'hsl(var(--text-muted))' }}>Personalize your healing journey</p>
+            <p style={{ color: 'hsl(var(--text-muted))' }}>Manage your profile and preferences</p>
           </div>
         </div>
+
+        <Tabs defaultValue={user?.is_artist ? "artist" : "preferences"}>
+          <TabsList style={{ backgroundColor: 'hsl(var(--surface))', border: '1px solid hsl(var(--border))' }}>
+            {user?.is_artist && (
+              <TabsTrigger value="artist">
+                <User className="w-4 h-4 mr-2" />
+                Artist Profile
+              </TabsTrigger>
+            )}
+            <TabsTrigger value="preferences">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Preferences
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Artist Profile Tab */}
+          {user?.is_artist && (
+            <TabsContent value="artist" className="space-y-6 mt-6">
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem' }}>
+                <CardHeader>
+                  <CardTitle style={{ color: 'hsl(var(--foreground))', fontSize: '1.25rem' }}>Artist Profile</CardTitle>
+                  <CardDescription style={{ fontSize: '0.9375rem', color: 'hsl(var(--text-muted))' }}>
+                    Customize how you appear to listeners
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Avatar Upload */}
+                  <div>
+                    <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>Profile Avatar</Label>
+                    <div className="flex items-center gap-4">
+                      <div className="w-24 h-24 rounded-full overflow-hidden" style={{ backgroundColor: 'hsl(var(--muted))' }}>
+                        {artistData.artist_avatar_url ? (
+                          <img src={artistData.artist_avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-2xl" style={{ color: 'hsl(var(--text-muted))' }}>
+                            {user?.full_name?.[0] || 'A'}
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAvatarUpload}
+                          className="hidden"
+                          id="avatar-upload"
+                        />
+                        <label htmlFor="avatar-upload">
+                          <Button type="button" variant="outline" disabled={uploadingAvatar} asChild>
+                            <span>
+                              {uploadingAvatar ? (
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              ) : (
+                                <Upload className="w-4 h-4 mr-2" />
+                              )}
+                              Upload Image
+                            </span>
+                          </Button>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Artist Tagline */}
+                  <div>
+                    <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>
+                      Tagline / Hero Line
+                    </Label>
+                    <Input
+                      value={artistData.artist_tagline}
+                      onChange={(e) => setArtistData(prev => ({ ...prev, artist_tagline: e.target.value }))}
+                      placeholder="e.g., Healing through sacred sound and vibration"
+                      style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
+                      maxLength={100}
+                    />
+                    <p className="text-xs mt-1" style={{ color: 'hsl(var(--text-subtle))' }}>
+                      A short, inspiring line that appears on your profile
+                    </p>
+                  </div>
+
+                  {/* Artist Bio */}
+                  <div>
+                    <Label className="mb-2 block" style={{ color: 'hsl(var(--text-body))' }}>
+                      Bio
+                    </Label>
+                    <Textarea
+                      value={artistData.artist_bio}
+                      onChange={(e) => setArtistData(prev => ({ ...prev, artist_bio: e.target.value }))}
+                      placeholder="Tell listeners about your practice, background, and approach to sound healing..."
+                      style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
+                      rows={6}
+                    />
+                  </div>
+
+                  <Button
+                    onClick={handleSaveArtistProfile}
+                    disabled={saveArtistProfile.isPending}
+                    style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+                  >
+                    {saveArtistProfile.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4 mr-2" />
+                        Save Artist Profile
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
+
+          {/* Preferences Tab */}
+          <TabsContent value="preferences" className="space-y-6 mt-6">
 
         {/* Preferred Themes */}
         <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border) / 0.5)', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' }}>
@@ -417,27 +586,29 @@ export default function Settings() {
           </CardContent>
         </Card>
 
-        {/* Save Button */}
-        <div className="flex justify-end">
-          <Button
-            onClick={handleSave}
-            disabled={saveMutation.isPending}
-            className="px-8"
-            style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
-          >
-            {saveMutation.isPending ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 mr-2" />
-                Save Preferences
-              </>
-            )}
-          </Button>
-        </div>
+            {/* Save Button */}
+            <div className="flex justify-end">
+              <Button
+                onClick={handleSave}
+                disabled={saveMutation.isPending}
+                className="px-8"
+                style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+              >
+                {saveMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Preferences
+                  </>
+                )}
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
