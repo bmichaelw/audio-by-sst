@@ -46,24 +46,6 @@ const tiers = [
     priceId: 'price_member_monthly', // Replace with actual Stripe Price ID
   },
   {
-    id: 'resonance_path',
-    name: 'ResonancePath',
-    price: '$9.99',
-    period: '/month',
-    description: 'Deep journey with advanced practices',
-    icon: Sparkles,
-    features: [
-      'Everything in Member',
-      'Advanced breathwork tracks',
-      'Chakra-specific sessions',
-      'Personalized recommendations',
-      'Priority support',
-      'Exclusive workshops',
-    ],
-    color: 'from-amber-600 to-orange-600',
-    priceId: 'price_resonance_monthly', // Replace with actual Stripe Price ID
-  },
-  {
     id: 'collaborations',
     name: 'Collaborations',
     price: '$19.99',
@@ -71,7 +53,7 @@ const tiers = [
     description: 'Exclusive artist collaborations',
     icon: Crown,
     features: [
-      'Everything in ResonancePath',
+      'Everything in Member',
       'Exclusive artist sessions',
       'Live workshops access',
       'Community circles',
@@ -218,7 +200,7 @@ export default function Pricing() {
         )}
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {tiers.map((tier, index) => {
             const Icon = tier.icon;
             const isCurrentTier = currentTier === tier.id;

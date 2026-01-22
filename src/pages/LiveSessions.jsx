@@ -105,11 +105,11 @@ export default function LiveSessions() {
       <div className="bg-gradient-to-b from-purple-50/50 to-transparent border-b" style={{ borderColor: 'hsl(var(--border))' }}>
         <div className="max-w-7xl mx-auto px-4 py-12">
           <h1 className="text-4xl font-light mb-3" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.03em', color: 'hsl(var(--foreground))' }}>
-            Live Sound Bath Sessions
+            Live Sessions
           </h1>
           <div className="h-px w-32 mb-4" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
           <p className="text-lg" style={{ color: 'hsl(var(--text-muted))' }}>
-            Join us for immersive live sessions with real-time guidance and community connection
+            Join live sessions from artists across the platform
           </p>
         </div>
       </div>
