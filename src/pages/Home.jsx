@@ -3,12 +3,12 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import TrackList from '@/components/tracks/TrackList.jsx';
-import TrackFilters from '@/components/tracks/TrackFilters.jsx';
 import UpgradeModal from '@/components/subscription/UpgradeModal.jsx';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, ArrowRight, Heart } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Sparkles, ArrowRight, Heart, Search, Music, Clock, List } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Home() {
