@@ -1,39 +1,32 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import UpgradeModal from '@/components/subscription/UpgradeModal.jsx';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Sparkles, ArrowRight, Heart, Search, Music, Clock, List } from 'lucide-react';
+import { Sparkles, ArrowRight, Heart, Search, Music, Clock, List, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Home() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   const [userTier, setUserTier] = useState('free');
-  const [userEmail, setUserEmail] = useState(null);
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
-  const [filters, setFilters] = useState({
-    search: '',
-    theme: 'all',
-    nervousSystem: 'all',
-    chakra: 'all',
-    difficulty: 'all',
-    voicePresent: 'all',
-    accessTier: 'all'
-  });
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Fetch user and subscription
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const user = await base44.auth.me();
-        if (user) {
-          setUserEmail(user.email);
+        const userData = await base44.auth.me();
+        setUser(userData);
+        if (userData) {
           const subscriptions = await base44.entities.UserSubscription.filter({
-            user_email: user.email,
+            user_email: userData.email,
             is_active: true
           });
           if (subscriptions.length > 0) {
@@ -41,55 +34,50 @@ export default function Home() {
           }
         }
       } catch {
-
-
-        // User not logged in, default to free tier
-      }};fetchUserData();
+        setUser(null);
+      }
+    };
+    fetchUserData();
   }, []);
-
-  // Fetch user preferences
-  const { data: preferences } = useQuery({
-    queryKey: ['user-preferences', userEmail],
-    queryFn: async () => {
-      const prefs = await base44.entities.UserPreferences.filter({ user_email: userEmail });
-      return prefs[0] || null;
-    },
-    enabled: !!userEmail
-  });
 
   // Fetch user's recent playlists
   const { data: recentPlaylists = [] } = useQuery({
-    queryKey: ['recent-playlists', userEmail],
+    queryKey: ['recent-playlists', user?.email],
     queryFn: async () => {
-      if (!userEmail) return [];
-      const playlists = await base44.entities.Playlist.filter({ user_email: userEmail });
-      return playlists.slice(0, 4);
+      if (!user) return [];
+      const playlists = await base44.entities.Playlist.filter({ user_email: user.email });
+      return playlists.slice(0, 6);
     },
-    enabled: !!userEmail
+    enabled: !!user
   });
 
   // Fetch play history for stats
   const { data: playHistory = [] } = useQuery({
-    queryKey: ['play-history', userEmail],
+    queryKey: ['play-history', user?.email],
     queryFn: async () => {
-      if (!userEmail) return [];
-      return await base44.entities.PlayHistory.filter({ user_email: userEmail });
+      if (!user) return [];
+      return await base44.entities.PlayHistory.filter({ user_email: user.email });
     },
-    enabled: !!userEmail
+    enabled: !!user
   });
 
   // Calculate stats
   const stats = useMemo(() => {
     const totalListens = playHistory.length;
-    const totalMinutes = Math.floor(playHistory.reduce((sum, ph) => {
-      return sum + (ph.completed ? 5 : 0); // Rough estimate
-    }, 0));
+    const completedListens = playHistory.filter(ph => ph.completed).length;
     return {
       totalListens,
-      totalMinutes,
+      completedListens,
       playlistCount: recentPlaylists.length
     };
   }, [playHistory, recentPlaylists]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(createPageUrl('Library') + '?search=' + encodeURIComponent(searchQuery));
+    }
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--background))' }}>
@@ -105,12 +93,12 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto">
 
-<div className="flex justify-center mb-6">
-  <Badge className="inline-flex items-center bg-purple-100 text-purple-900 border-purple-200">
-    <Sparkles className="w-3 h-3 mr-1" />
-    Healing Through Vocal Resonance™
-  </Badge>
-</div>
+            <div className="flex justify-center mb-6">
+              <Badge className="inline-flex items-center bg-purple-100 text-purple-900 border-purple-200">
+                <Sparkles className="w-3 h-3 mr-1" />
+                Healing Through Vocal Resonance™
+              </Badge>
+            </div>
             
             {/* Title with Logo Sigil */}
             <div className="relative inline-block mb-4">
@@ -135,96 +123,236 @@ export default function Home() {
             <p className="text-xl md:text-2xl font-light mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.02em' }}>
               Ancient sound. Modern healing.
             </p>
-            <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>A curated collection of therapeutic audio designed to help you reprogram, support your nervous system, deepen your practice, and guide you toward inner peace.
-
-
+            <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
+              A curated collection of therapeutic audio designed to help you reprogram, support your nervous system, deepen your practice, and guide you toward inner peace.
             </p>
             
-            {userTier === 'free' &&
-            <div className="flex flex-wrap justify-center gap-4">
+            {!user && (
+              <div className="flex flex-wrap justify-center gap-4">
                 <Button
-                onClick={() => setIsUpgradeOpen(true)}
-                className="px-8 py-6 text-base"
-                style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
-
+                  onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                  className="px-8 py-6 text-base"
+                  style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
                   <Heart className="w-4 h-4 mr-2" />
                   Begin Your Journey
                 </Button>
                 <Link to={createPageUrl('Library')}>
                   <Button variant="outline" className="px-8 py-6 text-base border-purple-300 text-purple-900 hover:bg-purple-50">
-                    Explore Sample Tracks
+                    Explore Library
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
               </div>
-            }
+            )}
           </motion.div>
         </div>
       </section>
 
-      {/* Recommended/Featured Tracks */}
-      {heroTracks.length > 0 &&
-      <section className="max-w-7xl mx-auto px-4 pb-16">
+      {/* Search Section */}
+      <section className="max-w-4xl mx-auto px-4 pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+            <CardContent className="p-6">
+              <form onSubmit={handleSearch} className="flex gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'hsl(var(--text-muted))' }} />
+                  <Input
+                    type="text"
+                    placeholder="Search tracks, themes, or intentions..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                    style={{ backgroundColor: 'hsl(var(--input))', borderColor: 'hsl(var(--border))' }}
+                  />
+                </div>
+                <Button type="submit" style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
+                  Search
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </section>
+
+      {/* Dashboard for logged-in users */}
+      {user && (
+        <section className="max-w-7xl mx-auto px-4 pb-16">
           <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}>
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <h2 className="text-2xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.025em' }}>
+              Your Dashboard
+            </h2>
 
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-2xl font-light mb-2" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)', letterSpacing: '0.025em' }}>
-                  {recommendedTracks.length > 0 ? 'Recommended for You' : 'Featured Sessions'}
-                </h2>
-                <div className="h-px w-20 mb-2" style={{ background: 'linear-gradient(to right, hsl(var(--accent)), transparent)' }} />
-                {recommendedTracks.length > 0 &&
-              <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Based on your preferences</p>
-              }
-              </div>
-              <Link
-              to={createPageUrl('Library')}
-              className="text-sm flex items-center gap-1 transition-colors"
-              style={{ color: 'hsl(var(--accent))', hover: { color: 'hsl(var(--accent-hover))' } }}>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--accent) / 0.2)' }}>
+                      <Music className="w-6 h-6" style={{ color: 'hsl(var(--accent))' }} />
+                    </div>
+                    <div>
+                      <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Total Listens</p>
+                      <p className="text-2xl font-light" style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading)' }}>
+                        {stats.totalListens}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-                View all
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--accent) / 0.2)' }}>
+                      <Clock className="w-6 h-6" style={{ color: 'hsl(var(--accent))' }} />
+                    </div>
+                    <div>
+                      <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Completed Sessions</p>
+                      <p className="text-2xl font-light" style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading)' }}>
+                        {stats.completedListens}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--accent) / 0.2)' }}>
+                      <List className="w-6 h-6" style={{ color: 'hsl(var(--accent))' }} />
+                    </div>
+                    <div>
+                      <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>Your Playlists</p>
+                      <p className="text-2xl font-light" style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading)' }}>
+                        {stats.playlistCount}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-            <TrackList
-            tracks={heroTracks}
-            isLoading={false}
-            userTier={userTier}
-            onUpgradeClick={() => setIsUpgradeOpen(true)} />
 
+            {/* Recent Playlists */}
+            <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }} className="mb-8">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading)' }}>
+                    Recent Playlists
+                  </CardTitle>
+                  <Link to={createPageUrl('Playlists')}>
+                    <Button variant="ghost" size="sm" style={{ color: 'hsl(var(--accent))' }}>
+                      View All <ArrowRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {recentPlaylists.length === 0 ? (
+                  <div className="text-center py-8">
+                    <List className="w-12 h-12 mx-auto mb-3 opacity-40" style={{ color: 'hsl(var(--text-muted))' }} />
+                    <p style={{ color: 'hsl(var(--text-muted))' }}>No playlists yet</p>
+                    <Link to={createPageUrl('Playlists')}>
+                      <Button variant="outline" size="sm" className="mt-4">
+                        Create Your First Playlist
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {recentPlaylists.map((playlist) => (
+                      <Link key={playlist.id} to={createPageUrl('Playlists') + '?id=' + playlist.id}>
+                        <Card className="hover:shadow-md transition-shadow cursor-pointer" style={{ backgroundColor: 'hsl(var(--surface))', borderColor: 'hsl(var(--border))' }}>
+                          <CardContent className="p-4">
+                            <div className="flex items-center gap-3">
+                              {playlist.cover_image_url ? (
+                                <img src={playlist.cover_image_url} alt="" className="w-12 h-12 rounded-lg object-cover" />
+                              ) : (
+                                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--muted))' }}>
+                                  <Music className="w-6 h-6" style={{ color: 'hsl(var(--text-muted))' }} />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium truncate" style={{ color: 'hsl(var(--foreground))' }}>{playlist.name}</p>
+                                <p className="text-sm truncate" style={{ color: 'hsl(var(--text-muted))' }}>
+                                  {playlist.description || 'No description'}
+                                </p>
+                              </div>
+                              <Play className="w-5 h-5 flex-shrink-0" style={{ color: 'hsl(var(--accent))' }} />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Suggested Artists - Placeholder */}
+            <Card style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+              <CardHeader>
+                <CardTitle style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading)' }}>
+                  Suggested Artists
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <Sparkles className="w-12 h-12 mx-auto mb-3 opacity-40" style={{ color: 'hsl(var(--text-muted))' }} />
+                  <p style={{ color: 'hsl(var(--text-muted))' }}>Artist suggestions coming soon</p>
+                  <p className="text-sm mt-2" style={{ color: 'hsl(var(--text-subtle))' }}>
+                    We'll recommend artists based on your listening preferences
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
         </section>
-      }
+      )}
 
-      {/* All Tracks with Filters */}
-      <section className="max-w-7xl mx-auto px-4 pb-32">
-        <div className="mb-8">
-          <h2 className="text-2xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading))' }}>Sound Library</h2>
-          <TrackFilters
-            filters={filters}
-            onFilterChange={setFilters}
-            themes={themeNames}
-            activeFiltersCount={activeFiltersCount} />
-
-        </div>
-
-        <TrackList
-          tracks={filteredTracks}
-          isLoading={isLoading}
-          userTier={userTier}
-          onUpgradeClick={() => setIsUpgradeOpen(true)} />
-
-      </section>
+      {/* CTA for non-logged in users */}
+      {!user && (
+        <section className="max-w-4xl mx-auto px-4 pb-16">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Card style={{ backgroundColor: 'hsl(var(--accent) / 0.1)', borderColor: 'hsl(var(--accent) / 0.3)' }}>
+              <CardContent className="p-8 text-center">
+                <h3 className="text-2xl font-light mb-3" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)' }}>
+                  Ready to begin your healing journey?
+                </h3>
+                <p className="mb-6" style={{ color: 'hsl(var(--text-body))' }}>
+                  Sign in to access your personalized dashboard and start creating playlists
+                </p>
+                <Button
+                  onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                  style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+                >
+                  <Heart className="w-4 h-4 mr-2" />
+                  Get Started
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </section>
+      )}
 
       {/* Upgrade Modal */}
       <UpgradeModal
         isOpen={isUpgradeOpen}
         onClose={() => setIsUpgradeOpen(false)}
-        currentTier={userTier} />
-
-    </div>);
-
+        currentTier={userTier}
+      />
+    </div>
+  );
 }
