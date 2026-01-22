@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, Home, Library, Shield, DollarSign, TrendingUp, Radio } from 'lucide-react';
+import { Menu, X, User, LogOut, Home, Library, Shield, DollarSign, TrendingUp, Radio, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function Header({ user, currentPageName, isMenuOpen, setIsMenuOpen, onLogin, onLogout }) {
@@ -21,8 +21,6 @@ export default function Header({ user, currentPageName, isMenuOpen, setIsMenuOpe
   ];
 
   if (user) {
-    navItems.push({ name: 'Profile', icon: User, href: createPageUrl('Profile') });
-    navItems.push({ name: 'Settings', icon: User, href: createPageUrl('Settings') });
     navItems.push({ name: 'Community', icon: User, href: createPageUrl('Community') });
     navItems.push({ name: 'Playlists', icon: Library, href: createPageUrl('Playlists') });
   }
@@ -118,6 +116,19 @@ export default function Header({ user, currentPageName, isMenuOpen, setIsMenuOpe
                     </p>
                     <p className="text-xs truncate" style={{ color: 'hsl(var(--text-muted))' }}>{user.email}</p>
                   </div>
+                  <DropdownMenuSeparator style={{ backgroundColor: 'hsl(var(--border))' }} />
+                  <DropdownMenuItem asChild>
+                    <Link to={createPageUrl('Profile')} style={{ color: 'hsl(var(--foreground))' }}>
+                      <User className="w-4 h-4 mr-2" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to={createPageUrl('Settings')} style={{ color: 'hsl(var(--foreground))' }}>
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator style={{ backgroundColor: 'hsl(var(--border))' }} />
                   <DropdownMenuItem onClick={onLogout} style={{ color: 'hsl(var(--foreground))' }}>
                     <LogOut className="w-4 h-4 mr-2" />
