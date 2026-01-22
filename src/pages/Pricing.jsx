@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, Sparkles, Heart, Crown, ArrowRight, Loader2 } from 'lucide-react';
+import { Check, Sparkles, Heart, Crown, ArrowRight, Loader2, Mic } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -62,6 +62,24 @@ const tiers = [
     ],
     color: 'from-purple-600 to-pink-600',
     priceId: 'price_collaborations_monthly', // Replace with actual Stripe Price ID
+  },
+  {
+    id: 'artist',
+    name: 'Artist',
+    price: '$9.99',
+    period: '/month',
+    description: 'Share your healing sounds with the community',
+    icon: Mic,
+    features: [
+      'Upload unlimited tracks',
+      'Host live sessions',
+      'Create artist collections',
+      'Listener subscription features',
+      'Analytics dashboard',
+      'Admin approval required',
+    ],
+    color: 'from-amber-600 to-orange-600',
+    priceId: 'price_artist_monthly', // Replace with actual Stripe Price ID
   },
 ];
 
