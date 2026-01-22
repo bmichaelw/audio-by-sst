@@ -7,7 +7,6 @@ import AdminGuard from '@/components/admin/AdminGuard.jsx';
 import TrackUploadForm from '@/components/admin/TrackUploadForm.jsx';
 import AdminStats from '@/components/admin/AdminStats.jsx';
 import AdminTrackTable from '@/components/admin/AdminTrackTable.jsx';
-import PhaseManager from '@/components/admin/PhaseManager.jsx';
 import LiveSessionManager from '@/components/admin/LiveSessionManager.jsx';
 import { StatsSkeleton } from '@/components/LoadingSkeleton.jsx';
 import { Button } from '@/components/ui/button';
@@ -31,7 +30,6 @@ import {
   Loader2,
   ArrowLeft,
   Trash2,
-  TrendingUp as PathIcon,
   Radio,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -173,10 +171,6 @@ export default function Admin() {
               <Music className="w-4 h-4 mr-2" />
               Tracks
             </TabsTrigger>
-            <TabsTrigger value="phases">
-              <PathIcon className="w-4 h-4 mr-2" />
-              ResonancePath
-            </TabsTrigger>
             <TabsTrigger value="themes">
               <Tag className="w-4 h-4 mr-2" />
               Themes
@@ -216,11 +210,6 @@ export default function Admin() {
                 onRefresh={() => queryClient.invalidateQueries({ queryKey: ['admin-tracks'] })}
               />
             )}
-          </TabsContent>
-
-          {/* ResonancePath Tab */}
-          <TabsContent value="phases">
-            <PhaseManager />
           </TabsContent>
 
           {/* Live Sessions Tab */}
