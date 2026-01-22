@@ -17,11 +17,6 @@ export default function Layout({ children, currentPageName }) {
       try {
         const userData = await base44.auth.me();
         setUser(userData);
-        
-        // Redirect to signup if user hasn't completed onboarding
-        if (!userData.onboarding_completed && currentPageName !== 'Signup') {
-          navigate(createPageUrl('Signup'));
-        }
       } catch {
         setUser(null);
       }
