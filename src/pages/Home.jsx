@@ -78,125 +78,18 @@ export default function Home() {
     enabled: !!userEmail
   });
 
-  // Filter tracks
-  const filteredTracks = useMemo(() => {
-    return tracks.filter((track) => {
-      // Search filter
-      if (filters.search) {
-        const searchLower = filters.search.toLowerCase();
-        const matchesSearch =
-        track.title?.toLowerCase().includes(searchLower) ||
-        track.description?.toLowerCase().includes(searchLower) ||
-        track.intention?.toLowerCase().includes(searchLower) ||
-        track.themes?.some((t) => t.toLowerCase().includes(searchLower)) ||
-        track.tags?.some((t) => t.toLowerCase().includes(searchLower));
-        if (!matchesSearch) return false;
-      }
-
-      // Theme filter
-      if (filters.theme !== 'all' && !track.themes?.includes(filters.theme)) {
-        return false;
-      }
-
-      // Nervous system filter
-      if (filters.nervousSystem !== 'all' && track.nervous_system_state !== filters.nervousSystem) {
-        return false;
-      }
-
-      // Chakra filter
-      if (filters.chakra !== 'all' && track.chakra !== filters.chakra) {
-        return false;
-      }
-
-      // Difficulty filter
-      if (filters.difficulty !== 'all' && track.difficulty_level !== filters.difficulty) {
-        return false;
-      }
-
-      // Voice filter
-      if (filters.voicePresent !== 'all') {
-        const hasVoice = filters.voicePresent === 'true';
-        if (track.voice_present !== hasVoice) return false;
-      }
-
-      // Access tier filter
-      if (filters.accessTier !== 'all' && track.access_tier !== filters.accessTier) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [tracks, filters]);
-
-  // Personalized recommendations based on preferences
-  const recommendedTracks = useMemo(() => {
-    if (!preferences || tracks.length === 0) return [];
-
-    const scored = tracks.map((track) => {
-      let score = 0;
-
-      // Match preferred themes
-      if (preferences.preferred_themes?.length > 0) {
-        const themeMatch = track.themes?.some((t) => preferences.preferred_themes.includes(t));
-        if (themeMatch) score += 3;
-      }
-
-      // Match preferred chakras
-      if (preferences.preferred_chakras?.length > 0 && track.chakra) {
-        if (preferences.preferred_chakras.includes(track.chakra)) score += 2;
-      }
-
-      // Match nervous system preferences
-      if (preferences.preferred_nervous_system_states?.length > 0 && track.nervous_system_state) {
-        if (preferences.preferred_nervous_system_states.includes(track.nervous_system_state)) score += 2;
-      }
-
-      // Match difficulty level
-      if (preferences.difficulty_level && track.difficulty_level === preferences.difficulty_level) {
-        score += 1;
-      }
-
-      // Match voice preference
-      if (preferences.voice_preference === 'with_voice' && track.voice_present) score += 1;
-      if (preferences.voice_preference === 'without_voice' && !track.voice_present) score += 1;
-
-      // Match session duration
-      if (preferences.session_duration_preference && track.duration_seconds) {
-        const minutes = track.duration_seconds / 60;
-        if (preferences.session_duration_preference === 'short' && minutes < 15) score += 1;
-        if (preferences.session_duration_preference === 'medium' && minutes >= 15 && minutes <= 30) score += 1;
-        if (preferences.session_duration_preference === 'long' && minutes > 30) score += 1;
-      }
-
-      return { track, score };
-    });
-
-    return scored.
-    filter((item) => item.score > 0).
-    sort((a, b) => b.score - a.score).
-    slice(0, 4).
-    map((item) => item.track);
-  }, [tracks, preferences]);
-
-  // Featured tracks
-  const featuredTracks = useMemo(() => {
-    return tracks.filter((t) => t.is_featured).slice(0, 4);
-  }, [tracks]);
-
-  // Display personalized tracks if available, otherwise featured
-  const heroTracks = recommendedTracks.length > 0 ? recommendedTracks : featuredTracks;
-
-  // Count active filters
-  const activeFiltersCount = useMemo(() => {
-    let count = 0;
-    if (filters.theme !== 'all') count++;
-    if (filters.nervousSystem !== 'all') count++;
-    if (filters.chakra !== 'all') count++;
-    if (filters.difficulty !== 'all') count++;
-    if (filters.voicePresent !== 'all') count++;
-    if (filters.accessTier !== 'all') count++;
-    return count;
-  }, [filters]);
+  // Calculate stats
+  const stats = useMemo(() => {
+    const totalListens = playHistory.length;
+    const totalMinutes = Math.floor(playHistory.reduce((sum, ph) => {
+      return sum + (ph.completed ? 5 : 0); // Rough estimate
+    }, 0));
+    return {
+      totalListens,
+      totalMinutes,
+      playlistCount: recentPlaylists.length
+    };
+  }, [playHistory, recentPlaylists]);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--background))' }}>
