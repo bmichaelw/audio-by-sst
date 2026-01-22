@@ -57,19 +57,26 @@ export default function Home() {
     enabled: !!userEmail
   });
 
-  // Fetch tracks
-  const { data: tracks = [], isLoading } = useQuery({
-    queryKey: ['tracks'],
-    queryFn: () => base44.entities.Track.list('-created_date')
+  // Fetch user's recent playlists
+  const { data: recentPlaylists = [] } = useQuery({
+    queryKey: ['recent-playlists', userEmail],
+    queryFn: async () => {
+      if (!userEmail) return [];
+      const playlists = await base44.entities.Playlist.filter({ user_email: userEmail });
+      return playlists.slice(0, 4);
+    },
+    enabled: !!userEmail
   });
 
-  // Fetch themes for filter options
-  const { data: themesData = [] } = useQuery({
-    queryKey: ['themes'],
-    queryFn: () => base44.entities.Theme.list('sort_order')
+  // Fetch play history for stats
+  const { data: playHistory = [] } = useQuery({
+    queryKey: ['play-history', userEmail],
+    queryFn: async () => {
+      if (!userEmail) return [];
+      return await base44.entities.PlayHistory.filter({ user_email: userEmail });
+    },
+    enabled: !!userEmail
   });
-
-  const themeNames = useMemo(() => themesData.map((t) => t.name), [themesData]);
 
   // Filter tracks
   const filteredTracks = useMemo(() => {
