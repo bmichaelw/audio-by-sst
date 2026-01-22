@@ -46,27 +46,9 @@ const tiers = [
     priceId: 'price_member_monthly', // Replace with actual Stripe Price ID
   },
   {
-    id: 'collaborations',
-    name: 'Collaborations',
-    price: '$19.99',
-    period: '/month',
-    description: 'Exclusive artist collaborations',
-    icon: Crown,
-    features: [
-      'Everything in Member',
-      'Exclusive artist sessions',
-      'Live workshops access',
-      'Community circles',
-      'Early access to new content',
-      '1-on-1 guidance sessions',
-    ],
-    color: 'from-purple-600 to-pink-600',
-    priceId: 'price_collaborations_monthly', // Replace with actual Stripe Price ID
-  },
-  {
     id: 'artist',
     name: 'Artist',
-    price: '$9.99',
+    price: '$19.99',
     period: '/month',
     description: 'Share your healing sounds with the community',
     icon: Mic,
