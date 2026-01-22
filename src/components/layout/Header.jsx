@@ -26,6 +26,10 @@ export default function Header({ user, currentPageName, isMenuOpen, setIsMenuOpe
     navItems.push({ name: 'Playlists', icon: Library, href: createPageUrl('Playlists') });
   }
 
+  if (user?.is_artist && user?.artist_approved) {
+    navItems.push({ name: 'ArtistAnalytics', icon: TrendingUp, href: createPageUrl('ArtistAnalytics') });
+  }
+
   if (user?.role === 'admin') {
     navItems.push({ name: 'Admin', icon: Shield, href: createPageUrl('Admin') });
   }
