@@ -124,7 +124,7 @@ export default function Home() {
               Ancient sound. Modern healing.
             </p>
             <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
-              A curated collection of therapeutic audio designed to help you reprogram, support your nervous system, deepen your practice, and guide you toward inner peace.
+              A sacred audio platform for spiritual artists and intentional listeners.
             </p>
             
             {!user && (
