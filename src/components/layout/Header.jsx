@@ -9,12 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, Home, Library, Shield, DollarSign, TrendingUp, Radio, Settings } from 'lucide-react';
+import { Menu, X, User, LogOut, Home, Library, Shield, DollarSign, TrendingUp, Radio, Settings, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function Header({ user, currentPageName, isMenuOpen, setIsMenuOpen, onLogin, onLogout }) {
   const navItems = [
     { name: 'Home', icon: Home, href: createPageUrl('Home') },
+    { name: 'Discover', icon: Sparkles, href: createPageUrl('Discover') },
     { name: 'Library', icon: Library, href: createPageUrl('Library') },
     { name: 'LiveSessions', icon: Radio, href: createPageUrl('LiveSessions') },
     { name: 'Pricing', icon: DollarSign, href: createPageUrl('Pricing') },

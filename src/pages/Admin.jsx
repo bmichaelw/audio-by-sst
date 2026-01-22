@@ -8,6 +8,7 @@ import TrackUploadForm from '@/components/admin/TrackUploadForm.jsx';
 import AdminStats from '@/components/admin/AdminStats.jsx';
 import AdminTrackTable from '@/components/admin/AdminTrackTable.jsx';
 import LiveSessionManager from '@/components/admin/LiveSessionManager.jsx';
+import ArtistApprovals from '@/components/admin/ArtistApprovals.jsx';
 import { StatsSkeleton } from '@/components/LoadingSkeleton.jsx';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -31,6 +32,7 @@ import {
   ArrowLeft,
   Trash2,
   Radio,
+  UserCheck,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -171,6 +173,10 @@ export default function Admin() {
               <Music className="w-4 h-4 mr-2" />
               Tracks
             </TabsTrigger>
+            <TabsTrigger value="artists">
+              <UserCheck className="w-4 h-4 mr-2" />
+              Artists
+            </TabsTrigger>
             <TabsTrigger value="themes">
               <Tag className="w-4 h-4 mr-2" />
               Themes
@@ -210,6 +216,11 @@ export default function Admin() {
                 onRefresh={() => queryClient.invalidateQueries({ queryKey: ['admin-tracks'] })}
               />
             )}
+          </TabsContent>
+
+          {/* Artists Tab */}
+          <TabsContent value="artists">
+            <ArtistApprovals />
           </TabsContent>
 
           {/* Live Sessions Tab */}

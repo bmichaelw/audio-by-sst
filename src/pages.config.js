@@ -10,6 +10,7 @@ import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
 import ResonancePath from './pages/ResonancePath';
 import Settings from './pages/Settings';
+import Discover from './pages/Discover';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +27,7 @@ export const PAGES = {
     "Profile": Profile,
     "ResonancePath": ResonancePath,
     "Settings": Settings,
+    "Discover": Discover,
 }
 
 export const pagesConfig = {
