@@ -110,20 +110,34 @@ export default function Pricing() {
     setIsLoading(true);
 
     try {
-      // TODO: Call backend function to create Stripe checkout session
-      // For now, show placeholder
-      toast.info('Stripe integration requires backend functions to be enabled');
-      
-      // Example of what the backend call would look like:
-      // const { sessionUrl } = await base44.functions.createCheckoutSession({
-      //   priceId: tier.priceId,
-      //   successUrl: window.location.origin + '/subscription-success',
-      //   cancelUrl: window.location.origin + '/pricing',
-      // });
-      // window.location.href = sessionUrl;
+      // Testing mode: auto-subscribe user without Stripe
+      const existingSubscriptions = await base44.entities.UserSubscription.filter({
+        user_email: user.email,
+        is_active: true,
+      });
+
+      // Deactivate existing subscriptions
+      for (const sub of existingSubscriptions) {
+        await base44.entities.UserSubscription.update(sub.id, { is_active: false });
+      }
+
+      // Create new subscription
+      const expiresAt = new Date();
+      expiresAt.setMonth(expiresAt.getMonth() + 1); // 1 month from now
+
+      await base44.entities.UserSubscription.create({
+        user_email: user.email,
+        tier: tier.id,
+        is_active: true,
+        expires_at: expiresAt.toISOString(),
+      });
+
+      // Update current tier state
+      setCurrentTier(tier.id);
+      toast.success(`Successfully subscribed to ${tier.name}!`);
       
     } catch (error) {
-      toast.error('Failed to start checkout. Please try again.');
+      toast.error('Failed to subscribe. Please try again.');
     } finally {
       setIsLoading(false);
       setLoadingTier(null);
