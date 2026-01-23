@@ -37,71 +37,72 @@ export default function Layout({ children, currentPageName }) {
       <AudioPlayerProvider>
         <div className="min-h-screen bg-[#f5f0e8]">
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
           :root {
-            /* Core Colors */
-            --background: 32 30% 95%;
-            --foreground: 280 50% 20%;
-            --surface: 30 25% 98%;
-            --surface-elevated: 30 30% 99%;
+            /* Backgrounds - Crystalline Light Champagne */
+            --background: 40 33% 97%;           /* #faf9f7 - Clear Quartz */
+            --foreground: 0 0% 29%;             /* #4a4a4a - Charcoal */
 
-            /* Card Colors */
-            --card: 30 25% 98%;
-            --card-foreground: 280 50% 20%;
-            --card-hover: 30 30% 96%;
+            /* Cards/Surfaces */
+            --card: 0 0% 100%;                  /* #ffffff - Pure White */
+            --card-foreground: 0 0% 29%;        /* #4a4a4a - Charcoal */
+            --surface: 0 0% 100%;               /* #ffffff */
+            --surface-elevated: 0 0% 100%;      /* #ffffff */
 
-            /* Primary (Deep Purple) */
-            --primary: 280 50% 30%;
-            --primary-foreground: 32 30% 95%;
-            --primary-hover: 280 50% 25%;
-            --primary-muted: 280 30% 45%;
+            /* Primary (Light Champagne Gold) */
+            --primary: 43 38% 73%;              /* #d9ca9c - Light Champagne */
+            --primary-foreground: 0 0% 100%;    /* White text on gold */
+            --primary-hover: 43 38% 68%;        /* Slightly darker gold */
+            --primary-muted: 43 38% 80%;        /* Lighter gold */
 
-            /* Secondary (Gold) */
-            --secondary: 40 50% 60%;
-            --secondary-foreground: 280 50% 20%;
-            --secondary-hover: 40 50% 55%;
+            /* Secondary */
+            --secondary: 40 14% 93%;            /* #f0eeea - Light warm gray */
+            --secondary-foreground: 0 0% 29%;   /* #4a4a4a */
+            --secondary-hover: 40 14% 88%;      /* Slightly darker */
 
-            /* Accent (Gold for highlights) */
-            --accent: 40 50% 60%;
-            --accent-foreground: 280 50% 20%;
-            --accent-muted: 40 30% 75%;
+            /* Muted */
+            --muted: 40 14% 93%;                /* #f0eeea */
+            --muted-foreground: 0 0% 54%;       /* #8a8a8a */
+
+            /* Accent (Light Champagne Gold) */
+            --accent: 43 38% 73%;               /* #d9ca9c */
+            --accent-foreground: 0 0% 29%;      /* #4a4a4a */
+            --accent-muted: 43 38% 85%;         /* Very light gold */
 
             /* Text Colors */
-            --text-heading: 280 50% 20%;
-            --text-body: 280 30% 35%;
-            --text-muted: 280 15% 50%;
-            --text-subtle: 280 10% 60%;
+            --text-heading: 0 0% 29%;           /* #4a4a4a - Charcoal */
+            --text-body: 0 0% 42%;              /* #6a6a6a - Gray */
+            --text-muted: 0 0% 54%;             /* #8a8a8a - Muted Gray */
+            --text-subtle: 0 0% 67%;            /* #aaaaaa - Subtle Gray */
 
-            /* Border & Divider */
-            --border: 32 20% 85%;
-            --border-muted: 32 15% 90%;
-            --divider: 32 20% 88%;
+            /* Borders & Dividers */
+            --border: 40 14% 90%;               /* #e8e6e2 */
+            --border-muted: 40 14% 93%;         /* #f0eeea */
+            --divider: 40 14% 90%;              /* #e8e6e2 */
 
             /* Input & Form */
-            --input: 32 20% 92%;
-            --input-border: 32 20% 85%;
-            --ring: 280 50% 30%;
+            --input: 40 14% 90%;                /* #e8e6e2 */
+            --input-border: 40 14% 90%;         /* #e8e6e2 */
+            --ring: 43 38% 73%;                 /* #d9ca9c - Gold focus ring */
 
             /* States */
-            --muted: 32 20% 92%;
-            --muted-foreground: 280 20% 45%;
-            --popover: 30 25% 99%;
-            --popover-foreground: 280 50% 20%;
+            --popover: 0 0% 100%;               /* #ffffff */
+            --popover-foreground: 0 0% 29%;     /* #4a4a4a */
             --destructive: 0 62% 45%;
-            --destructive-foreground: 32 30% 95%;
+            --destructive-foreground: 0 0% 100%;
             --success: 140 50% 40%;
-            --success-foreground: 32 30% 95%;
+            --success-foreground: 0 0% 100%;
 
-            /* Shadows */
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            /* Shadows - Softer for quartz aesthetic */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
 
             /* Radius */
             --radius-sm: 0.375rem;
-            --radius: 0.5rem;
+            --radius: 0.75rem;
             --radius-md: 0.75rem;
             --radius-lg: 1rem;
             --radius-xl: 1.5rem;
@@ -166,14 +167,14 @@ export default function Layout({ children, currentPageName }) {
             height: 8px;
           }
           ::-webkit-scrollbar-track {
-            background: hsl(32, 20%, 90%);
+            background: hsl(40, 14%, 93%);
           }
           ::-webkit-scrollbar-thumb {
-            background: hsl(280, 25%, 55%);
+            background: hsl(43, 38%, 73%);
             border-radius: 4px;
           }
           ::-webkit-scrollbar-thumb:hover {
-            background: hsl(280, 35%, 45%);
+            background: hsl(43, 38%, 68%);
           }
 
           /* Safe area for mobile */
@@ -227,7 +228,7 @@ export default function Layout({ children, currentPageName }) {
           
           /* Softer borders */
           .border {
-            border-color: hsl(var(--border) / 0.5);
+            border-color: hsl(var(--border) / 0.6);
           }
           
           /* More organic spacing */

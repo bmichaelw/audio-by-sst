@@ -1,4 +1,5 @@
 import Admin from './pages/Admin';
+import ArtistAnalytics from './pages/ArtistAnalytics';
 import ArtistProfile from './pages/ArtistProfile';
 import Community from './pages/Community';
 import Discover from './pages/Discover';
@@ -12,12 +13,12 @@ import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
 import ResonancePath from './pages/ResonancePath';
 import Settings from './pages/Settings';
-import ArtistAnalytics from './pages/ArtistAnalytics';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Admin": Admin,
+    "ArtistAnalytics": ArtistAnalytics,
     "ArtistProfile": ArtistProfile,
     "Community": Community,
     "Discover": Discover,
@@ -31,7 +32,6 @@ export const PAGES = {
     "Profile": Profile,
     "ResonancePath": ResonancePath,
     "Settings": Settings,
-    "ArtistAnalytics": ArtistAnalytics,
 }
 
 export const pagesConfig = {
