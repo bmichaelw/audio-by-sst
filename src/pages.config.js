@@ -1,7 +1,6 @@
 import Admin from './pages/Admin';
 import ArtistAnalytics from './pages/ArtistAnalytics';
 import ArtistProfile from './pages/ArtistProfile';
-import Community from './pages/Community';
 import Discover from './pages/Discover';
 import Home from './pages/Home';
 import Library from './pages/Library';
@@ -20,7 +19,6 @@ export const PAGES = {
     "Admin": Admin,
     "ArtistAnalytics": ArtistAnalytics,
     "ArtistProfile": ArtistProfile,
-    "Community": Community,
     "Discover": Discover,
     "Home": Home,
     "Library": Library,
