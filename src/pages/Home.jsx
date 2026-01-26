@@ -83,8 +83,8 @@ export default function Home() {
     <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--background))' }}>
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-100/30 via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-200/20 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--accent))]/10 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[hsl(var(--accent))]/5 via-transparent to-transparent" />
         
         <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
           <motion.div
@@ -94,7 +94,7 @@ export default function Home() {
             className="text-center max-w-3xl mx-auto">
 
             <div className="flex justify-center mb-6">
-              <Badge className="inline-flex items-center bg-purple-100 text-purple-900 border-purple-200">
+              <Badge className="inline-flex items-center" style={{ backgroundColor: 'hsl(var(--accent) / 0.15)', color: 'hsl(var(--text-heading))', borderColor: 'hsl(var(--accent) / 0.3)' }}>
                 <Sparkles className="w-3 h-3 mr-1" />
                 Healing Through Vocal Resonance™
               </Badge>
@@ -137,7 +137,7 @@ export default function Home() {
                   Begin Your Journey
                 </Button>
                 <Link to={createPageUrl('Library')}>
-                  <Button variant="outline" className="px-8 py-6 text-base border-purple-300 text-purple-900 hover:bg-purple-50">
+                  <Button variant="outline" className="px-8 py-6 text-base" style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}>
                     Explore Library
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
