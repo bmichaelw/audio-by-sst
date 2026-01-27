@@ -121,6 +121,37 @@ export default function ArtistProfile() {
     await startFlow(accessibleTracks[0], artistEmail);
   };
 
+  // Toggle favorite
+  const toggleFavorite = async () => {
+    if (!currentUser) {
+      base44.auth.redirectToLogin(window.location.href);
+      return;
+    }
+
+    try {
+      if (isFavorited) {
+        const favorites = await base44.entities.FavoriteArtist.filter({
+          user_email: currentUser.email,
+          artist_email: artistEmail
+        });
+        if (favorites.length > 0) {
+          await base44.entities.FavoriteArtist.delete(favorites[0].id);
+        }
+        setIsFavorited(false);
+        toast.success('Removed from favorites');
+      } else {
+        await base44.entities.FavoriteArtist.create({
+          user_email: currentUser.email,
+          artist_email: artistEmail
+        });
+        setIsFavorited(true);
+        toast.success('Added to favorites');
+      }
+    } catch (error) {
+      toast.error('Failed to update favorites');
+    }
+  };
+
   if (artistLoading || !artist) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--background))' }}>

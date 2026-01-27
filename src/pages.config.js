@@ -2,6 +2,8 @@ import Admin from './pages/Admin';
 import ArtistAnalytics from './pages/ArtistAnalytics';
 import ArtistProfile from './pages/ArtistProfile';
 import Discover from './pages/Discover';
+import EmbedFlowPlayer from './pages/EmbedFlowPlayer';
+import EmbedSingleTrack from './pages/EmbedSingleTrack';
 import Home from './pages/Home';
 import Library from './pages/Library';
 import LiveSessionViewer from './pages/LiveSessionViewer';
@@ -12,8 +14,6 @@ import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
 import ResonancePath from './pages/ResonancePath';
 import Settings from './pages/Settings';
-import EmbedSingleTrack from './pages/EmbedSingleTrack';
-import EmbedFlowPlayer from './pages/EmbedFlowPlayer';
 import __Layout from './Layout.jsx';
 
 
@@ -22,6 +22,8 @@ export const PAGES = {
     "ArtistAnalytics": ArtistAnalytics,
     "ArtistProfile": ArtistProfile,
     "Discover": Discover,
+    "EmbedFlowPlayer": EmbedFlowPlayer,
+    "EmbedSingleTrack": EmbedSingleTrack,
     "Home": Home,
     "Library": Library,
     "LiveSessionViewer": LiveSessionViewer,
@@ -32,8 +34,6 @@ export const PAGES = {
     "Profile": Profile,
     "ResonancePath": ResonancePath,
     "Settings": Settings,
-    "EmbedSingleTrack": EmbedSingleTrack,
-    "EmbedFlowPlayer": EmbedFlowPlayer,
 }
 
 export const pagesConfig = {
