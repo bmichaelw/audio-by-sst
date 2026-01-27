@@ -10,10 +10,11 @@ import TrackCard from '@/components/tracks/TrackCard.jsx';
 import { Music, Edit, Loader2, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAudioPlayer } from '@/components/audio/AudioPlayerContext.jsx';
+import { toast } from 'sonner';
 
 export default function ArtistProfile() {
   const navigate = useNavigate();
-  const { playQueue } = useAudioPlayer();
+  const { startFlow } = useAudioPlayer();
   const [currentUser, setCurrentUser] = useState(null);
   const [artistEmail, setArtistEmail] = useState(null);
   const [userTier, setUserTier] = useState('free');
@@ -104,34 +105,20 @@ export default function ArtistProfile() {
   });
 
   // Enter the Flow handler
-  const handleEnterFlow = () => {
+  const handleEnterFlow = async () => {
     if (!currentUser) {
       base44.auth.redirectToLogin(window.location.href);
       return;
     }
 
     if (accessibleTracks.length === 0) {
+      toast.error('No accessible tracks. Please subscribe to this artist.');
       return;
     }
 
-    // Build flow queue: artist tracks first, then compatible all-access content
-    const flowQueue = [...accessibleTracks];
-    
-    if (userTier === 'all_access' && allAccessTracks.length > 0) {
-      // Add compatible all-access tracks based on similar characteristics
-      const artistIntensities = new Set(accessibleTracks.map(t => t.intensity_band));
-      const artistModalities = new Set(accessibleTracks.map(t => t.modality));
-      
-      const compatibleTracks = allAccessTracks.filter(track => 
-        artistIntensities.has(track.intensity_band) || 
-        artistModalities.has(track.modality)
-      ).slice(0, 10);
-      
-      flowQueue.push(...compatibleTracks);
-    }
-
-    // Start playing the flow
-    playQueue(flowQueue, 0);
+    // Start intelligent flow with this artist
+    toast.success('Entering the flow...');
+    await startFlow(accessibleTracks[0], artistEmail);
   };
 
   if (artistLoading || !artist) {

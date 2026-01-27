@@ -88,6 +88,37 @@ export default function PersistentPlayer() {
     hasTracked90Percent.current = false;
   }, [currentTrack?.id]);
 
+  // Show flow end message
+  if (isFlowEnding && flowEndMessage) {
+    return (
+      <div className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl border-t safe-area-bottom"
+        style={{ 
+          backgroundColor: 'hsl(var(--background) / 0.95)',
+          borderColor: 'hsl(var(--border) / 0.3)'
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse"
+              style={{ backgroundColor: 'hsl(var(--accent) / 0.2)' }}
+            >
+              <div className="w-12 h-12 rounded-full" style={{ backgroundColor: 'hsl(var(--accent) / 0.3)' }} />
+            </div>
+            <p className="text-lg font-light" 
+              style={{ 
+                color: 'hsl(var(--text-heading))',
+                fontFamily: 'var(--font-heading)',
+                letterSpacing: '0.02em'
+              }}
+            >
+              {flowEndMessage}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!currentTrack) return null;
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
