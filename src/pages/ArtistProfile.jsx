@@ -7,13 +7,16 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import TrackCard from '@/components/tracks/TrackCard.jsx';
-import { Music, Calendar, Users, Edit, Loader2 } from 'lucide-react';
+import { Music, Edit, Loader2, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAudioPlayer } from '@/components/audio/AudioPlayerContext.jsx';
 
 export default function ArtistProfile() {
   const navigate = useNavigate();
+  const { playQueue } = useAudioPlayer();
   const [currentUser, setCurrentUser] = useState(null);
   const [artistEmail, setArtistEmail] = useState(null);
+  const [userTier, setUserTier] = useState('free');
 
   // Get artist email from URL params
   useEffect(() => {
@@ -22,12 +25,21 @@ export default function ArtistProfile() {
     setArtistEmail(email);
   }, []);
 
-  // Fetch current user
+  // Fetch current user and subscription
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData = await base44.auth.me();
         setCurrentUser(userData);
+        
+        const subscriptions = await base44.entities.UserSubscription.filter({
+          user_email: userData.email,
+          is_active: true
+        });
+        
+        if (subscriptions.length > 0) {
+          setUserTier(subscriptions[0].subscription_type);
+        }
       } catch {
         setCurrentUser(null);
       }
@@ -49,7 +61,7 @@ export default function ArtistProfile() {
   const { data: tracks = [], isLoading: tracksLoading } = useQuery({
     queryKey: ['artist-tracks', artistEmail],
     queryFn: async () => {
-      const allTracks = await base44.entities.Track.filter({ created_by: artistEmail });
+      const allTracks = await base44.entities.Track.filter({ artist_email: artistEmail });
       return allTracks.filter(t => !t.is_archived);
     },
     enabled: !!artistEmail,
@@ -62,21 +74,65 @@ export default function ArtistProfile() {
       return await base44.entities.Playlist.filter({
         user_email: artistEmail,
         collection_type: 'artist_collection',
-        is_public: true,
       });
     },
     enabled: !!artistEmail,
   });
 
-  // Fetch artist's upcoming sessions
-  const { data: sessions = [] } = useQuery({
-    queryKey: ['artist-sessions', artistEmail],
-    queryFn: async () => {
-      const allSessions = await base44.entities.LiveSession.list('-scheduled_time');
-      return allSessions.filter(s => s.created_by === artistEmail && !s.is_archived && new Date(s.scheduled_time) > new Date());
-    },
-    enabled: !!artistEmail,
+  // Filter accessible tracks based on subscription
+  const accessibleTracks = tracks.filter(track => {
+    if (track.access_eligibility === 'all_access') {
+      return userTier === 'all_access';
+    }
+    if (track.access_eligibility === 'artist_membership') {
+      return userTier === 'all_access' || userTier === 'artist_membership';
+    }
+    return false;
   });
+
+  // Fetch compatible all-access tracks for flow expansion
+  const { data: allAccessTracks = [] } = useQuery({
+    queryKey: ['all-access-tracks'],
+    queryFn: async () => {
+      const allTracks = await base44.entities.Track.filter({ 
+        access_eligibility: 'all_access',
+        is_archived: false 
+      });
+      return allTracks.filter(t => t.artist_email !== artistEmail);
+    },
+    enabled: userTier === 'all_access',
+  });
+
+  // Enter the Flow handler
+  const handleEnterFlow = () => {
+    if (!currentUser) {
+      base44.auth.redirectToLogin(window.location.href);
+      return;
+    }
+
+    if (accessibleTracks.length === 0) {
+      return;
+    }
+
+    // Build flow queue: artist tracks first, then compatible all-access content
+    const flowQueue = [...accessibleTracks];
+    
+    if (userTier === 'all_access' && allAccessTracks.length > 0) {
+      // Add compatible all-access tracks based on similar characteristics
+      const artistIntensities = new Set(accessibleTracks.map(t => t.intensity_band));
+      const artistModalities = new Set(accessibleTracks.map(t => t.modality));
+      
+      const compatibleTracks = allAccessTracks.filter(track => 
+        artistIntensities.has(track.intensity_band) || 
+        artistModalities.has(track.modality)
+      ).slice(0, 10);
+      
+      flowQueue.push(...compatibleTracks);
+    }
+
+    // Start playing the flow
+    playQueue(flowQueue, 0);
+  };
 
   if (artistLoading || !artist) {
     return (
@@ -93,7 +149,7 @@ export default function ArtistProfile() {
     <div className="min-h-screen pb-12" style={{ backgroundColor: 'hsl(var(--background))' }}>
       {/* Hero Section */}
       <div className="relative overflow-hidden border-b" style={{ borderColor: 'hsl(var(--border))' }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-100/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--accent))]/10 to-transparent" />
         
         <div className="relative max-w-7xl mx-auto px-4 py-12">
           <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
@@ -125,35 +181,47 @@ export default function ArtistProfile() {
 
               {/* Artist Bio */}
               {artist.artist_bio && (
-                <p className="mb-4 max-w-2xl" style={{ color: 'hsl(var(--text-body))' }}>
+                <p className="mb-6 max-w-2xl leading-relaxed" style={{ color: 'hsl(var(--text-body))' }}>
                   {artist.artist_bio}
                 </p>
               )}
 
-              {/* Stats */}
-              <div className="flex gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <Music className="w-4 h-4" style={{ color: 'hsl(var(--text-muted))' }} />
-                  <span style={{ color: 'hsl(var(--foreground))' }}>{tracks.length} tracks</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" style={{ color: 'hsl(var(--text-muted))' }} />
-                  <span style={{ color: 'hsl(var(--foreground))' }}>{sessions.length} upcoming sessions</span>
-                </div>
+              {/* Primary CTA */}
+              <div className="flex gap-3 items-center">
+                <Button
+                  size="lg"
+                  onClick={handleEnterFlow}
+                  disabled={!currentUser || accessibleTracks.length === 0}
+                  className="px-8"
+                  style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+                >
+                  <Play className="w-5 h-5 mr-2" />
+                  Enter the Flow
+                </Button>
+
+                {/* Edit Profile Button */}
+                {isOwnProfile && (
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate('/settings')}
+                    style={{ borderColor: 'hsl(var(--border))' }}
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit Profile
+                  </Button>
+                )}
               </div>
 
-              {/* Edit Profile Button */}
-              {isOwnProfile && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/settings')}
-                  className="mt-4"
-                  style={{ borderColor: 'hsl(var(--border))' }}
-                >
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </Button>
+              {!currentUser && (
+                <p className="text-sm mt-3" style={{ color: 'hsl(var(--text-muted))' }}>
+                  Sign in to enter the flow
+                </p>
+              )}
+
+              {currentUser && accessibleTracks.length === 0 && (
+                <p className="text-sm mt-3" style={{ color: 'hsl(var(--text-muted))' }}>
+                  Subscribe to access this artist's content
+                </p>
               )}
             </div>
           </div>
@@ -162,10 +230,44 @@ export default function ArtistProfile() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Collections Section */}
+        {collections.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)' }}>
+              Collections & Albums
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {collections.map((collection) => (
+                <Card key={collection.id} className="hover:shadow-lg transition-all cursor-pointer group" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+                  {collection.cover_image_url && (
+                    <div className="relative aspect-video overflow-hidden">
+                      <img 
+                        src={collection.cover_image_url} 
+                        alt={collection.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
+                  <CardContent className="p-6">
+                    <h3 className="font-medium mb-2 text-lg" style={{ color: 'hsl(var(--foreground))', fontFamily: 'var(--font-heading)' }}>
+                      {collection.name}
+                    </h3>
+                    {collection.description && (
+                      <p className="text-sm leading-relaxed" style={{ color: 'hsl(var(--text-muted))' }}>
+                        {collection.description}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Tracks Section */}
         <section className="mb-12">
           <h2 className="text-2xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)' }}>
-            Tracks
+            All Tracks
           </h2>
           {tracksLoading ? (
             <div className="text-center py-8">
@@ -187,54 +289,7 @@ export default function ArtistProfile() {
           )}
         </section>
 
-        {/* Collections Section */}
-        {collections.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-2xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)' }}>
-              Collections
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {collections.map((collection) => (
-                <Card key={collection.id} className="hover:shadow-md transition-shadow cursor-pointer" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
-                  <CardContent className="p-6">
-                    <h3 className="font-medium mb-2" style={{ color: 'hsl(var(--foreground))' }}>
-                      {collection.name}
-                    </h3>
-                    <p className="text-sm" style={{ color: 'hsl(var(--text-muted))' }}>
-                      {collection.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
 
-        {/* Upcoming Sessions */}
-        {sessions.length > 0 && (
-          <section>
-            <h2 className="text-2xl font-light mb-6" style={{ color: 'hsl(var(--text-heading))', fontFamily: 'var(--font-heading)' }}>
-              Upcoming Live Sessions
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {sessions.map((session) => (
-                <Card key={session.id} className="hover:shadow-md transition-shadow" style={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
-                  <CardContent className="p-6">
-                    <h3 className="font-medium mb-2" style={{ color: 'hsl(var(--foreground))' }}>
-                      {session.title}
-                    </h3>
-                    <p className="text-sm mb-3" style={{ color: 'hsl(var(--text-muted))' }}>
-                      {new Date(session.scheduled_time).toLocaleDateString()} at {new Date(session.scheduled_time).toLocaleTimeString()}
-                    </p>
-                    <Button size="sm" style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}>
-                      Learn More
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
       </div>
     </div>
   );
