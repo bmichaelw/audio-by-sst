@@ -25,6 +25,9 @@ export default function PersistentPlayer() {
     isLoading,
     queue,
     queueIndex,
+    isFlowMode,
+    isFlowEnding,
+    flowEndMessage,
     togglePlay,
     seek,
     setVolume,
@@ -165,9 +168,21 @@ export default function PersistentPlayer() {
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <p className="font-medium text-sm md:text-base truncate" style={{ color: 'hsl(var(--foreground))' }}>
-                {currentTrack.title}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="font-medium text-sm md:text-base truncate" style={{ color: 'hsl(var(--foreground))' }}>
+                  {currentTrack.title}
+                </p>
+                {isFlowMode && (
+                  <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
+                    style={{ 
+                      backgroundColor: 'hsl(var(--accent) / 0.2)',
+                      color: 'hsl(var(--accent))'
+                    }}
+                  >
+                    Flow
+                  </span>
+                )}
+              </div>
               {currentTrack.intention && (
                 <p className="text-xs md:text-sm truncate" style={{ color: 'hsl(var(--text-muted))' }}>
                   {currentTrack.intention}
@@ -223,7 +238,7 @@ export default function PersistentPlayer() {
               variant="ghost"
               size="icon"
               onClick={playNext}
-              disabled={!hasQueue || queueIndex >= queue.length - 1}
+              disabled={!isFlowMode && (!hasQueue || queueIndex >= queue.length - 1)}
               className="hidden md:flex h-9 w-9"
               style={{ color: 'hsl(var(--text-muted))' }}
             >
