@@ -23,6 +23,10 @@ export function AudioPlayerProvider({ children }) {
     isLoading: false,
     queue: [],
     queueIndex: -1,
+    isFlowMode: false,
+    flowArtistEmail: null,
+    isFlowEnding: false,
+    flowEndMessage: null,
   });
 
   useEffect(() => {
@@ -39,17 +43,7 @@ export function AudioPlayerProvider({ children }) {
     });
 
     audio.addEventListener('ended', () => {
-      setState(prev => {
-        // Auto-play next track in queue
-        if (prev.queueIndex < prev.queue.length - 1) {
-          return prev; // Will be handled by playNext
-        }
-        return { ...prev, isPlaying: false, currentTime: 0 };
-      });
-      // Trigger next track after a short delay
-      setTimeout(() => {
-        playNext();
-      }, 100);
+      handleTrackEnd();
     });
 
     audio.addEventListener('waiting', () => {
@@ -70,6 +64,90 @@ export function AudioPlayerProvider({ children }) {
       audio.src = '';
     };
   }, []);
+
+  const handleTrackEnd = async () => {
+    if (state.queueIndex < state.queue.length - 1) {
+      // Play next in queue
+      playNext();
+    } else if (state.isFlowMode && !state.isFlowEnding) {
+      // Flow mode: try to generate more tracks
+      try {
+        const { base44 } = await import('@/api/base44Client');
+        const response = await base44.functions.invoke('generateFlow', {
+          startTrackId: state.queue[state.queue.length - 1]?.track.id,
+          artistEmail: state.flowArtistEmail
+        });
+
+        if (response.data.tracks && response.data.tracks.length > 1) {
+          // Fetch signed URLs for new tracks
+          const newTracks = response.data.tracks.slice(1);
+          const signedUrls = await Promise.all(
+            newTracks.map(track => 
+              base44.integrations.Core.CreateFileSignedUrl({
+                file_uri: track.audio_file_uri,
+                expires_in: 3600
+              }).then(res => res.signed_url)
+            )
+          );
+
+          // Add to queue
+          const newQueueItems = newTracks.map((track, i) => ({
+            track,
+            playbackUrl: signedUrls[i]
+          }));
+
+          setState(prev => ({
+            ...prev,
+            queue: [...prev.queue, ...newQueueItems]
+          }));
+
+          // Play next track
+          setTimeout(() => playNext(), 100);
+        } else {
+          // No more tracks - gentle end
+          setState(prev => ({
+            ...prev,
+            isFlowEnding: true,
+            flowEndMessage: 'Your flow is complete. May you carry this peace forward.'
+          }));
+
+          // Fade out over 3 seconds
+          const audio = audioRef.current;
+          if (audio) {
+            const fadeSteps = 30;
+            const fadeInterval = setInterval(() => {
+              if (audio.volume > 0.03) {
+                audio.volume = Math.max(0, audio.volume - (state.volume / fadeSteps));
+              } else {
+                clearInterval(fadeInterval);
+                audio.pause();
+                setState(prev => ({
+                  ...prev,
+                  isPlaying: false,
+                }));
+
+                // Clear end message after 5 seconds
+                setTimeout(() => {
+                  setState(prev => ({
+                    ...prev,
+                    isFlowEnding: false,
+                    flowEndMessage: null,
+                    isFlowMode: false,
+                    flowArtistEmail: null,
+                  }));
+                }, 5000);
+              }
+            }, 100);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to generate flow:', error);
+        setState(prev => ({ ...prev, isPlaying: false, currentTime: 0 }));
+      }
+    } else {
+      setState(prev => ({ ...prev, isPlaying: false, currentTime: 0 }));
+    }
+  };
 
   const playTrack = async (track, playbackUrl, addToQueue = false) => {
     const audio = audioRef.current;
@@ -100,6 +178,8 @@ export function AudioPlayerProvider({ children }) {
       isLoading: true, 
       currentTime: 0,
       queueIndex: -1,
+      isFlowMode: false,
+      flowArtistEmail: null,
     }));
     
     // Use the provided signed playback URL
@@ -251,7 +331,58 @@ export function AudioPlayerProvider({ children }) {
       track,
       playbackUrl: playbackUrls[index],
     }));
-    setState(prev => ({ ...prev, queue: queueItems, queueIndex: -1 }));
+    setState(prev => ({ ...prev, queue: queueItems, queueIndex: -1, isFlowMode: false }));
+  };
+
+  const startFlow = async (startTrack, artistEmail = null) => {
+    try {
+      const { base44 } = await import('@/api/base44Client');
+      const response = await base44.functions.invoke('generateFlow', {
+        startTrackId: startTrack.id,
+        artistEmail: artistEmail
+      });
+
+      if (response.data.tracks && response.data.tracks.length > 0) {
+        // Fetch signed URLs for all tracks
+        const signedUrls = await Promise.all(
+          response.data.tracks.map(track => 
+            base44.integrations.Core.CreateFileSignedUrl({
+              file_uri: track.audio_file_uri,
+              expires_in: 3600
+            }).then(res => res.signed_url)
+          )
+        );
+
+        const queueItems = response.data.tracks.map((track, i) => ({
+          track,
+          playbackUrl: signedUrls[i]
+        }));
+
+        setState(prev => ({
+          ...prev,
+          queue: queueItems,
+          queueIndex: 0,
+          currentTrack: queueItems[0].track,
+          isLoading: true,
+          currentTime: 0,
+          isFlowMode: true,
+          flowArtistEmail: artistEmail,
+          isFlowEnding: false,
+          flowEndMessage: null,
+        }));
+
+        const audio = audioRef.current;
+        audio.src = queueItems[0].playbackUrl;
+        audio.volume = state.volume;
+        audio.play().then(() => {
+          setState(prev => ({ ...prev, isPlaying: true }));
+        }).catch(() => {
+          setState(prev => ({ ...prev, isPlaying: false, isLoading: false }));
+        });
+      }
+    } catch (error) {
+      console.error('Failed to start flow:', error);
+    }
   };
 
   const getAnalyser = () => analyserRef.current;
@@ -338,6 +469,7 @@ export function AudioPlayerProvider({ children }) {
         removeFromQueue,
         clearQueue,
         setQueue,
+        startFlow,
         getAnalyser,
       }}
     >
