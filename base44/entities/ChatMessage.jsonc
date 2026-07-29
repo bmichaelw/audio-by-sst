@@ -1,0 +1,31 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "ID of the live session"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of user who sent message"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Display name of user"
+    },
+    "message": {
+      "type": "string",
+      "description": "Chat message content"
+    },
+    "is_admin": {
+      "type": "boolean",
+      "description": "Whether message is from admin/host"
+    }
+  },
+  "required": [
+    "session_id",
+    "user_email",
+    "message"
+  ]
+}

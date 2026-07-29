@@ -1,0 +1,51 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "is_artist": {
+      "type": "boolean",
+      "description": "Whether user has requested artist status",
+      "default": false
+    },
+    "artist_approved": {
+      "type": "boolean",
+      "description": "Whether artist account has been approved by admin",
+      "default": false
+    },
+    "artist_tagline": {
+      "type": "string",
+      "description": "Artist hero/tagline for profile page"
+    },
+    "artist_bio": {
+      "type": "string",
+      "description": "Artist biography and description"
+    },
+    "artist_avatar_url": {
+      "type": "string",
+      "description": "Artist profile avatar image URL"
+    },
+    "stripe_account_id": {
+      "type": "string",
+      "description": "Stripe Connect account ID for artist payouts"
+    },
+    "subscribed_artists": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of artist emails the user is subscribed to",
+      "default": []
+    },
+    "onboarding_completed": {
+      "type": "boolean",
+      "description": "Whether user has completed signup/onboarding",
+      "default": false
+    }
+  },
+  "required": [
+    "artist_tagline",
+    "artist_bio",
+    "artist_avatar_url",
+    "stripe_account_id"
+  ]
+}

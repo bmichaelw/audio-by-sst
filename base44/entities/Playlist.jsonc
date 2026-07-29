@@ -1,0 +1,35 @@
+{
+  "name": "Playlist",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of playlist creator"
+    },
+    "name": {
+      "type": "string",
+      "description": "Playlist name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Playlist description"
+    },
+    "cover_image_url": {
+      "type": "string",
+      "description": "Custom cover image"
+    },
+    "collection_type": {
+      "type": "string",
+      "enum": [
+        "user_playlist",
+        "artist_collection"
+      ],
+      "description": "Type: user's playlist or artist's curated collection",
+      "default": "user_playlist"
+    }
+  },
+  "required": [
+    "user_email",
+    "name"
+  ]
+}

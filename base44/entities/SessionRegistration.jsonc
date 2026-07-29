@@ -1,0 +1,36 @@
+{
+  "name": "SessionRegistration",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "ID of the live session"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of registered user"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "included_in_tier"
+      ],
+      "description": "Payment status"
+    },
+    "payment_amount": {
+      "type": "number",
+      "description": "Amount paid (if one-time purchase)"
+    },
+    "attended": {
+      "type": "boolean",
+      "description": "Whether user attended the session"
+    }
+  },
+  "required": [
+    "session_id",
+    "user_email",
+    "payment_status"
+  ]
+}

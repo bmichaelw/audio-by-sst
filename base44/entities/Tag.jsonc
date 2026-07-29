@@ -1,0 +1,24 @@
+{
+  "name": "Tag",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Tag name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "mood",
+        "technique",
+        "duration",
+        "instrument",
+        "other"
+      ],
+      "description": "Tag category"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

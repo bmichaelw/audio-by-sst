@@ -1,0 +1,44 @@
+{
+  "name": "UserSubscription",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "User's email address"
+    },
+    "subscription_type": {
+      "type": "string",
+      "enum": [
+        "all_access",
+        "artist_membership"
+      ],
+      "description": "Type of subscription"
+    },
+    "artist_email": {
+      "type": "string",
+      "description": "If artist_membership, the artist's email"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Subscription expiration date"
+    },
+    "is_active": {
+      "type": "boolean",
+      "description": "Whether subscription is currently active"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe customer ID for billing"
+    },
+    "stripe_subscription_id": {
+      "type": "string",
+      "description": "Stripe subscription ID"
+    }
+  },
+  "required": [
+    "user_email",
+    "subscription_type",
+    "is_active"
+  ]
+}

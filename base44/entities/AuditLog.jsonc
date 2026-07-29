@@ -1,0 +1,31 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "admin_email": {
+      "type": "string",
+      "description": "Email of admin who performed the action"
+    },
+    "action": {
+      "type": "string",
+      "description": "Action performed (e.g., create_track, delete_track, bulk_update)"
+    },
+    "target_type": {
+      "type": "string",
+      "description": "Type of entity affected (e.g., Track, Theme)"
+    },
+    "target_id": {
+      "type": "string",
+      "description": "ID of the affected entity"
+    },
+    "details": {
+      "type": "object",
+      "description": "Additional details about the action"
+    }
+  },
+  "required": [
+    "admin_email",
+    "action",
+    "target_type"
+  ]
+}

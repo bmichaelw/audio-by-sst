@@ -1,0 +1,27 @@
+{
+  "name": "PlayHistory",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "User's email"
+    },
+    "track_id": {
+      "type": "string",
+      "description": "Track ID"
+    },
+    "played_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the track was played"
+    },
+    "completed": {
+      "type": "boolean",
+      "description": "Whether user listened to 90%+"
+    }
+  },
+  "required": [
+    "user_email",
+    "track_id"
+  ]
+}

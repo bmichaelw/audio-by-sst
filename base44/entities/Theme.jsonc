@@ -1,0 +1,29 @@
+{
+  "name": "Theme",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Theme name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Theme description"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Icon name from Lucide"
+    },
+    "color": {
+      "type": "string",
+      "description": "Theme color hex code"
+    },
+    "sort_order": {
+      "type": "number",
+      "description": "Display order"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

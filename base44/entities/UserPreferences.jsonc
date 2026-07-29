@@ -1,0 +1,98 @@
+{
+  "name": "UserPreferences",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "User's email (unique)"
+    },
+    "preferred_themes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "User's favorite meditation themes"
+    },
+    "preferred_chakras": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Chakras the user wants to focus on"
+    },
+    "preferred_nervous_system_states": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Preferred nervous system effects (activating, calming, balancing)"
+    },
+    "difficulty_level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "description": "User's experience level"
+    },
+    "voice_preference": {
+      "type": "string",
+      "enum": [
+        "with_voice",
+        "without_voice",
+        "no_preference"
+      ],
+      "description": "Preference for guided vs instrumental"
+    },
+    "mood_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "mood": {
+            "type": "string"
+          },
+          "energy_level": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Daily mood tracking entries"
+    },
+    "resonance_focus_areas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Areas user wants to focus on in ResonancePath"
+    },
+    "session_duration_preference": {
+      "type": "string",
+      "enum": [
+        "short",
+        "medium",
+        "long"
+      ],
+      "description": "Preferred session length (short: <15min, medium: 15-30min, long: 30min+)"
+    },
+    "daily_reminder_time": {
+      "type": "string",
+      "description": "Preferred time for daily practice reminder (HH:MM format)"
+    },
+    "reminder_enabled": {
+      "type": "boolean",
+      "description": "Whether daily reminders are enabled"
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}

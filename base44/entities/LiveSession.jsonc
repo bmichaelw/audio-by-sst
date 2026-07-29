@@ -1,0 +1,71 @@
+{
+  "name": "LiveSession",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Session title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Session description"
+    },
+    "scheduled_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the session is scheduled"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "description": "Session duration in minutes"
+    },
+    "stream_url": {
+      "type": "string",
+      "description": "Live stream embed URL (YouTube, Twitch, etc.)"
+    },
+    "cover_image_url": {
+      "type": "string",
+      "description": "Session cover image"
+    },
+    "is_live": {
+      "type": "boolean",
+      "description": "Whether session is currently live"
+    },
+    "access_tier": {
+      "type": "string",
+      "enum": [
+        "member",
+        "resonance_path",
+        "collaborations",
+        "one_time"
+      ],
+      "description": "Minimum tier required or one-time purchase"
+    },
+    "one_time_price": {
+      "type": "number",
+      "description": "Price for one-time access (if access_tier is one_time)"
+    },
+    "max_attendees": {
+      "type": "number",
+      "description": "Maximum number of attendees (optional)"
+    },
+    "current_attendees": {
+      "type": "number",
+      "description": "Current number of registered attendees"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "description": "Whether session is archived (past)"
+    },
+    "recording_url": {
+      "type": "string",
+      "description": "URL to session recording (if available)"
+    }
+  },
+  "required": [
+    "title",
+    "scheduled_time",
+    "duration_minutes",
+    "access_tier"
+  ]
+}

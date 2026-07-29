@@ -1,0 +1,114 @@
+{
+  "name": "Track",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Track title"
+    },
+    "artist_email": {
+      "type": "string",
+      "description": "Email of the artist who owns this track"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the track"
+    },
+    "audio_file_uri": {
+      "type": "string",
+      "description": "Private file URI for audio (not publicly accessible)"
+    },
+    "audio_mime_type": {
+      "type": "string",
+      "description": "Audio MIME type (e.g. audio/mpeg, audio/wav)"
+    },
+    "audio_file_size": {
+      "type": "number",
+      "description": "Audio file size in bytes"
+    },
+    "cover_image_url": {
+      "type": "string",
+      "description": "Cover art image URL (public)"
+    },
+    "duration_seconds": {
+      "type": "number",
+      "description": "Track duration in seconds"
+    },
+    "lyrical_state": {
+      "type": "string",
+      "enum": [
+        "lyrics",
+        "no_lyrics"
+      ],
+      "description": "Whether track contains lyrics (required for flow)"
+    },
+    "voice_type": {
+      "type": "string",
+      "enum": [
+        "spoken",
+        "sung",
+        "instrumental"
+      ],
+      "description": "Type of voice present (required for flow)"
+    },
+    "intensity_band": {
+      "type": "string",
+      "enum": [
+        "very_low",
+        "low",
+        "medium",
+        "high",
+        "very_high"
+      ],
+      "description": "Intensity level (required for flow)"
+    },
+    "modality": {
+      "type": "string",
+      "enum": [
+        "drone",
+        "chant",
+        "soundscape",
+        "rhythmic",
+        "ambient",
+        "ceremonial"
+      ],
+      "description": "Audio modality type (required for flow)"
+    },
+    "is_sleep_safe": {
+      "type": "boolean",
+      "description": "Safe for sleep listening"
+    },
+    "is_trip_safe": {
+      "type": "boolean",
+      "description": "Safe for psychedelic journeys"
+    },
+    "access_eligibility": {
+      "type": "string",
+      "enum": [
+        "all_access",
+        "artist_membership",
+        "private_offering"
+      ],
+      "description": "How this track can be accessed"
+    },
+    "offering_id": {
+      "type": "string",
+      "description": "If private_offering, ID of the offering program"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "description": "Whether track is archived (hidden from library)"
+    }
+  },
+  "required": [
+    "title",
+    "artist_email",
+    "audio_file_uri",
+    "duration_seconds",
+    "lyrical_state",
+    "voice_type",
+    "intensity_band",
+    "modality",
+    "access_eligibility"
+  ]
+}

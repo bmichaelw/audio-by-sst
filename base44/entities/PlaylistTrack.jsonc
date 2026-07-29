@@ -1,0 +1,23 @@
+{
+  "name": "PlaylistTrack",
+  "type": "object",
+  "properties": {
+    "playlist_id": {
+      "type": "string",
+      "description": "ID of the playlist"
+    },
+    "track_id": {
+      "type": "string",
+      "description": "ID of the track"
+    },
+    "sort_order": {
+      "type": "number",
+      "description": "Order in playlist"
+    }
+  },
+  "required": [
+    "playlist_id",
+    "track_id",
+    "sort_order"
+  ]
+}
